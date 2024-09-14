@@ -1,17 +1,31 @@
 # School class
 class School:
+
     # Im not sure if i should add __shlots__ in School class, as it has many temporarily variables
-    # __sltos__ = ["school_type", "classrooms", "new_classroom", "classrooms"]
-    def __init__(self, school_type):
-        self.school_type = school_type
+    # __sltos__ = ["school_stage", "classrooms", "new_classroom", "classrooms"]
+    def __init__(self, name, school_stage):
+        self.name = name
+        self.school_stage = school_stage
         self.classrooms = set()
         self.classgroups = set()
+        self.last_classroom_id = 0
 
     # Create and adding ClassRooms to the school
-    def add_classroom(self, classroom_name):
+    def add_classroom(self, *classroom_names):
         # TODO Getting classroom_name
-        new_classroom = ClassRoom(self, classroom_name)
-        self.classrooms.add(new_classroom)
+        for item in classroom_names
+            id = School.last_classroom
+            new_classroom = ClassRoom(self, id, item)
+            self.classrooms.add(new_classroom)
+
+    def get_id(self, entity: str = "cr"):
+        match entity:
+            case "cr":
+                self.last_classroom_id += 1
+                return self.last_classroom_id
+            case _:
+                # TODO At this point there should be an error raise
+                return None
 
     # Creating a ClassGroup for the school
     # most of the parameters should be removed and be placed within the function to get
@@ -28,12 +42,16 @@ class School:
         new_classgroup = ClassGroup(self, educationgrade, student_list, teacher_list)
         self.classgroups.add(new_classgroup)
 
+    def __str__():
+        return "no info"
+
 
 # Classroom class which are called by School class instances. they are used as the place for holding class sessions
 class ClassRoom:
-    __slots__ = ["parent_school", "name"]
+    __slots__ = ["parent_school", "id", "name"]
 
-    def __init__(self, parent_school, name):
+    def __init__(self, parent_school, id, name):
+        self.id = id
         self.parent_school = parent_school
         self.name = name
 

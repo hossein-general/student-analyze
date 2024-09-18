@@ -1,7 +1,7 @@
 # School class
 class School:
 
-    # Im not sure if i should add __shlots__ in School class, as it has many temporarily variables
+    # Im not sure if i should add __slots__ in School class, as it has many temporarily variables
     # __sltos__ = ["school_stage", "classrooms", "new_classroom", "classrooms"]
     def __init__(self, name, school_stage):
         self.name = name
@@ -13,11 +13,16 @@ class School:
     # Create and adding ClassRooms to the school
     def add_classroom(self, *classroom_names):
         # TODO Getting classroom_name
-        for item in classroom_names
+        for item in classroom_names:
             id = School.last_classroom
             new_classroom = ClassRoom(self, id, item)
             self.classrooms.add(new_classroom)
 
+    # This class will manage ids for each id-able item in the school
+    # e.g. ClassRooms (cr), Teachers (t), Students (s), etc.
+    # This management happens by using a counter variable and adding one to it each time an id is assigned
+    # each entity has its own id counter
+    # This function is used within the class, where ever a new entity creates
     def get_id(self, entity: str = "cr"):
         match entity:
             case "cr":
@@ -89,7 +94,7 @@ class ClassGroup:
 
 
 # This class shows which of the ClassGroup teachers is assigend and what lesson is he presenting (as a sible ClassGroup could hold many teachers and lessons at the same time)
-# In most cases the ClassSchedule instances are named by the lesson presenting within them, and sometimes combined with and an id
+# In most cases the ClassSchedule instances are named by the lesson presenting within them, and sometimes combined with an id
 # e.g. "Riazi-1 20341", "Arabi", ...
 class ClassSchedule:
     def __init__(self, parent_classgroup, name, student_list, teacher, lesson):

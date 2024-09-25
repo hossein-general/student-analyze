@@ -37,6 +37,9 @@ University: U
 ** GroupLessons are stored within EducationGrous. then they are used by ClassSchedules (which are created by ClassGroups) and define the schedule of that lesson (this blueprint will be used to create instances of ClassSession, which are containing date and time assigned to each instance session)
 ** ClassSessions are the class schedule containing date and time, students, teacher, etc. these are created using ClassSchedules
 ** SchoolStage is an object that defines what type is the school (PS, HS1, HS2, U). this will be used to apply properties to other objects. e.g. policies like objects relation types (one-to-one, one-to-many, etc.).
+** ClassGroups in University have a lifespam of 6 months, that is a term long. in ps, hs1, and hs2 this is also related to the term length that is about a year long
+
+** I think it could be a good idea to seperate EducationState and CurrentSchoolState. The EducationState is for students and shows where they are in the path of their education. but the CurrentSchoolState is actually a counter that increases by each term passing and shows the current state/term.
 
 
 

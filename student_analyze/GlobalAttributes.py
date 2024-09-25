@@ -1,16 +1,19 @@
 # SchoolType will define type of schools
 # e.g. Primary School, High School 1st Term, High School 2nd Term, University
 class SchoolType:
-    __slots__ = ["type_name", "educationgrades"]
+    # __slots__ = ["type_name", "educationgrades"]
 
     def __init__(self, type_name):
         self.type_name = type_name
-        self.educationgrades = set()
+        self.educationgrades = list()
         # TODO Creating variables that will be initialized when an instance is created, and will manage School realations
 
     def add_grade(self, educationgrade_name):
         new_educationgrade = EducationGrade(self, educationgrade_name)
-        self.educationgrades.add(new_educationgrade)
+        self.educationgrades.append(new_educationgrade)
+
+    def __str__(self):
+        return self.type_name
 
 
 # EducationGrades are stages within each SchoolType that are defining the path for each student
@@ -22,9 +25,13 @@ class SchoolType:
 #   The first two are used to define where is an student in life time of education and the other defines the field of study
 class EducationGrade:
     def __init__(self, parent_schooltype, name):
+        self.parent_schooltype = parent_schooltype
         self.name = name
 
-    
+    def __str__(self):
+        return self.name
+
+
 # EducationGroups are created to define different fields of study in differen SchoolTypes
 # e.g. General, Tajrobi, Riazi, Mohandesi mechanic, ...
 class EducationGroup:
@@ -38,8 +45,24 @@ class EducationGroup:
         new_lesson = Lesson(self, lesson_name)
         self.lessons.add(new_lesson)
 
+    def __str__(self):
+        return self.name
+
 
 class Lesson:
     def __init__(self, parent_educationgroup, name):
         self.parent_educationgroup = parent_educationgroup
         self.name = name
+
+    def __str__(self):
+        return self.name
+
+
+class EducationState:
+    def __init__(self, parent_schooltype, name, order):
+        self.parent_schooltype = parent_schooltype
+        self.name = name
+        self.order = order
+
+    def __str__(self):
+        return self.name

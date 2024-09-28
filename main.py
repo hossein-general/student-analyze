@@ -1,10 +1,10 @@
-# For cleaner look
+# For a cleaner look
 from os import system
 
-# For cleaner printing option
+# As a cleaner printing option
 from pprint import pprint
 
-# Main imported modules for program
+# Main modules for program
 from student_analyze import (
     Student,
     Teacher,
@@ -17,7 +17,7 @@ from student_analyze import (
     ClassGroup,
     ClassRoom,
     School,
-    getattributes,
+    gtattr,
 )
 
 
@@ -62,18 +62,25 @@ def main():
     # -------------------------------------------------
     # School Information Initializing
     # Creating a School
-    test_school = School("Alameh Tabatabai", school_types["ps"])
+    test_school = School("Shahid Abbass Hesaraki", school_types["ps"])
 
-    # Creating a classroom for the school
+    # Creating classrooms for the school
     test_school.add_classroom("room 1", "room 2", "room 3")
+
+    # Adding Students
+    test_school.add_student(
+        "Hossein", "Ramezani", school_types["ps"], school_types["ps"][0]
+    )  # a first grade student
+
+    # Adding Teachers
 
     # -------------------------------------------------
     # For Testing Purposes:
 
+    import ipdb
 
-    import ipdb; ipdb.set_trace()
-    pprint(getattributes(test_school))
-
+    ipdb.set_trace()
+    pprint(gtattr(test_school))
 
     # pprint(getattributes(school_types["u"]))
 
@@ -95,7 +102,7 @@ def main():
 
     # pprint(getattributes(test_school))
     # print("End of the program!")
-    
+
     print("end")
 
 

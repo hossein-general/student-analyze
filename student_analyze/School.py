@@ -1,3 +1,6 @@
+from .Persons import Student
+
+
 # School class
 class School:
     # last_classroom
@@ -7,31 +10,25 @@ class School:
     def __init__(self, name, school_type):
         self.name = name
         self.school_type = school_type
-        self.classrooms = set()
-        self.classgroups = set()
-        self.last_classroom_id = 0
+        self.classrooms = dict()
+        self.students = dict()
+        self.teachers = dict()
+        self.classgroups = dict()
+        self.last_classroom_id = 100
+        self.last_student_id = 200
+        self.last_teacher_id = 300
+        self.last_classgroup_id = 400
 
     # Create and adding ClassRooms to the school
     def add_classroom(self, *classroom_names):
         # TODO Getting classroom_name
         for item in classroom_names:
-            id = self.get_id("cr")
-            new_classroom = ClassRoom(self, id, item)
-            self.classrooms.add(new_classroom)
-
-    # This class will manage ids for each id-able item in the school
-    # e.g. ClassRooms (cr), Teachers (t), Students (s), etc.
-    # This management happens by using a counter variable and adding one to it each time an id is assigned
-    # each entity has its own id counter
-    # This function is used within the class, where ever a new entity creates
-    def get_id(self, entity: str = "cr"):
-        match entity:
-            case "cr":
-                self.last_classroom_id += 1
-                return self.last_classroom_id
-            case _:
-                # TODO At this point there should be an error raise
-                return None
+            # Getting an id for the new classroom
+            classroom_id = self.get_id("classroom")
+            # Creating an instance of ClassRoom
+            new_classroom = ClassRoom(self, classroom_id, item)
+            # Assigning the newly created classroom to classrooms dict
+            self.classrooms[classroom_id] = new_classroom
 
     # Creating a ClassGroup for the school
     # most of the parameters should be removed and be placed within the function to get
@@ -44,25 +41,73 @@ class School:
     def add_classgroup(
         self,
         educationgrade,
-        student_list,
-        teacher_list,
-        lessons_list,
-        default_classroom,
-        classgroup_id,
+        student_ids_list,
+        teacher_ids_list,
+        lessons_ids_list,
+        default_classroom_id,
     ):
         # TODO Getting educationgrade
         # TODO Getting student_list
         # TODO Getting teacher_list
+        # Getting an id for the new classgroup
+        classgroup_id = self.get_id("classgroup")
+        # Creating an instance of ClassGroup
         new_classgroup = ClassGroup(
             self,
             educationgrade,
-            student_list,
-            teacher_list,
-            lessons_list,
-            default_classroom,
+            student_ids_list,
+            teacher_ids_list,
+            lessons_ids_list,
+            default_classroom_id,
             classgroup_id,
         )
-        self.classgroups.add(new_classgroup)
+        # Assigning the newly created classgroup to the classgroups dict
+        self.classgroups[classgroup_id] = new_classgroup
+
+    # Creating new students and assigning them to the school
+    def add_student(
+        self,
+        student_first_name,
+        student_last_name,
+        grade,
+        education_state,
+        education_grade,
+    ):
+        # Getting an id for the student from get_id
+        student_id = self.get_id("student")
+        # Calling the Student class to create an instance of Student
+        new_student = Student(
+            self,
+            first_name=student_first_name,
+            last_name=student_last_name,
+            education_state=education_state,
+            education_grade=education_grade,
+            id=student_id,
+        )
+        # Adding the newly created student to students dict
+        self.students[student_id] = new_student
+
+    # This class will manage ids for each id-able item in the school
+    # e.g. ClassRooms (classroom), Teachers (teacher), Students (student), etc.
+    # This management happens by using a counter variable and adding one to it each time an id is assigned
+    # each entity has its own id counter
+    # This function is used within the class, where ever a new entity creates
+    def get_id(self, entity: str):
+        match entity:
+            case "classroom":
+                self.last_classroom_id += 1
+                return self.last_classroom_id
+
+            case "student":
+                self.last_student_id += 1
+                return self.last_student_id
+
+            case "classgroup":
+                self.last_classgroup_id += 1
+                return self.last_classgroup_id
+
+            case _:
+                raise ValueError("non-defined entity name for id assignment")
 
     def __str__(self):
         return self.name

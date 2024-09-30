@@ -4,12 +4,9 @@ from .Persons import Student
 # School class
 class School:
     # last_classroom
-
-    # Im not sure if i should add __slots__ in School class, as it has many temporarily variables
-    # __sltos__ = ["school_type", "classrooms", "new_classroom", "classrooms"]
-    def __init__(self, name, school_type):
+    def __init__(self, name, education_state):
         self.name = name
-        self.school_type = school_type
+        self.education_state = education_state
         self.classrooms = dict()
         self.students = dict()
         self.teachers = dict()
@@ -69,8 +66,6 @@ class School:
         self,
         student_first_name,
         student_last_name,
-        grade,
-        education_state,
         education_grade,
     ):
         # Getting an id for the student from get_id
@@ -80,7 +75,6 @@ class School:
             self,
             first_name=student_first_name,
             last_name=student_last_name,
-            education_state=education_state,
             education_grade=education_grade,
             id=student_id,
         )

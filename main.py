@@ -8,9 +8,10 @@ from pprint import pprint
 from student_analyze import (
     Student,
     Teacher,
-    SchoolType,
+    EducationState,
     EducationGrade,
     EducationGroup,
+    EducationTerm,
     Lesson,
     ClassSession,
     ClassSchedule,
@@ -18,6 +19,7 @@ from student_analyze import (
     ClassRoom,
     School,
     gtattr,
+    GovPerson,
 )
 
 
@@ -30,46 +32,48 @@ def main():
 
     # -------------------------------------------------
     # General Information Initializing:
-    # Creating all excisting SchoolTypes
-    school_types = {}
-    school_types["ps"] = SchoolType("Primary School")
-    school_types["hs1"] = SchoolType("High School 1st Term")
-    school_types["hs2"] = SchoolType("High School 2nd Term")
-    school_types["u"] = SchoolType("University")
+    # Creating all excisting EducationStates
+    education_states = {}
+    education_states["ps"] = EducationState("Primary School")
+    education_states["hs1"] = EducationState("High School 1st Term")
+    education_states["hs2"] = EducationState("High School 2nd Term")
+    education_states["u"] = EducationState("University")
 
-    # Creating EducationGrades for each and all SchoolType
-    school_types["ps"].add_grade("1st grade")
-    school_types["ps"].add_grade("2nd grade")
-    school_types["ps"].add_grade("3rd grade")
-    school_types["ps"].add_grade("4th grade")
-    school_types["ps"].add_grade("5th grade")
-    school_types["ps"].add_grade("6th grade")
+    # Creating EducationGrades for each and all EducationState
+    education_states["ps"].add_grade("1st grade")
+    education_states["ps"].add_grade("2nd grade")
+    education_states["ps"].add_grade("3rd grade")
+    education_states["ps"].add_grade("4th grade")
+    education_states["ps"].add_grade("5th grade")
+    education_states["ps"].add_grade("6th grade")
 
-    school_types["hs1"].add_grade("7th grade")
-    school_types["hs1"].add_grade("8th grade")
-    school_types["hs1"].add_grade("9th grade")
+    education_states["hs1"].add_grade("7th grade")
+    education_states["hs1"].add_grade("8th grade")
+    education_states["hs1"].add_grade("9th grade")
 
-    school_types["hs2"].add_grade("10th grade")
-    school_types["hs2"].add_grade("11th grade")
-    school_types["hs2"].add_grade("12th grade")
+    education_states["hs2"].add_grade("10th grade")
+    education_states["hs2"].add_grade("11th grade")
+    education_states["hs2"].add_grade("12th grade")
 
-    school_types["u"].add_grade("Bachelor")
-    school_types["u"].add_grade("Master")
-    school_types["u"].add_grade("Ph.D")
+    education_states["u"].add_grade("Bachelor")
+    education_states["u"].add_grade("Master")
+    education_states["u"].add_grade("Ph.D")
 
-    # pprint(getattributes(school_types["u"]))
+    # -------------------------------------------------
+    # Creating the government
+    gov = GovPerson()
 
     # -------------------------------------------------
     # School Information Initializing
     # Creating a School
-    test_school = School("Shahid Abbass Hesaraki", school_types["ps"])
+    test_school = School("Shahid Abbass Hesaraki", education_states["ps"])
 
     # Creating classrooms for the school
     test_school.add_classroom("room 1", "room 2", "room 3")
 
     # Adding Students
     test_school.add_student(
-        "Hossein", "Ramezani", school_types["ps"], school_types["ps"][0]
+        "Hossein", "Ramezani", education_states["ps"], education_states["ps"][0]
     )  # a first grade student
 
     # Adding Teachers
@@ -77,31 +81,9 @@ def main():
     # -------------------------------------------------
     # For Testing Purposes:
 
-    import ipdb
+    import ipdb; ipdb.set_trace()
 
-    ipdb.set_trace()
     pprint(gtattr(test_school))
-
-    # pprint(getattributes(school_types["u"]))
-
-    # pprint(getattributes(school_types["u"]))
-    # system("cls")
-    # print("=============================")
-    # print("test_school.__dict__: \n")
-    # pprint(test_school.__dict__)
-
-    # print("=============================")
-    # print("vars(test_school): \n")
-    # pprint(vars(test_school))
-
-    # print("=============================")
-    # print("dir(teat_school): \n")
-    # pprint(dir(test_school))
-
-    # print("=============================")
-
-    # pprint(getattributes(test_school))
-    # print("End of the program!")
 
     print("end")
 

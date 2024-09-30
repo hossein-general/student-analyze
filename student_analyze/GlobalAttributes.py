@@ -1,10 +1,8 @@
-# SchoolType will define type of schools
+# EducationState will define type of education states wich affects different school types 
 # e.g. Primary School, High School 1st Term, High School 2nd Term, University
-class SchoolType:
-    # __slots__ = ["type_name", "educationgrades"]
-
-    def __init__(self, type_name):
-        self.type_name = type_name
+class EducationState:
+    def __init__(self, state_name):
+        self.state_name = state_name
         self.educationgrades = list()
         # TODO Creating variables that will be initialized when an instance is created, and will manage School realations
 
@@ -13,10 +11,10 @@ class SchoolType:
         self.educationgrades.append(new_educationgrade)
 
     def __str__(self):
-        return self.type_name
+        return self.state_name
 
 
-# EducationGrades are stages within each SchoolType that are defining the path for each student
+# EducationGrades are stages within each EducationState that are defining the path for each student
 # e.g. the primary school has 6 grades from 1st to 6th grade
 #   then high school 1st term has 3, starting with 7th and ending with 9th grade
 #   high school 2nd term continues like this till 12th grade
@@ -24,15 +22,15 @@ class SchoolType:
 # EducationGrade and SchoolTyeps are different from EducationGroups
 #   The first two are used to define where is an student in life time of education and the other defines the field of study
 class EducationGrade:
-    def __init__(self, parent_schooltype, name):
-        self.parent_schooltype = parent_schooltype
+    def __init__(self, parent_educationstate, name):
+        self.parent_educationstate = parent_educationstate
         self.name = name
 
     def __str__(self):
         return self.name
 
 
-# EducationGroups are created to define different fields of study in differen SchoolTypes
+# EducationGroups are created to define different fields of study in differen EducationStates
 # e.g. General, Tajrobi, Riazi, Mohandesi mechanic, ...
 class EducationGroup:
     def __init__(self, educationgrade, name):
@@ -58,9 +56,9 @@ class Lesson:
         return self.name
 
 
-class EducationState:
-    def __init__(self, parent_schooltype, name, order):
-        self.parent_schooltype = parent_schooltype
+class EducationTerm:
+    def __init__(self, parent_educationstate, name, order):
+        self.parent_educationstate = parent_educationstate
         self.name = name
         self.order = order
 

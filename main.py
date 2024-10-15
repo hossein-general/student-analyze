@@ -81,7 +81,9 @@ def main():
     # -------------------------------------------------
     # For Testing Purposes:
 
-    import ipdb; ipdb.set_trace()
+    import ipdb
+
+    ipdb.set_trace()
 
     pprint(gtattr(test_school))
 

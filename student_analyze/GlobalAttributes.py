@@ -1,17 +1,36 @@
 # EducationState will define type of education states wich affects different school types 
 # e.g. Primary School, High School 1st Term, High School 2nd Term, University
 class EducationState:
-    def __init__(self, state_name):
+    __es_list = []
+    def __init__(self, state_name, insert_to: int = None ):
         self.state_name = state_name
-        self.educationgrades = list()
+        # instead of creating id's for each educationgrade, im using a list that supports order, so i could now which grade comes after another in its order
+        self.__educationgrades = list()
         # TODO Creating variables that will be initialized when an instance is created, and will manage School realations
+        if insert_to is None:
+            self.__class__.__es_list.append(self)
+        else:
+            self.__class__.__es_list.insert(insert_to, self)
+            
 
     def add_grade(self, educationgrade_name):
-        new_educationgrade = EducationGrade(self, educationgrade_name)
-        self.educationgrades.append(new_educationgrade)
+        new_educationgrade = EducationGrade(self,  educationgrade_name)
+        self.__educationgrades.append(new_educationgrade)
+        return new_educationgrade
 
+    def educationgrades(self):
+        return self.__educationgrades
+        
     def __str__(self):
         return self.state_name
+    
+    def __repr__(self):
+        return self.state_name
+    
+    # Returning the list of education states by order
+    @classmethod
+    def list(cls):
+        return cls.__es_list
 
 
 # EducationGrades are stages within each EducationState that are defining the path for each student
@@ -27,6 +46,9 @@ class EducationGrade:
         self.name = name
 
     def __str__(self):
+        return self.name
+    
+    def __repr__(self):
         return self.name
 
 
@@ -45,6 +67,9 @@ class EducationGroup:
 
     def __str__(self):
         return self.name
+    
+    def __repr__(self):
+        return self.name
 
 
 class Lesson:
@@ -54,6 +79,9 @@ class Lesson:
 
     def __str__(self):
         return self.name
+    
+    def __repr__(self):
+        self.name
 
 
 class EducationTerm:
@@ -63,4 +91,7 @@ class EducationTerm:
         self.order = order
 
     def __str__(self):
+        return self.name
+    
+    def __repr__(self):
         return self.name

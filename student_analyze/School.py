@@ -1,4 +1,4 @@
-from .Persons import Student
+# from .Persons import Student
 
 
 # School class

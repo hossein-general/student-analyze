@@ -2,26 +2,32 @@ from abc import ABC, abstractmethod  # Not yet sure how to make the class
 from .GlobalAttributes import EducationGrade
 from datetime import datetime
 
+
 # GovernmentPerson shortened as GovPerson
 # This class is a blueprint for person type
 # Any organization that needs to validate a persons identification will chek that person's id with this class, and may retreive data about that person. (this connection can be seen in government web apps only gets the person id and filles other fields automatically like name, family, age, etc.)
 # Each instance of this class is single person, containing information about that person. There will be a private variable within the class itself that acts as a container for all persons created
 # UPDATE: GovPerson has been changed to Person
 class Person:
-    # region Class Attributes
     # A dictionary containing all people
     __people = dict()
     __id_pool = 0
     __last_nationalcode = 1000
-    # endregion
 
     # TODO making the national_code a string (right now its an integer to prevent complecation)
     # TODO write typing for each parameter (e.g. parameter: str)
-    def __init__(self, first_name: str, last_name: str, birth_date: datetime, education_grade: EducationGrade, national_code: int = None):
+    def __init__(
+        self,
+        first_name: str,
+        last_name: str,
+        birth_date: datetime,
+        education_grade: EducationGrade,
+        national_code: int = None,
+    ):
         self.first_name = first_name
         self.last_name = last_name
         # Each person has an education grade as their education state
-        # it has to be of type 
+        # it has to be of type
         self.birth_date = birth_date
         self.education_grade = education_grade
         # setting a national code (this could be done automatically or by user)
@@ -36,16 +42,39 @@ class Person:
 
     # region WorkingLog Class
     # A class that is kind of a table that contains records of places each person have been worked or is working in
+    class Contract:
+        def __init__(self) -> None:
+            # the execuation date of contract
+            self.conclusion_date
+            # when the contract ends by reaching its deadline
+            # expiration_date and termination_date are Usually(!) the same
+            # It referes to the "initial" date, and it could be not the same as termination_date in two cases:
+            #   Automatic Renewal: If a contract has an automatic renewal clause, the expiration date might refer to the end of the initial term, while the termination date would be the actual date when the contract is formally terminated (which could be after a renewal period)
+            #   Early Termination: If a contract allows for early termination under certain conditions, the termination date would be the date when one party officially notifies the other of their intent to terminate, while the expiration date might still refer to the end of the original term.
+            self.expiration_date
+            # when the contract ends
+            self.termination_date
+
     class WorkingLog:
         # Creating a new record for the table
-        def __init__(self, start_contract_date, original_end_contract_date, working_organization, job_position, base_salary):
+        def __init__(
+            self,
+            parent_person,
+            start_contract_date,
+            original_end_contract_date,
+            working_organization,
+            job_position,
+            base_salary,
+        ):
+            self.person = parent_person
             self.start_contract_date = start_contract_date
             # an end_time would not be empty as each contract has an end_time by default
             self.original_end_contract_date = start_contract_date
             # in case the person leaves his work or fired by organization
-            self.end_contract_datetime = original_end_contract_date
+            self.contract_expiration = original_end_contract_date
             # like beeing fired or leaving the work or etc.
-            self.end_contract_reason = None
+            # could be {Expiration, Termination, or Resignation}
+            self.end_of_employment_relationship_reason = None
             # The id of that organization
             self.working_organization = working_organization
             self.job_position = job_position
@@ -63,6 +92,7 @@ class Person:
         @property
         def status(self):
             pass
+
         # endregion
 
         # region Class Method/Properties
@@ -71,10 +101,11 @@ class Person:
         @classmethod
         def current_organization(cls):
             pass
+
         # endregion
-    
+
     # endregion
-    
+
     # region EducationLog Class
     # A class that is kind of a table that contains records of places each person have been educated or is currently educating in
     class EducationLog:
@@ -87,14 +118,28 @@ class Person:
         @classmethod
         def current_organization(cls):
             pass
+
     # endregion
-    
+
     # region Instancemethods/Properties
-    def add_workinglog(self, start_contract_date, original_end_contract_date, working_organization, job_position, base_salary):
-        new_workinglog = self.WorkingLog(start_contract_date, original_end_contract_date, working_organization, job_position, base_salary)
+    def add_workinglog(
+        self,
+        start_contract_date,
+        original_end_contract_date,
+        working_organization,
+        job_position,
+        base_salary,
+    ):
+        new_workinglog = self.WorkingLog(
+            self,
+            start_contract_date,
+            original_end_contract_date,
+            working_organization,
+            job_position,
+            base_salary,
+        )
         self._workinglog_list.append(new_workinglog)
-        
-        
+
     @property
     def age(self):
         # TODO calculating age
@@ -104,19 +149,20 @@ class Person:
     @property
     def national_code(self):
         return self.__national_code
-    
+
     # Returning full name
     @property
     def fullname(self):
         return f"{self.first_name} {self.last_name}"
-    
+
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
-    
+
     def __repr__(self):
         return f"{self.first_name} {self.last_name}"
+
     # endregion
-    
+
     # region Classmethods/Properties
     @classmethod
     def get_by_id(cls, person_id):
@@ -139,10 +185,9 @@ class Person:
     @classmethod
     def add_person(cls, person):
         cls.__people[cls.id] = person
+
     # endregion
 
-        
-    
 
 # # OLD STYLE PERSON MODULE ----------------------------------
 # # OLD STYLE STUDENT/TEACHER CLASSES

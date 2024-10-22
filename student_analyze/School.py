@@ -1,8 +1,18 @@
+
+
+class Organization:
+    def __init__(self) -> None:
+        pass
+    
+
+
+
+
+
 # from .Persons import Student
 
-
 # School class
-class School:
+class School(Organization):
     # last_classroom
     def __init__(self, name, education_state):
         self.name = name
@@ -161,7 +171,6 @@ class ClassGroup:
 # e.g. "Riazi-1 20341", "Arabi", ...
 class ClassSchedule:
     def __init__(self, parent_classgroup, id, student_list, teacher, lesson):
-        self.parent_classgroup = parent_classgroup
         self.id = id
         self.student_list = student_list
         self.teacher = teacher

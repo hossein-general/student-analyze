@@ -1,10 +1,12 @@
+# region IMPORTING
 # For a cleaner look
 from os import system
-
-# As a cleaner printing option
 from pprint import pprint
 
-# Main modules for program
+# Other packages
+from datetime import datetime
+
+# Modules from the main package
 from student_analyze import (
     Person,
     # Student,  # Depricated
@@ -22,17 +24,35 @@ from student_analyze import (
     gtattr,
     # GovPerson, # Renamed to Person
 )
-from datetime import datetime
+
+# Faker Module
+import faker
+# endregion
 
 
+
+# main: Containing functions for users to modify and manage the applicatoin (like adding person, organization, etc.)
 def main():
-    # # Cleaning the screen
-    # system("cls")
+    es = {}
+    eg = {}
+    genders = {}
+    person = {}
 
-    # # Running the debugger
-    # import ipdb; ipdb.set_trace()
+    # region initializations and fakers
+    es, eg, gender = faker.init_data()
+    person_gen = faker.fake_person(eg, gender)
+    for person in person_gen:
+        pass
+    # endregion
 
-    # region old style educationstate/educationgrade/school/classroom initialization
+    import ipdb; ipdb.set_trace()
+
+
+
+if __name__ == "__main__":
+    main()
+
+    # initialization
     # -------------------------------------------------
     # # General Information Initializing:
     # # Creating all excisting EducationStates
@@ -85,56 +105,12 @@ def main():
     # # Adding Teachers
     # # ...
 
-    # endregion
+    # # Person
+    # person = {}
+    # person_temp = Person("Hossein", "Ramezani", datetime(2020, 5, 17), eg["10th"])
+    # person[person_temp.id] = person_temp
 
-    # region new style eudcationstate
-    # Creating EducationState's
-    es = {}
-    es['ps'] = EducationState('Primary School')
-    es['hs1'] = EducationState('High School 1st')
-    es['hs2'] = EducationState('High School 2nd')
-    es['u'] = EducationState('University')
+    # person_temp = Person("Mohammadmahdi", "Ramezani", datetime(2023, 3, 11), eg["7th"])
+    # person[person_temp.id] = person_temp
 
-    # Creating
-    eg = {}
-    eg['1st'] = es["ps"].add_grade("1st grade")
-    eg['2nd'] = es["ps"].add_grade("2nd grade")
-    eg['3rd'] = es["ps"].add_grade("3rd grade")
-    eg['4th'] = es["ps"].add_grade("4th grade")
-    eg['5th'] = es["ps"].add_grade("5th grade")
-    eg['6th'] = es["ps"].add_grade("6th grade")
-
-    eg['7th'] = es["hs1"].add_grade("7th grade")
-    eg['8th'] = es["hs1"].add_grade("8th grade")
-    eg['9th'] = es["hs1"].add_grade("9th grade")
-
-    eg['10th'] = es["hs2"].add_grade("10th grade")
-    eg['11th'] = es["hs2"].add_grade("11th grade")
-    eg['12th'] = es["hs2"].add_grade("12th grade")
-
-    # in persion: Lisanse
-    eg['bachelor'] = es["u"].add_grade("Bachelor")
-    # in persian: foghlisans
-    eg['master'] = es["u"].add_grade("Master")
-    #  in persian: doctora
-    eg['phd'] = es["u"].add_grade("Ph.D")
-    # endregion
-
-    # region new style person
-    # Creating a Person
-    person1 = Person("Hossein", "Ramezani", datetime(2020, 5, 17), eg['10th'])
-    person2 = Person("Mohammadmahdi", "Ramezani", datetime(2023, 3, 11), eg['7th'])
     # Adding logs to the WorkingLog
-    
-
-    # endregion
-
-    # ===================================================================
-    # For Testing Purposes:
-    import ipdb
-    ipdb.set_trace()
-    print("end")
-
-
-if __name__ == "__main__":
-    main()

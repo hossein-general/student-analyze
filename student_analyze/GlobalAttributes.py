@@ -5,12 +5,13 @@
 # endregion
 
 
-# region EducationState
+# region E-State
 # EducationState will define type of education states wich affects different school types
 # e.g. Primary School, High School 1st Term, High School 2nd Term, University
 class EducationState:
     __es_list = []
 
+    # The insert_to parameter is used to manage the order of stages
     def __init__(self, state_name, insert_to: int = None):
         self.state_name = state_name
         # instead of creating id's for each educationgrade, im using a list that supports order, so i could now which grade comes after another in its order
@@ -21,6 +22,7 @@ class EducationState:
         else:
             self.__class__.__es_list.insert(insert_to, self)
 
+    # this method is used to create a new educationGrade though an educationState instance, which is the main way of doing so.
     def add_grade(self, educationgrade_name):
         new_educationgrade = EducationGrade(self, educationgrade_name)
         self.__educationgrades.append(new_educationgrade)
@@ -44,7 +46,7 @@ class EducationState:
 # endregion
 
 
-# region EducationGrade
+# region E-Grade
 # EducationGrades are stages within each EducationState that are defining the path for each student
 # e.g. the primary school has 6 grades from 1st to 6th grade
 #   then high school 1st term has 3, starting with 7th and ending with 9th grade
@@ -67,7 +69,7 @@ class EducationGrade:
 # endregion
 
 
-# region EducationGroup
+# region E-Group
 # EducationGroups are created to define different fields of study in differen EducationStates
 # e.g. General, Tajrobi, Riazi, Mohandesi mechanic, ...
 class EducationGroup:
@@ -107,7 +109,10 @@ class Lesson:
 # endregion
 
 
-# region EducationTerm
+# region E-Term
+# EducationTerms are not yet defined, but will manage the date system for learnings
+# Something like "1 year for each grade of highschool state, 4 month for each term of university, etc..."
+# TODO complete the EducationTerm class
 class EducationTerm:
     def __init__(self, parent_educationstate, name, order):
         self.parent_educationstate = parent_educationstate

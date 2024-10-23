@@ -28,89 +28,29 @@ from student_analyze import (
 # Program Modules
 import faker
 from ui import Program
+from bl import RuntimeDataAccessor
 
 # endregion
 
 
 # main: Containing functions for users to modify and manage the applicatoin (like adding person, organization, etc.)
 def main():
-    es = {}
-    eg = {}
-    genders = {}
-    person = {}
-
+    data = RuntimeDataAccessor()
+    
     # region initializations and fakers
-    es, eg, gender = faker.init_data()
-    person_gen = faker.fake_person(eg, gender)
-    for person in person_gen:
-        pass
+    faker.init_data(data)
+    person_gen = faker.fake_person(data, 20)
+    for new_person in person_gen:
+        data.person.list[new_person.id] = new_person
+
     # endregion
 
-    program = Program()
-    program.main_menue()
+    program = Program(data)
+    program.start()
+
+    system("cls")    
+    print("Good Luck")
+
 
 if __name__ == "__main__":
     main()
-
-    # initialization
-    # -------------------------------------------------
-    # # General Information Initializing:
-    # # Creating all excisting EducationStates
-    # # a list (as it supports order) containing es
-    # # TODO i should add some functions to manage order for the education state
-    # es = []
-
-    # es["ps"] = EducationState("Primary School")
-    # es["hs1"] = EducationState("High School 1st Term")
-    # es["hs2"] = EducationState("High School 2nd Term")
-    # es["u"] = EducationState("University")
-
-    # # Creating EducationGrades for each and all EducationState
-    # # each education state will create its own education grade instances and stores them within itself
-    # es["ps"].add_grade("1st grade")
-    # es["ps"].add_grade("2nd grade")
-    # es["ps"].add_grade("3rd grade")
-    # es["ps"].add_grade("4th grade")
-    # es["ps"].add_grade("5th grade")
-    # es["ps"].add_grade("6th grade")
-
-    # es["hs1"].add_grade("7th grade")
-    # es["hs1"].add_grade("8th grade")
-    # es["hs1"].add_grade("9th grade")
-
-    # es["hs2"].add_grade("10th grade")
-    # es["hs2"].add_grade("11th grade")
-    # es["hs2"].add_grade("12th grade")
-
-    # # in persion: Lisanse
-    # es["u"].add_grade("Bachelor")
-    # # in persian: foghlisans
-    # es["u"].add_grade("Master")
-    # #  in persian: doctora
-    # es["u"].add_grade("Ph.D")
-
-    # # -------------------------------------------------
-    # # School Information Initializing
-    # # Creating a School
-    # test_school = School("Shahid Abbass Hesaraki", es["ps"])
-
-    # # Creating classrooms for the school
-    # test_school.add_classroom("room 1", "room 2", "room 3")
-
-    # # Adding Students
-    # test_school.add_student(
-    #     "Hossein", "Ramezani", es["ps"], es["ps"][0]
-    # )  # a first grade student
-
-    # # Adding Teachers
-    # # ...
-
-    # # Person
-    # person = {}
-    # person_temp = Person("Hossein", "Ramezani", datetime(2020, 5, 17), eg["10th"])
-    # person[person_temp.id] = person_temp
-
-    # person_temp = Person("Mohammadmahdi", "Ramezani", datetime(2023, 3, 11), eg["7th"])
-    # person[person_temp.id] = person_temp
-
-    # Adding logs to the WorkingLog

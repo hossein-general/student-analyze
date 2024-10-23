@@ -15,45 +15,40 @@ def init_educationstates():
     pass
 
 
-def init_data():
+def init_data(data):
     # EducationStates
-    es = {}
-    es["ps"] = EducationState("Primary School")
-    es["hs1"] = EducationState("High School 1st")
-    es["hs2"] = EducationState("High School 2nd")
-    es["u"] = EducationState("University")
+    data.es.list["ps"] = EducationState("Primary School")
+    data.es.list["hs1"] = EducationState("High School 1st")
+    data.es.list["hs2"] = EducationState("High School 2nd")
+    data.es.list["u"] = EducationState("University")
 
     # EducationGrades
-    eg = {}
-    eg["1st"] = es["ps"].add_grade("1st grade")
-    eg["2nd"] = es["ps"].add_grade("2nd grade")
-    eg["3rd"] = es["ps"].add_grade("3rd grade")
-    eg["4th"] = es["ps"].add_grade("4th grade")
-    eg["5th"] = es["ps"].add_grade("5th grade")
-    eg["6th"] = es["ps"].add_grade("6th grade")
+    data.eg.list["1st"] = data.es.list["ps"].add_grade("1st grade")
+    data.eg.list["2nd"] = data.es.list["ps"].add_grade("2nd grade")
+    data.eg.list["3rd"] = data.es.list["ps"].add_grade("3rd grade")
+    data.eg.list["4th"] = data.es.list["ps"].add_grade("4th grade")
+    data.eg.list["5th"] = data.es.list["ps"].add_grade("5th grade")
+    data.eg.list["6th"] = data.es.list["ps"].add_grade("6th grade")
 
-    eg["7th"] = es["hs1"].add_grade("7th grade")
-    eg["8th"] = es["hs1"].add_grade("8th grade")
-    eg["9th"] = es["hs1"].add_grade("9th grade")
+    data.eg.list["7th"] = data.es.list["hs1"].add_grade("7th grade")
+    data.eg.list["8th"] = data.es.list["hs1"].add_grade("8th grade")
+    data.eg.list["9th"] = data.es.list["hs1"].add_grade("9th grade")
 
-    eg["10th"] = es["hs2"].add_grade("10th grade")
-    eg["11th"] = es["hs2"].add_grade("11th grade")
-    eg["12th"] = es["hs2"].add_grade("12th grade")
+    data.eg.list["10th"] = data.es.list["hs2"].add_grade("10th grade")
+    data.eg.list["11th"] = data.es.list["hs2"].add_grade("11th grade")
+    data.eg.list["12th"] = data.es.list["hs2"].add_grade("12th grade")
 
-    eg["bachelor"] = es["u"].add_grade("Bachelor")
-    eg["master"] = es["u"].add_grade("Master")
-    eg["phd"] = es["u"].add_grade("Ph.D")
+    data.eg.list["bachelor"] = data.es.list["u"].add_grade("Bachelor")
+    data.eg.list["master"] = data.es.list["u"].add_grade("Master")
+    data.eg.list["phd"] = data.es.list["u"].add_grade("Ph.D")
 
     # Genders
-    gender = {}
-    gender["male"] = Person.Gender("male")
-    gender["female"] = Person.Gender("female")
-
-    return es, eg, gender
+    data.gender.list["male"] = Person.Gender("male")
+    data.gender.list["female"] = Person.Gender("female")
 
 
 # TODO adding the ability to access eg, es, person, gender and etc through the class
-def fake_person(eg, gender, count):
+def fake_person(data, count):
     # person_temp = Person("Hossein", "Ramezani", datetime(2020, 5, 17), eg["10th"])
 
     # person_temp = Person("Mohammadmahdi", "Ramezani", datetime(2023, 3, 11), eg["7th"])
@@ -61,21 +56,21 @@ def fake_person(eg, gender, count):
     for count in range(count):
         # TODO i should refactor this and create Names class and assign the gender attribute to it (i dont have enough time)
         fname_gender_list = (
-            ("hossein", gender["male"]),
-            ("mohammad mahdi", gender["male"]),
-            ("reza", gender["male"]),
-            ("maryam", gender["female"]),
-            ("samira", gender["female"]),
-            ("fereshteh", gender["female"]),
-            ("eisa", gender["female"]),
-            ("peyman", gender["male"]),
-            ("mansore", gender["female"]),
-            ("elham", gender["female"]),
-            ("hasan", gender["male"]),
-            ("ali", gender["male"]),
-            ("said", gender["male"]),
-            ("arash", gender["male"]),
-            ("hoorieh", gender["female"]),
+            ("hossein", data.gender.list["male"]),
+            ("mohammad mahdi", data.gender.list["male"]),
+            ("reza", data.gender.list["male"]),
+            ("maryam", data.gender.list["female"]),
+            ("samira", data.gender.list["female"]),
+            ("fereshteh", data.gender.list["female"]),
+            ("eisa", data.gender.list["female"]),
+            ("peyman", data.gender.list["male"]),
+            ("mansore", data.gender.list["female"]),
+            ("elham", data.gender.list["female"]),
+            ("hasan", data.gender.list["male"]),
+            ("ali", data.gender.list["male"]),
+            ("said", data.gender.list["male"]),
+            ("arash", data.gender.list["male"]),
+            ("hoorieh", data.gender.list["female"]),
         )
         lname_list = (
             "mohammadi",
@@ -109,7 +104,7 @@ def fake_person(eg, gender, count):
         temp_gender = temp_fname_gender[1]
         # TODO making the birth_date attribute a random date within a range
         temp_birth_date = datetime(2001, 9, 11)
-        temp_education_grade = random.choice(tuple(eg.values()))
+        temp_education_grade = random.choice(tuple(data.eg.list.values()))
 
         yield Person(
             temp_first_name,

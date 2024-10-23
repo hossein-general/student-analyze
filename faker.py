@@ -59,24 +59,25 @@ def fake_person(eg, gender, count):
     # person_temp = Person("Mohammadmahdi", "Ramezani", datetime(2023, 3, 11), eg["7th"])
 
     for count in range(count):
-        first_name_list = (
-            "hossein",
-            "mohammad mahdi",
-            "reza",
-            "maryam",
-            "samira",
-            "fereshteh",
-            "eisa",
-            "peyman",
-            "mansore",
-            "elham",
-            "hasan",
-            "ali",
-            "said",
-            "arash",
-            "hoorieh",
+        # TODO i should refactor this and create Names class and assign the gender attribute to it (i dont have enough time)
+        fname_gender_list = (
+            ("hossein", gender["male"]),
+            ("mohammad mahdi", gender["male"]),
+            ("reza", gender["male"]),
+            ("maryam", gender["female"]),
+            ("samira", gender["female"]),
+            ("fereshteh", gender["female"]),
+            ("eisa", gender["female"]),
+            ("peyman", gender["male"]),
+            ("mansore", gender["female"]),
+            ("elham", gender["female"]),
+            ("hasan", gender["male"]),
+            ("ali", gender["male"]),
+            ("said", gender["male"]),
+            ("arash", gender["male"]),
+            ("hoorieh", gender["female"]),
         )
-        last_name_list = (
+        lname_list = (
             "mohammadi",
             "ramezani",
             "mamani",
@@ -96,12 +97,16 @@ def fake_person(eg, gender, count):
             "nikravesh",
         )
 
-        first_name_list = tuple(name.capitalize() for name in first_name_list)
-        last_name_list = tuple(name.capitalize() for name in last_name_list)
+        # Capitalizing the name parts
+        fname_gender_list = tuple(
+            (name[0].capitalize(), name[1]) for name in fname_gender_list
+        )
+        lname_list = tuple(name.capitalize() for name in lname_list)
 
-        temp_first_name = random.choice(first_name_list)
-        temp_last_name = random.choice(last_name_list)
-        temp_gender = random.choice(tuple(gender.values()))
+        temp_fname_gender = random.choice(fname_gender_list)
+        temp_first_name = temp_fname_gender[0]
+        temp_last_name = random.choice(lname_list)
+        temp_gender = temp_fname_gender[1]
         # TODO making the birth_date attribute a random date within a range
         temp_birth_date = datetime(2001, 9, 11)
         temp_education_grade = random.choice(tuple(eg.values()))
@@ -126,13 +131,13 @@ def main():
             person.first_name,
             person.last_name,
             person.gender.name,
-            # person.birth_date,
+            person.birth_date,
             person.education_grade.name,
             person.national_code,
         )
         print(
             # "{0:^10} {1:<10} {2:>10} \n".format('test', 'test2', 'test3'),
-            "{:<5}{:^16}{:^16}{:^10}{:^15}{:^7}".format(*order)
+            "{:<5}{:<20}{:<20}{:<10}{!s:<25}{:<15}{:<72}".format(*order)
             # "{:^10}{:^10}".format(person.id, person)
         )
 

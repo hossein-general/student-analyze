@@ -1,8 +1,9 @@
-from abc import ABC, abstractmethod  # Not yet sure how to make the class
+# from abc import ABC, abstractmethod
 from .GlobalAttributes import EducationGrade
 from datetime import datetime
 
 
+# region Person
 # GovernmentPerson shortened as GovPerson
 # This class is a blueprint for person type
 # Any organization that needs to validate a persons identification will chek that person's id with this class, and may retreive data about that person. (this connection can be seen in government web apps only gets the person id and filles other fields automatically like name, family, age, etc.)
@@ -42,8 +43,6 @@ class Person:
         self.__class__.add_person(self)
         self._workinglog_list = []
 
-    # region WorkingLog Class
-
     # A Gender could be Male or Female
     class Gender:
         _genders = []
@@ -56,7 +55,7 @@ class Person:
             return self.name
 
         def __repr__(self):
-            return self.name
+            return f'<Gender: "{self.name}">'
 
     # A class that is kind of a table that contains records of places each person have been worked or is working in
     class WorkingLog:
@@ -72,8 +71,6 @@ class Person:
             # The id of that organization
             self.working_organization = working_organization
 
-        # region Instance Method/Properties
-
         # An instance method that will tell whether the record status is active or inactive
         # it will check the organizations contractid and checks if the termination_date of that contract is filled with a value or not
         @property
@@ -87,20 +84,12 @@ class Person:
                 else (False, "inactive")
             )
 
-        # endregion
-
-        # region Class Method/Properties
         # Returns the instance that is representing the current working organization
         # that instance should not have an end_time and there could be multiple instances that will be retruned as a list
         @classmethod
         def current_organization(cls):
             pass
 
-        # endregion
-
-    # endregion
-
-    # region EducationLog Class
     # A class that is kind of a table that contains records of places each person have been educated or is currently educating in
     class EducationLog:
         # Creating a new record for the table
@@ -113,9 +102,6 @@ class Person:
         def current_organization(cls):
             pass
 
-    # endregion
-
-    # region Instance methods/Properties
     def add_workinglog(
         self,
         working_organization,
@@ -147,11 +133,8 @@ class Person:
         return f"{self.first_name} {self.last_name}"
 
     def __repr__(self):
-        return f"{self.first_name} {self.last_name}"
+        return f'<Person: "{self.fullname}">'
 
-    # endregion
-
-    # region Classmethods/Properties
     @classmethod
     def get_by_id(cls, person_id):
         return cls.__people[person_id]
@@ -181,47 +164,47 @@ class Person:
     def add_person(cls, person):
         cls.__people[person.id] = person
 
-    # endregion
 
+# endregion
 
 # # OLD STYLE PERSON MODULE ----------------------------------
 # # OLD STYLE STUDENT/TEACHER CLASSES
-class BasePerson(ABC):
-    def __init__(self, first_name, last_name):
-        self.first_name = first_name
-        self.last_name = last_name
-        print("the main")
+# class BasePerson(ABC):
+#     def __init__(self, first_name, last_name):
+#         self.first_name = first_name
+#         self.last_name = last_name
+#         print("the main")
 
-    @abstractmethod
-    def __str__(self):
-        pass
-
-
-class Student(BasePerson):
-    def __init__(
-        self,
-        parent_school,
-        education_grade,
-        student_id,
-        *args,
-        **kwargs,
-    ):
-        super().__init__(*args, **kwargs)
-        # TODO adding some getter and setters to the attributes
-        self.parent_school = parent_school
-        self.education_grade = education_grade
-        self.id = student_id
-
-    def __str__(self):
-        return " ".join((self.first_name, self.last_name))
+#     @abstractmethod
+#     def __str__(self):
+#         pass
 
 
-class Teacher(BasePerson):
-    def __init__(self, parent_school, name_prefix, teacher_id, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.name_prefix = name_prefix
-        self.parent_school = parent_school
-        self.id = teacher_id
+# class Student(BasePerson):
+#     def __init__(
+#         self,
+#         parent_school,
+#         education_grade,
+#         student_id,
+#         *args,
+#         **kwargs,
+#     ):
+#         super().__init__(*args, **kwargs)
+#         # TODO adding some getter and setters to the attributes
+#         self.parent_school = parent_school
+#         self.education_grade = education_grade
+#         self.id = student_id
 
-    def __str__(self):
-        return f"{self.name_prefix} {self.first_name} {self.last_name}"
+#     def __str__(self):
+#         return " ".join((self.first_name, self.last_name))
+
+
+# class Teacher(BasePerson):
+#     def __init__(self, parent_school, name_prefix, teacher_id, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         self.name_prefix = name_prefix
+#         self.parent_school = parent_school
+#         self.id = teacher_id
+
+#     def __str__(self):
+#         return f"{self.name_prefix} {self.first_name} {self.last_name}"

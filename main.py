@@ -25,10 +25,11 @@ from student_analyze import (
     # GovPerson, # Renamed to Person
 )
 
-# Faker Module
+# Program Modules
 import faker
-# endregion
+from ui import Program
 
+# endregion
 
 
 # main: Containing functions for users to modify and manage the applicatoin (like adding person, organization, etc.)
@@ -45,9 +46,8 @@ def main():
         pass
     # endregion
 
-    import ipdb; ipdb.set_trace()
-
-
+    program = Program()
+    program.main_menue()
 
 if __name__ == "__main__":
     main()

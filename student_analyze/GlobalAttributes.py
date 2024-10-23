@@ -1,8 +1,17 @@
-# EducationState will define type of education states wich affects different school types 
+# region Module Documention
+# This module containes classes that are globaly used for education related stuff
+
+
+# endregion
+
+
+# region EducationState
+# EducationState will define type of education states wich affects different school types
 # e.g. Primary School, High School 1st Term, High School 2nd Term, University
 class EducationState:
     __es_list = []
-    def __init__(self, state_name, insert_to: int = None ):
+
+    def __init__(self, state_name, insert_to: int = None):
         self.state_name = state_name
         # instead of creating id's for each educationgrade, im using a list that supports order, so i could now which grade comes after another in its order
         self.__educationgrades = list()
@@ -11,28 +20,31 @@ class EducationState:
             self.__class__.__es_list.append(self)
         else:
             self.__class__.__es_list.insert(insert_to, self)
-            
 
     def add_grade(self, educationgrade_name):
-        new_educationgrade = EducationGrade(self,  educationgrade_name)
+        new_educationgrade = EducationGrade(self, educationgrade_name)
         self.__educationgrades.append(new_educationgrade)
         return new_educationgrade
 
     def educationgrades(self):
         return self.__educationgrades
-        
+
     def __str__(self):
         return self.state_name
-    
+
     def __repr__(self):
-        return self.state_name
-    
+        return f'<EducationState: "{self.state_name}">'
+
     # Returning the list of education states by order
     @classmethod
     def list(cls):
         return cls.__es_list
 
 
+# endregion
+
+
+# region EducationGrade
 # EducationGrades are stages within each EducationState that are defining the path for each student
 # e.g. the primary school has 6 grades from 1st to 6th grade
 #   then high school 1st term has 3, starting with 7th and ending with 9th grade
@@ -47,11 +59,15 @@ class EducationGrade:
 
     def __str__(self):
         return self.name
-    
+
     def __repr__(self):
-        return self.name
+        return f'<EducationGrade: "{self.name}">'
 
 
+# endregion
+
+
+# region EducationGroup
 # EducationGroups are created to define different fields of study in differen EducationStates
 # e.g. General, Tajrobi, Riazi, Mohandesi mechanic, ...
 class EducationGroup:
@@ -67,11 +83,15 @@ class EducationGroup:
 
     def __str__(self):
         return self.name
-    
+
     def __repr__(self):
-        return self.name
+        return f'<EducationGroup: "{self.name}">'
 
 
+# endregion
+
+
+# region Lesson
 class Lesson:
     def __init__(self, parent_educationgroup, name):
         self.parent_educationgroup = parent_educationgroup
@@ -79,11 +99,15 @@ class Lesson:
 
     def __str__(self):
         return self.name
-    
+
     def __repr__(self):
-        self.name
+        return f'<Lesson: "{self.name}">'
 
 
+# endregion
+
+
+# region EducationTerm
 class EducationTerm:
     def __init__(self, parent_educationstate, name, order):
         self.parent_educationstate = parent_educationstate
@@ -92,6 +116,9 @@ class EducationTerm:
 
     def __str__(self):
         return self.name
-    
+
     def __repr__(self):
-        return self.name
+        return f'<EducationTerm: "{self.name}">'
+
+
+# endregion

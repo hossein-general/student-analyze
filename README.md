@@ -1,5 +1,7 @@
 # Student Management and Analyzing Tool
 
+database design link: https://dbdiagram.io/d/6713923d97a66db9a38ace8f
+
 this program will manage and analyze students data within a school
 
 it containes information about the school and each classroom and teachers

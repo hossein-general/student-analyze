@@ -2,7 +2,7 @@
 # These Classes only have meaning in the context of schools
 # The School class within this module inharites from the Organizations class within the Organizations module
 
-from .Organizatin import Organization
+from .Organization import Organization
 
 # region School
 # School class

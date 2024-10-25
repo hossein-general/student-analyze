@@ -4,6 +4,25 @@
 from typing import Callable  # to assign functions to type hints
 from os import system
 
+# Development tools
+import ipdb
+
+# endregion
+
+
+# region MenueOption
+class MenueOption:
+    def __init__(self, name: str, trigger: Callable, data_object=None) -> None:
+        self.name = name
+        self.trigger = trigger
+        self.data_object = data_object
+
+    def __str__(self) -> str:
+        return self.name
+
+    def __repr__(self) -> str:
+        return f'<MenueOption: "{self.name}">'
+
 # endregion
 
 
@@ -16,32 +35,32 @@ class Program:
 
         # Main Menue menue options
         self.main_menue_options = (
-            self.MenueOption(
+            MenueOption(
                 "global attribute managment", self.global_attribute_management
             ),
-            self.MenueOption("person managment", self.person_management),
+            MenueOption("person managment", self.person_management),
         )
         # Global attribute management menue option
         self.glob_attr_manage_mp = (
-            self.MenueOption("Education States management", None),
-            self.MenueOption("Education Grade management", None),
-            self.MenueOption("Education Group management", None),
-            self.MenueOption("Lesson management", None),
+            MenueOption("Education States management", None),
+            MenueOption("Education Grade management", None),
+            MenueOption("Education Group management", None),
+            MenueOption("Lesson management", None),
         )
         # Education State management menue option
         self.es_manage_mp = (
-            self.MenueOption("Show all", None, data.es),
-            self.MenueOption("Add", None, data.es),
-            self.MenueOption("Edit", None, data.es),
-            self.MenueOption("Remove", None, data.es),
+            MenueOption("Show all", None, data.es),
+            MenueOption("Add", None, data.es),
+            MenueOption("Edit", None, data.es),
+            MenueOption("Remove", None, data.es),
         )
         # Person management menue option
         self.person_manage_mp = (
-            self.MenueOption("Show all", None),
-            self.MenueOption("Search", None),
-            self.MenueOption("Add", None),
-            self.MenueOption("Edit", None),
-            self.MenueOption("Remove", None),
+            MenueOption("Show all", None),
+            MenueOption("Search", None),
+            MenueOption("Add", None),
+            MenueOption("Edit", None),
+            MenueOption("Remove", None),
         )
 
     # region Menues
@@ -59,7 +78,7 @@ class Program:
 
             # Cheking if there are any error
             if bottom_message:
-                for num in range(len(bottom_message)):
+                for _ in range(len(bottom_message)):
                     print("-", bottom_message.pop(0))
 
             # Getting the user input
@@ -67,7 +86,7 @@ class Program:
 
             try:
                 # Checking if the user input refers to a method that should be called
-                if callable(ref_menue[inp].trigger):
+                if isinstance(ref_menue[inp], MenueOption):
                     system("cls")
                     # Calling that method
                     # this will also send the data_object (e.g. es, eg, gender, etc.)
@@ -97,6 +116,10 @@ class Program:
                         # for exiting the current menue
                         case "Exit":
                             break
+
+                        case "ipdb":
+                            ipdb.set_trace()
+
                         case None:
                             bottom_message.append(
                                 f"the selected menue is not implemented yet, pls excuse the programmer! :)"
@@ -110,7 +133,9 @@ class Program:
 
     # endrgion
 
+
     # region Refactors
+    # this method will print menue options and adds some extra options to it, while adding indexes to them
     def option_print_refactor(self, menue_options):
         refactored_menue = {}
         for index_id, option in enumerate(menue_options):
@@ -124,19 +149,10 @@ class Program:
 
         refactored_menue[str(index_id + 2)] = "Exit"
         print(f"{index_id + 2} {exit_label}")
+
+        refactored_menue[str(index_id + 3)] = "ipdb"
+        print(f"{index_id + 3} ipdb")
         return refactored_menue
-
-    class MenueOption:
-        def __init__(self, name: str, trigger: Callable, data_object=None) -> None:
-            self.name = name
-            self.trigger = trigger
-            self.data_object = data_object
-
-        def __str__(self) -> str:
-            return self.name
-
-        def __repr__(self) -> str:
-            return f'<MenueOption: "{self.name}">'
 
     # endregion
 

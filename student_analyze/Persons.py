@@ -18,26 +18,25 @@ class BasePerson(ABC):
     def __str__(self):
         pass
 
-        
-    # region Gender
-    # A Gender could be Male or Female
-    class Gender:
-        _genders = []
-
-        def __init__(self, name: str):
-            self.name = name
-            self.__class__._genders.append(self)
-
-        def __str__(self):
-            return self.name
-
-        def __repr__(self):
-            return f'<Gender: "{self.name}">'
-
-    # endregion
-
 # endregion
 
+
+# region Gender
+# A Gender could be Male or Female
+class Gender:
+    _genders = []
+
+    def __init__(self, name: str):
+        self.name = name
+        self.__class__._genders.append(self)
+
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return f'<Gender: "{self.name}">'
+
+# endregion
 
 
 # region Person
@@ -58,7 +57,7 @@ class Person(BasePerson):
         self,
         first_name: str,
         last_name: str,
-        gender: "Gender",
+        gender: Gender,
         birth_date: datetime,
         education_grade: EducationGrade,
         national_code: int = None,

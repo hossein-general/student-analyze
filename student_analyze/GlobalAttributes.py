@@ -16,6 +16,7 @@ class EducationState:
         self.state_name = state_name
         # instead of creating id's for each educationgrade, im using a list that supports order, so i could now which grade comes after another in its order
         self.__educationgrades = list()
+        self.__educationgroup = set()
         # TODO Creating variables that will be initialized when an instance is created, and will manage School realations
         if insert_to is None:
             self.__class__.__es_list.append(self)
@@ -27,6 +28,11 @@ class EducationState:
         new_educationgrade = EducationGrade(self, educationgrade_name)
         self.__educationgrades.append(new_educationgrade)
         return new_educationgrade
+
+    def add_goup(self, educationgroup_name):
+        new_educationgroup = EducationGroup(self, educationgroup_name)
+        self.__educationgroup.add(new_educationgroup)
+        return new_educationgroup
 
     def educationgrades(self):
         return self.__educationgrades
@@ -71,16 +77,17 @@ class EducationGrade:
 
 # region E-Group
 # EducationGroups are created to define different fields of study in differen EducationStates
+# Each person could be assigned to multiple groups (e.g. both 'Dedicated lessons' and 'generic lessons')
 # e.g. General, Tajrobi, Riazi, Mohandesi mechanic, ...
 class EducationGroup:
-    def __init__(self, educationgrade, name):
-        self.educationgrade = educationgrade
+    def __init__(self, parent_educationstate, name):
+        self.parent_educationstate = parent_educationstate
         self.name = name
         self.lessons = set()
 
     # Adding an already created lesson to lessons list inside the education group
-    def add_lesson(self, lesson_name):
-        new_lesson = Lesson(self, lesson_name)
+    def add_lesson(self, lesson_name, education_grade, prerequisite):
+        new_lesson = Lesson(self, lesson_name, education_grade, prerequisite)
         self.lessons.add(new_lesson)
 
     def __str__(self):
@@ -95,16 +102,21 @@ class EducationGroup:
 
 # region Lesson
 class Lesson:
-    def __init__(self, parent_educationgroup, name):
+    def __init__(self, parent_educationgroup: EducationGroup, name: str, educationgrade: EducationGrade, prerequisite: 'Lesson'):
+        # The EducationGroup that this lesson belongs to
         self.parent_educationgroup = parent_educationgroup
+        # The grade that this lesson is presenting in
+        self.educationgrade = educationgrade
+        # The name of that lesson
         self.name = name
+        # The lessons that are necessary to be learned before starting this lesson (e.g. math-1 should be learned before math-2)
+        self.prerequisite = prerequisite
 
     def __str__(self):
         return self.name
 
     def __repr__(self):
         return f'<Lesson: "{self.name}">'
-
 
 # endregion
 
@@ -124,6 +136,5 @@ class EducationTerm:
 
     def __repr__(self):
         return f'<EducationTerm: "{self.name}">'
-
 
 # endregion

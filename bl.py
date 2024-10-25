@@ -17,5 +17,6 @@ class RuntimeDataAccessor:
         self.es = DataObject('Education State')
         self.egd = DataObject('Education Grade')
         self.egp = DataObject('Education Group')
+        self.lesson = DataObject('Lesson')
         self.gender = DataObject('Gender')
         self.person = DataObject('Person')

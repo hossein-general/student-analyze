@@ -87,8 +87,9 @@ class EducationGroup:
 
     # Adding an already created lesson to lessons list inside the education group
     def add_lesson(self, lesson_name, education_grade, prerequisite):
-        new_lesson = Lesson(self, lesson_name, education_grade, prerequisite)
+        new_lesson = Lesson(self, lesson_name, education_grade, prerequisite = None)
         self.lessons.add(new_lesson)
+        return new_lesson
 
     def __str__(self):
         return self.name
@@ -102,7 +103,7 @@ class EducationGroup:
 
 # region Lesson
 class Lesson:
-    def __init__(self, parent_educationgroup: EducationGroup, name: str, educationgrade: EducationGrade, prerequisite: 'Lesson'):
+    def __init__(self, parent_educationgroup: EducationGroup, name: str, educationgrade: EducationGrade, prerequisite: 'Lesson' = None):
         # The EducationGroup that this lesson belongs to
         self.parent_educationgroup = parent_educationgroup
         # The grade that this lesson is presenting in

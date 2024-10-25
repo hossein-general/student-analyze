@@ -8,6 +8,7 @@ import random
 from student_analyze import (
     EducationState,
     Person,
+    Gender,
 )
 
 
@@ -23,36 +24,52 @@ def init_data(data):
     data.es.list["u"] = EducationState("University")
 
     # EducationGrades
-    data.eg.list["1st"] = data.es.list["ps"].add_grade("1st grade")
-    data.eg.list["2nd"] = data.es.list["ps"].add_grade("2nd grade")
-    data.eg.list["3rd"] = data.es.list["ps"].add_grade("3rd grade")
-    data.eg.list["4th"] = data.es.list["ps"].add_grade("4th grade")
-    data.eg.list["5th"] = data.es.list["ps"].add_grade("5th grade")
-    data.eg.list["6th"] = data.es.list["ps"].add_grade("6th grade")
+    data.egd.list["1st"] = data.es.list["ps"].add_grade("1st grade")
+    data.egd.list["2nd"] = data.es.list["ps"].add_grade("2nd grade")
+    data.egd.list["3rd"] = data.es.list["ps"].add_grade("3rd grade")
+    data.egd.list["4th"] = data.es.list["ps"].add_grade("4th grade")
+    data.egd.list["5th"] = data.es.list["ps"].add_grade("5th grade")
+    data.egd.list["6th"] = data.es.list["ps"].add_grade("6th grade")
 
-    data.eg.list["7th"] = data.es.list["hs1"].add_grade("7th grade")
-    data.eg.list["8th"] = data.es.list["hs1"].add_grade("8th grade")
-    data.eg.list["9th"] = data.es.list["hs1"].add_grade("9th grade")
+    data.egd.list["7th"] = data.es.list["hs1"].add_grade("7th grade")
+    data.egd.list["8th"] = data.es.list["hs1"].add_grade("8th grade")
+    data.egd.list["9th"] = data.es.list["hs1"].add_grade("9th grade")
 
-    data.eg.list["10th"] = data.es.list["hs2"].add_grade("10th grade")
-    data.eg.list["11th"] = data.es.list["hs2"].add_grade("11th grade")
-    data.eg.list["12th"] = data.es.list["hs2"].add_grade("12th grade")
+    data.egd.list["10th"] = data.es.list["hs2"].add_grade("10th grade")
+    data.egd.list["11th"] = data.es.list["hs2"].add_grade("11th grade")
+    data.egd.list["12th"] = data.es.list["hs2"].add_grade("12th grade")
 
-    data.eg.list["bachelor"] = data.es.list["u"].add_grade("Bachelor")
-    data.eg.list["master"] = data.es.list["u"].add_grade("Master")
-    data.eg.list["phd"] = data.es.list["u"].add_grade("Ph.D")
+    data.egd.list["bachelor"] = data.es.list["u"].add_grade("Bachelor")
+    data.egd.list["master"] = data.es.list["u"].add_grade("Master")
+    data.egd.list["phd"] = data.es.list["u"].add_grade("Ph.D")
+
+
+    # EducationGroups
+    data.egp.list["ps-general"] = data.es.list["ps"].add_group("Primary School - General")    
+
+    data.egp.list["hs1-general"] = data.es.list["hs1"].add_group("High School 1st - General")
+
+    data.egp.list["hs2-general"] = data.es.list["hs2"].add_group("High School 2st - General")
+    data.egp.list["hs2-riazi"] = data.es.list["hs2"].add_group("High School 2st - Riazi Fizik")
+    data.egp.list["hs2-tajrobi"] = data.es.list["hs2"].add_group("High School 2st - Oloom Tajrobi")
+    data.egp.list["hs2-ensani"] = data.es.list["hs2"].add_group("High School 2st - Oloom Ensani")
+    data.egp.list["hs2-zaban"] = data.es.list["hs2"].add_group("High School 2st - Zaban haye Khareje")
+    data.egp.list["hs2-honar"] = data.es.list["hs2"].add_group("High School 2st - Honar")
+    data.egp.list["hs2-fani"] = data.es.list["hs2"].add_group("High School 2st - Fani Herfei")
+
+    data.egp.list["u-general"] = data.es.list["u"].add_group("University - General")
+    data.egp.list["u-mohandesi-computer"] = data.es.list["u"].add_group("University - Mohandesi Computer")
+    data.egp.list["u-oloom-computer"] = data.es.list["u"].add_group("University - Oloom Computer")
+    data.egp.list["u-mohandesi-bargh"] = data.es.list["u"].add_group("University - Mohandesi Bargh")
+    
+
 
     # Genders
-    data.gender.list["male"] = Person.Gender("male")
-    data.gender.list["female"] = Person.Gender("female")
+    data.gender.list["male"] = Gender("male")
+    data.gender.list["female"] = Gender("female")
 
 
-# TODO adding the ability to access eg, es, person, gender and etc through the class
 def fake_person(data, count):
-    # person_temp = Person("Hossein", "Ramezani", datetime(2020, 5, 17), eg["10th"])
-
-    # person_temp = Person("Mohammadmahdi", "Ramezani", datetime(2023, 3, 11), eg["7th"])
-
     for count in range(count):
         # TODO i should refactor this and create Names class and assign the gender attribute to it (i dont have enough time)
         fname_gender_list = (
@@ -104,7 +121,7 @@ def fake_person(data, count):
         temp_gender = temp_fname_gender[1]
         # TODO making the birth_date attribute a random date within a range
         temp_birth_date = datetime(2001, 9, 11)
-        temp_education_grade = random.choice(tuple(data.eg.list.values()))
+        temp_education_grade = random.choice(tuple(data.egd.list.values()))
 
         yield Person(
             temp_first_name,

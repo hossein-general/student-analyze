@@ -3,7 +3,8 @@
 
 # This object containes information about the data that is stored within it
 class DataObject:
-    def __init__(self, order=None) -> None:
+    def __init__(self, data_name, order=None) -> None:
+        self.data_name = data_name
         self.list = {}
         self.order = order
 
@@ -13,7 +14,8 @@ class DataObject:
 
 class RuntimeDataAccessor:
     def __init__(self) -> None:
-        self.es = DataObject()
-        self.eg = DataObject()
-        self.gender = DataObject()
-        self.person = DataObject()
+        self.es = DataObject('Education State')
+        self.egd = DataObject('Education Grade')
+        self.egp = DataObject('Education Group')
+        self.gender = DataObject('Gender')
+        self.person = DataObject('Person')

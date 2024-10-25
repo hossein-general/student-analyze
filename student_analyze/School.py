@@ -2,10 +2,7 @@
 # These Classes only have meaning in the context of schools
 # The School class within this module inharites from the Organizations class within the Organizations module
 
-class Organization:
-    def __init__(self) -> None:
-        pass
-    
+from .Organizatin import Organization
 
 # region School
 # School class

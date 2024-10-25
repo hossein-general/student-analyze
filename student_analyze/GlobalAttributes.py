@@ -29,7 +29,7 @@ class EducationState:
         self.__educationgrades.append(new_educationgrade)
         return new_educationgrade
 
-    def add_goup(self, educationgroup_name):
+    def add_group(self, educationgroup_name):
         new_educationgroup = EducationGroup(self, educationgroup_name)
         self.__educationgroup.add(new_educationgroup)
         return new_educationgroup

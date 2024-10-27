@@ -10,6 +10,8 @@ from datetime import datetime
 # endregion
 
 # region BasePerson
+
+
 class BasePerson(ABC):
     def __init__(self):
         pass
@@ -80,6 +82,7 @@ class Person(BasePerson):
         self.__class__.add_person(self)
         self._workinglog_list = []
 
+    # region @prop
     @property
     def age(self):
         # TODO calculating age
@@ -95,12 +98,9 @@ class Person(BasePerson):
     def fullname(self):
         return f"{self.first_name} {self.last_name}"
 
-    def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+    # endregion
 
-    def __repr__(self):
-        return f'<Person: "{self.fullname}">'
-
+    # region @cls
     @classmethod
     def get_by_id(cls, person_id):
         return cls.__people[person_id]
@@ -118,21 +118,33 @@ class Person(BasePerson):
         cls.__id_pool += 1
         return cls.__id_pool
 
-    # Wrong Order
-    # @property
-    # @classmethod
-    # def test(cls):
-    #     cls.__id_pool += 1
-    #     return cls.__id_pool
-
     # Adding a record using the person instance and an id
     @classmethod
     def add_person(cls, person):
         cls.__people[person.id] = person
 
+    # endregion
+
+    # region format
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
+    def __repr__(self):
+        return f'<Person: "{self.fullname}">'
+
+    # endregion
+    
+    # region nested classes
+    # a region containing nested classes
+    # these classes should be directly called from Person class
+    # these classes are not accessible from base person
+    # WorkingLog, EducationLog
+
 
     # region Working-L
     # A class that is kind of a table that contains records of places each person have been worked or is working in
+
     class WorkingLog:
         # Creating a new record for the table
         def __init__(
@@ -167,9 +179,9 @@ class Person(BasePerson):
 
     # endregion
 
-
     # region Education-L
     # A class that is kind of a table that contains records of places each person have been educated or is currently educating in
+
     class EducationLog:
         # Creating a new record for the table
         def __init__(self):
@@ -192,7 +204,6 @@ class Person(BasePerson):
             contract_id,
         )
         self._workinglog_list.append(new_workinglog)
-
 
 
 # endregion

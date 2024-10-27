@@ -157,6 +157,12 @@ def init_data(data):
     data.croom.item.update(zip(temp_croom_names, temp_croom_objects))
 
     # endregion
+    
+    # region Student
+    # Students
+    pass
+    
+    # endregion
 
 # endregion
 

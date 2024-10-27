@@ -4,6 +4,7 @@
 
 # region importing
 from .Organization import Organization
+from .Person import Person
 from .GlobalAttributes import (
     EducationState,
     EducationGroup,
@@ -39,13 +40,13 @@ class School(Organization):
         self.teacher_id_pool = self.generate_id('teacher')
         self.classgroup_id_pool = self.generate_id('classgroup')
 
-    # region add methods
-
+    # region c-room
     # Create add adding multiple classrooms to the school
+
     def add_classrooms(
-        self, 
-        *classroom_names: Union[str, int], 
-        starting_id: int = None, 
+        self,
+        *classroom_names: Union[str, int],
+        starting_id: int = None,
     ):
         # a list to be return at the end of the function
         created_crooms = []
@@ -67,6 +68,10 @@ class School(Organization):
             created_crooms.append(new_classroom)
 
         return created_crooms
+
+    # endregion
+
+    # region c-group
 
     # Creating a ClassGroup for the school
     # TODO most of the parameters should be removed and be placed within the function to get
@@ -98,6 +103,10 @@ class School(Organization):
         # Assigning the newly created classgroup to the classgroups dict
         self.classgroups[classgroup_id] = new_classgroup
 
+    # endregion
+
+    # region student
+
     # Creating new students and assigning them to the school
     def add_student(
         self,
@@ -117,16 +126,18 @@ class School(Organization):
         )
         # Adding the newly created student to students dict
         self.students[student_id] = new_student
+
     # endregion
+
+    # region ID genrator
 
     # This class will manage ids for each id-able item in the school
     # e.g. ClassRooms (classroom), Teachers (teacher), Students (student), etc.
     # This management happens by using a counter variable and adding one to it each time an id is assigned
     # each entity has its own id counter
     # This function is used within the class, where ever a new entity creates
-
-    # region ID genrator
     # ID Generator
+
     def generate_id(self, entity: str, start_id: int = None):
         last_id = start_id
         match entity:

@@ -9,6 +9,7 @@ from student_analyze import (
     EducationState,
     Person,
     Gender,
+    School,
 )
 
 
@@ -20,76 +21,82 @@ def init_educationstates():
 def init_data(data):
     # region ES
     # EducationStates
-    data.es.list["ps"] = EducationState("Primary School")
-    data.es.list["hs1"] = EducationState("High School 1st")
-    data.es.list["hs2"] = EducationState("High School 2nd")
-    data.es.list["u"] = EducationState("University")
+    data.es.item["ps"] = EducationState("Primary School")
+    data.es.item["hs1"] = EducationState("High School 1st")
+    data.es.item["hs2"] = EducationState("High School 2nd")
+    data.es.item["u"] = EducationState("University")
     # endregion
 
     # region EGd
     # EducationGrades
-    data.egd.list["1st"] = data.es.list["ps"].add_grade("1st grade")
-    data.egd.list["2nd"] = data.es.list["ps"].add_grade("2nd grade")
-    data.egd.list["3rd"] = data.es.list["ps"].add_grade("3rd grade")
-    data.egd.list["4th"] = data.es.list["ps"].add_grade("4th grade")
-    data.egd.list["5th"] = data.es.list["ps"].add_grade("5th grade")
-    data.egd.list["6th"] = data.es.list["ps"].add_grade("6th grade")
+    data.egd.item["1st"] = data.es.item["ps"].add_grade("1st grade")
+    data.egd.item["2nd"] = data.es.item["ps"].add_grade("2nd grade")
+    data.egd.item["3rd"] = data.es.item["ps"].add_grade("3rd grade")
+    data.egd.item["4th"] = data.es.item["ps"].add_grade("4th grade")
+    data.egd.item["5th"] = data.es.item["ps"].add_grade("5th grade")
+    data.egd.item["6th"] = data.es.item["ps"].add_grade("6th grade")
 
-    data.egd.list["7th"] = data.es.list["hs1"].add_grade("7th grade")
-    data.egd.list["8th"] = data.es.list["hs1"].add_grade("8th grade")
-    data.egd.list["9th"] = data.es.list["hs1"].add_grade("9th grade")
+    data.egd.item["7th"] = data.es.item["hs1"].add_grade("7th grade")
+    data.egd.item["8th"] = data.es.item["hs1"].add_grade("8th grade")
+    data.egd.item["9th"] = data.es.item["hs1"].add_grade("9th grade")
 
-    data.egd.list["10th"] = data.es.list["hs2"].add_grade("10th grade")
-    data.egd.list["11th"] = data.es.list["hs2"].add_grade("11th grade")
-    data.egd.list["12th"] = data.es.list["hs2"].add_grade("12th grade")
+    data.egd.item["10th"] = data.es.item["hs2"].add_grade("10th grade")
+    data.egd.item["11th"] = data.es.item["hs2"].add_grade("11th grade")
+    data.egd.item["12th"] = data.es.item["hs2"].add_grade("12th grade")
 
-    data.egd.list["bachelor"] = data.es.list["u"].add_grade("Bachelor")
-    data.egd.list["master"] = data.es.list["u"].add_grade("Master")
-    data.egd.list["phd"] = data.es.list["u"].add_grade("Ph.D")
+    data.egd.item["bachelor"] = data.es.item["u"].add_grade("Bachelor")
+    data.egd.item["master"] = data.es.item["u"].add_grade("Master")
+    data.egd.item["phd"] = data.es.item["u"].add_grade("Ph.D")
     # endregion
 
     # region EGp
     # EducationGroups
-    data.egp.list["ps-general"] = data.es.list["ps"].add_group(
+    data.egp.item["ps-general"] = data.es.item["ps"].add_group(
         "Primary School - General")
 
-    data.egp.list["hs1-general"] = data.es.list["hs1"].add_group(
+    data.egp.item["hs1-general"] = data.es.item["hs1"].add_group(
         "High School 1st - General")
 
-    data.egp.list["hs2-general"] = data.es.list["hs2"].add_group(
+    data.egp.item["hs2-general"] = data.es.item["hs2"].add_group(
         "High School 2st - General")
-    data.egp.list["hs2-riazi"] = data.es.list["hs2"].add_group(
+    data.egp.item["hs2-riazi"] = data.es.item["hs2"].add_group(
         "High School 2st - Riazi Fizik")
-    data.egp.list["hs2-tajrobi"] = data.es.list["hs2"].add_group(
+    data.egp.item["hs2-tajrobi"] = data.es.item["hs2"].add_group(
         "High School 2st - Oloom Tajrobi")
-    data.egp.list["hs2-ensani"] = data.es.list["hs2"].add_group(
+    data.egp.item["hs2-ensani"] = data.es.item["hs2"].add_group(
         "High School 2st - Oloom Ensani")
-    data.egp.list["hs2-zaban"] = data.es.list["hs2"].add_group(
+    data.egp.item["hs2-zaban"] = data.es.item["hs2"].add_group(
         "High School 2st - Zaban haye Khareje")
-    data.egp.list["hs2-honar"] = data.es.list["hs2"].add_group(
+    data.egp.item["hs2-honar"] = data.es.item["hs2"].add_group(
         "High School 2st - Honar")
-    data.egp.list["hs2-fani"] = data.es.list["hs2"].add_group(
+    data.egp.item["hs2-fani"] = data.es.item["hs2"].add_group(
         "High School 2st - Fani Herfei")
 
-    data.egp.list["u-general"] = data.es.list["u"].add_group(
+    data.egp.item["u-general"] = data.es.item["u"].add_group(
         "University - General")
-    data.egp.list["u-mohandesi-computer"] = data.es.list["u"].add_group(
+    data.egp.item["u-mohandesi-computer"] = data.es.item["u"].add_group(
         "University - Mohandesi Computer")
-    data.egp.list["u-oloom-computer"] = data.es.list["u"].add_group(
+    data.egp.item["u-oloom-computer"] = data.es.item["u"].add_group(
         "University - Oloom Computer")
-    data.egp.list["u-mohandesi-bargh"] = data.es.list["u"].add_group(
+    data.egp.item["u-mohandesi-bargh"] = data.es.item["u"].add_group(
         "University - Mohandesi Bargh")
     # endregion
 
     # region Lessons
     # Lessons
-    data.lessons.list['farsi aval'] = data.egp.list["ps-general"].add_lesson("Farsi Aval", data.egd.list["1st"])
+    data.lessons.item['farsi aval'] = data.egp.item["ps-general"].add_lesson("Farsi Aval", data.egd.item["1st"])
     # endregion
 
     # region Gender
     # Genders
-    data.gender.list["male"] = Gender("male")
-    data.gender.list["female"] = Gender("female")
+    data.gender.item["male"] = Gender("male")
+    data.gender.item["female"] = Gender("female")
+    # endregion
+    
+    # region School
+    data.school.item['hesaraki'] = School('Dabestan Shahid Abas Hesaraki', data.es.item['ps'])
+    # data.school.item['hesaraki'] = School('Dabestan Shahid Abas Hesaraki', )
+
     # endregion
 # endregion
 
@@ -99,21 +106,21 @@ def fake_person(data, count):
     for count in range(count):
         # TODO i should refactor this and create Names class and assign the gender attribute to it (i dont have enough time)
         fname_gender_list = (
-            ("hossein", data.gender.list["male"]),
-            ("mohammad mahdi", data.gender.list["male"]),
-            ("reza", data.gender.list["male"]),
-            ("maryam", data.gender.list["female"]),
-            ("samira", data.gender.list["female"]),
-            ("fereshteh", data.gender.list["female"]),
-            ("eisa", data.gender.list["female"]),
-            ("peyman", data.gender.list["male"]),
-            ("mansore", data.gender.list["female"]),
-            ("elham", data.gender.list["female"]),
-            ("hasan", data.gender.list["male"]),
-            ("ali", data.gender.list["male"]),
-            ("said", data.gender.list["male"]),
-            ("arash", data.gender.list["male"]),
-            ("hoorieh", data.gender.list["female"]),
+            ("hossein", data.gender.item["male"]),
+            ("mohammad mahdi", data.gender.item["male"]),
+            ("reza", data.gender.item["male"]),
+            ("maryam", data.gender.item["female"]),
+            ("samira", data.gender.item["female"]),
+            ("fereshteh", data.gender.item["female"]),
+            ("eisa", data.gender.item["female"]),
+            ("peyman", data.gender.item["male"]),
+            ("mansore", data.gender.item["female"]),
+            ("elham", data.gender.item["female"]),
+            ("hasan", data.gender.item["male"]),
+            ("ali", data.gender.item["male"]),
+            ("said", data.gender.item["male"]),
+            ("arash", data.gender.item["male"]),
+            ("hoorieh", data.gender.item["female"]),
         )
         lname_list = (
             "mohammadi",
@@ -147,7 +154,7 @@ def fake_person(data, count):
         temp_gender = temp_fname_gender[1]
         # TODO making the birth_date attribute a random date within a range
         temp_birth_date = datetime(2001, 9, 11)
-        temp_education_grade = random.choice(tuple(data.egd.list.values()))
+        temp_education_grade = random.choice(tuple(data.egd.item.values()))
 
         yield Person(
             temp_first_name,

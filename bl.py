@@ -3,13 +3,13 @@
 
 # This object containes information about the data that is stored within it
 class DataObject:
-    def __init__(self, data_name, order=None) -> None:
+    def __init__(self, data_name, print_format=None) -> None:
         self.data_name = data_name
-        self.list = {}
-        self.order = order
+        self.item = {}
+        self.print_format = print_format
 
     def retrieve(self):
-        return self.list
+        return self.item
 
 
 class RuntimeDataAccessor:
@@ -20,3 +20,4 @@ class RuntimeDataAccessor:
         self.lesson = DataObject('Lesson')
         self.gender = DataObject('Gender')
         self.person = DataObject('Person')
+        self.school = DataObject('School')

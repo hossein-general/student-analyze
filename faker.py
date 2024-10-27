@@ -83,7 +83,7 @@ def init_data(data):
 
     # region Lessons
     # Lessons
-    data.lessons.list['farsi aval'] = data.egp.list["ps-general"].add_lesson("Farsi Aval", data.egd.list["1st"])
+    data.lesson.list['farsi aval'] = data.egp.list["ps-general"].add_lesson("Farsi Aval", data.egd.list["1st"])
     # endregion
 
     # region Gender

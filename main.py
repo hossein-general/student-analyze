@@ -37,7 +37,7 @@ def main():
     faker.init_data(data)
     person_gen = faker.fake_person(data, 20)
     for new_person in person_gen:
-        data.person.list[new_person.id] = new_person
+        data.person.item[new_person.id] = new_person
 
     # endregion
 

@@ -10,16 +10,18 @@ from .GlobalAttributes import (
     EducationGrade,
     Lesson,
 )
+# for type hints
+from typing import Union
 
 # endregion
 
 # region School
+
+
 # School class
-
-
 class School(Organization):
     # last_classroom
-    def __init__(self, name, *education_states_list):
+    def __init__(self, name, *education_states_list: EducationState):
         # initializations
         self.name = name
         self.education_state = set(
@@ -31,24 +33,40 @@ class School(Organization):
         self.teachers = dict()
         self.classgroups = dict()
 
-        # id pools
-        self.last_classroom_id = 100
-        self.last_student_id = 200
-        self.last_teacher_id = 300
-        self.last_classgroup_id = 400
+        # id generators
+        self.classroom_id_pool = self.generate_id('classroom')
+        self.student_id_pool = self.generate_id('student')
+        self.teacher_id_pool = self.generate_id('teacher')
+        self.classgroup_id_pool = self.generate_id('classgroup')
 
     # region add methods
-    # Create and adding ClassRooms to the school
 
-    def add_classroom(self, *classroom_names):
-        # TODO Getting classroom_name
-        for item in classroom_names:
+    # Create add adding multiple classrooms to the school
+    def add_classrooms(
+        self, 
+        *classroom_names: Union[str, int], 
+        starting_id: int = None, 
+    ):
+        # a list to be return at the end of the function
+        created_crooms = []
+
+        # desiding if i want to use my own id pattern or the default one
+        if starting_id is None:
+            id_pattern = self.classroom_id_pool
+        else:
+            id_pattern = self.generate_id("custom", starting_id)
+
+        # stating to crete classrooms
+        for name in classroom_names:
             # Generate an id for the new classroom
-            classroom_id = self.generate_id("classroom")
+            classroom_id = next(id_pattern)
             # Creating an instance of ClassRoom
-            new_classroom = self.ClassRoom(self, classroom_id, item)
-            # Assigning the newly created classroom to classrooms dict
+            new_classroom = self.ClassRoom(self, classroom_id, str(name))
+            # Assigning the newly created classroom to classrooms dict and the tempore list
             self.classrooms[classroom_id] = new_classroom
+            created_crooms.append(new_classroom)
+
+        return created_crooms
 
     # Creating a ClassGroup for the school
     # TODO most of the parameters should be removed and be placed within the function to get
@@ -68,7 +86,7 @@ class School(Organization):
         # TODO Getting student_list
         # TODO Getting teacher_list
         # Generate an id for the new classgroup
-        classgroup_id = self.generate_id("classgroup")
+        classgroup_id = next(self.classgroup_id_pool)
         # Creating an instance of ClassGroup
         new_classgroup = self.ClassGroup(
             self,
@@ -87,8 +105,8 @@ class School(Organization):
         student_last_name,
         education_grade,
     ):
-        # Generating an id for the student from generate_id
-        student_id = self.generate_id("student")
+        # Generating an id for the student from student_id_pool
+        student_id = next(self.student_id)
         # Calling the Student class to create an instance of Student
         new_student = self.Student(
             self,
@@ -107,20 +125,43 @@ class School(Organization):
     # each entity has its own id counter
     # This function is used within the class, where ever a new entity creates
 
-    # region genrate id
-    def generate_id(self, entity: str):
+    # region ID genrator
+    # ID Generator
+    def generate_id(self, entity: str, start_id: int = None):
+        last_id = start_id
         match entity:
             case "classroom":
-                self.last_classroom_id += 1
-                return self.last_classroom_id
+                if last_id is None:
+                    last_id = 100
+                while True:
+                    yield last_id
+                    last_id += 1
 
             case "student":
-                self.last_student_id += 1
-                return self.last_student_id
+                if last_id is None:
+                    last_id = 200
+                while True:
+                    yield last_id
+                    last_id += 1
+
+            case "teacher":
+                if last_id is None:
+                    last_id = 300
+                while True:
+                    yield last_id
+                    last_id += 1
 
             case "classgroup":
-                self.last_classgroup_id += 1
-                return self.last_classgroup_id
+                if last_id is None:
+                    last_id = 400
+                while True:
+                    yield last_id
+                    last_id += 1
+
+            case "custom":
+                while True:
+                    yield last_id
+                    last_id += 1
 
             case _:
                 raise ValueError("non-defined entity name for id assignment")
@@ -138,9 +179,8 @@ class School(Organization):
     # region C-Room
     # Classroom class which are called by School class instances. they are used as the place for holding class sessions
 
+    # TODO adding __slot__ for all classes
     class ClassRoom:
-        __slots__ = ["parent_school", "id", "name"]
-
         def __init__(self, parent_school, parent_assigned_id, name):
             self.parent_school = parent_school
             self.parent_assigned_id = parent_assigned_id
@@ -187,7 +227,7 @@ class School(Organization):
             # TODO Getting students_list and removing from parameters
             # TODO Getting teacher and removing from parameters
             # TODO Getting lesson and removing from parameters
-            # Generating an id for the classschedule from generate_id
+            # Generating an id for the classschedule for new ClassSchedule
             classschedule_id = self.generate_id('cschedule')
             # Calling the ClassSchedule class to create an instance of it
             new_classschedule = self.ClassSchedule(

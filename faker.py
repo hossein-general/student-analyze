@@ -84,7 +84,8 @@ def init_data(data):
 
     # region Lessons
     # Lessons
-    data.lesson.list['farsi aval'] = data.egp.list["ps-general"].add_lesson("Farsi Aval", data.egd.list["1st"])
+    data.lesson.item['farsi aval'] = data.egp.item["ps-general"].add_lesson(
+        "Farsi Aval", data.egd.item["1st"])
     # endregion
 
     # region Gender
@@ -92,12 +93,71 @@ def init_data(data):
     data.gender.item["male"] = Gender("male")
     data.gender.item["female"] = Gender("female")
     # endregion
-    
+
     # region School
-    data.school.item['hesaraki'] = School('Dabestan Shahid Abas Hesaraki', data.es.item['ps'])
-    # data.school.item['hesaraki'] = School('Dabestan Shahid Abas Hesaraki', )
+    data.school.item['hesaraki'] = School(
+        'Dabestan Shahid Abas Hesaraki', data.es.item['ps'])
+    data.school.item['alameh'] = School(
+        'Dabirestan Alameh Tabatabai', data.es.item['hs1'], data.es.item['hs2'])
+    data.school.item['payamenoor'] = School(
+        'Daneshgah Payame Noor', data.es.item['u'])
 
     # endregion
+
+    # region C-Room
+
+    data.croom.item['1-1'] = data.school.item['hesaraki'].add_classrooms(
+        'Aval 1-1')[0]
+    data.croom.item['1-2'] = data.school.item['hesaraki'].add_classrooms(
+        'Aval 1-2')[0]
+    data.croom.item['1-3'] = data.school.item['hesaraki'].add_classrooms(
+        'Aval 1-3')[0]
+    data.croom.item['2-1'] = data.school.item['hesaraki'].add_classrooms(
+        'Dovom 2-1')[0]
+    data.croom.item['2-2'] = data.school.item['hesaraki'].add_classrooms(
+        'Dovom 2-2')[0]
+    data.croom.item['2-3'] = data.school.item['hesaraki'].add_classrooms(
+        'Dovom 2-3')[0]
+    data.croom.item['3-1'] = data.school.item['hesaraki'].add_classrooms(
+        'Sevom 3-1')[0]
+    data.croom.item['3-2'] = data.school.item['hesaraki'].add_classrooms(
+        'Sevom 3-2')[0]
+    data.croom.item['3-3'] = data.school.item['hesaraki'].add_classrooms(
+        'Sevom 3-3')[0]
+    data.croom.item['4-1'] = data.school.item['hesaraki'].add_classrooms(
+        'Chaharom 4-1')[0]
+    data.croom.item['4-2'] = data.school.item['hesaraki'].add_classrooms(
+        'Chaharom 4-2')[0]
+    data.croom.item['4-3'] = data.school.item['hesaraki'].add_classrooms(
+        'Chaharom 4-3')[0]
+    data.croom.item['5-1'] = data.school.item['hesaraki'].add_classrooms(
+        'Panjom 5-1')[0]
+    data.croom.item['5-2'] = data.school.item['hesaraki'].add_classrooms(
+        'Panjom 5-2')[0]
+    data.croom.item['5-3'] = data.school.item['hesaraki'].add_classrooms(
+        'Panjom 5-3')[0]
+    data.croom.item['6-1'] = data.school.item['hesaraki'].add_classrooms(
+        'Shishom 6-1')[0]
+    data.croom.item['6-2'] = data.school.item['hesaraki'].add_classrooms(
+        'Shishom 6-2')[0]
+    data.croom.item['6-3'] = data.school.item['hesaraki'].add_classrooms(
+        'Shishom 6-3')[0]
+
+    data.croom.item['kharazmi 1'] = data.school.item['alameh'].add_classrooms(
+        'Haftom Kharazmi 1')[0]
+    data.croom.item['kharazmi 2'] = data.school.item['alameh'].add_classrooms(
+        'Haftom Kharazmi 2')[0]
+    data.croom.item['kharazmi 3'] = data.school.item['alameh'].add_classrooms(
+        'Haftom Kharazmi 3')[0]
+
+    rng = range(200, 210)
+    temp_croom_names = map(lambda i: str(i), rng)
+    temp_croom_objects = data.school.item['payamenoor'].add_classrooms(
+        *rng, starting_id=200)
+    data.croom.item.update(zip(temp_croom_names, temp_croom_objects))
+
+    # endregion
+
 # endregion
 
 

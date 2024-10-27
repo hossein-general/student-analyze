@@ -79,10 +79,13 @@ class EducationGrade:
 # EducationGroups are created to define different fields of study in differen EducationStates
 # Each person could be assigned to multiple groups (e.g. both 'Dedicated lessons' and 'generic lessons')
 # e.g. General, Tajrobi, Riazi, Mohandesi mechanic, ...
+# Dedicated education groups like riazi and mohandesi shimi do have generic dependencies
+#   e.g. General group lessons that are the same for every dedicated group like dini, ghoran, etc.
 class EducationGroup:
-    def __init__(self, parent_educationstate, name):
+    def __init__(self, parent_educationstate, name, generic_dependency: 'EducationGroup'):
         self.parent_educationstate = parent_educationstate
         self.name = name
+        self.generic_dependancy = generic_dependency
         self.lessons = set()
 
     # Adding an already created lesson to lessons list inside the education group

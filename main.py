@@ -16,10 +16,6 @@ from student_analyze import (
     EducationGroup,
     EducationTerm,
     Lesson,
-    ClassSession,
-    ClassSchedule,
-    ClassGroup,
-    ClassRoom,
     School,
     gtattr,
     # GovPerson, # Renamed to Person

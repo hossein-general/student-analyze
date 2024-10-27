@@ -326,7 +326,13 @@ class School(Organization):
     # region Student
     # Student
     class Student:
-        pass
+        def __init__(
+            self, 
+            person: Person,
+            education_grade: EducationGrade,
+            education_group: EducationGroup,
+        ):
+            pass
 
     # endregion
 

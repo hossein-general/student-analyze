@@ -4,7 +4,10 @@
 from abc import ABC, abstractmethod
 
 # only for type hints:
-from .GlobalAttributes import EducationGrade
+from .GlobalAttributes import (
+    EducationGrade,
+    EducationGroup
+)
 from datetime import datetime
 
 # endregion
@@ -43,6 +46,8 @@ class Gender:
 # region id_generator
 # The generator function at this point is somuch like a range() generator
 # the reason of using a different generator is to customize it in the future
+
+
 def id_generator(start_id):
     current_id = start_id
     while True:
@@ -72,7 +77,6 @@ class Person(BasePerson):
         last_name: str,
         gender: Gender,
         birth_date: datetime,
-        education_grade: EducationGrade,
         national_code: int = None,
     ):
         self.id = next(self.__class__.__id)
@@ -82,16 +86,32 @@ class Person(BasePerson):
         # Each person has an education grade as their education state
         # it has to be of type
         self.birth_date = birth_date
-        self.education_grade = education_grade
         # setting a national code (this could be done automatically or by user)
         # TODO the current national code generator does not check for duplicate national codes. add a checking function for that in the future
         if national_code is not None:
             self.__national_code = national_code
         else:
-            self.__national_code = next(self.__class__.__national_code) 
+            self.__national_code = next(self.__class__.__national_code)
         # Adding the newly created person to the
         self.__class__.add_person(self)
-        self._workinglog_list = []
+        self._professional_record_list = []
+
+    # region methods
+    
+
+    def add_professional_record(
+        self,
+        working_organization,
+        contract_id,
+    ):
+        new_professional_record = self.__class__.ProfessionalRecords(
+            self,
+            working_organization,
+            contract_id,
+        )
+        self._professional_record_list.append(new_professional_record)
+
+    # endregion
 
     # region @prop
 
@@ -116,14 +136,6 @@ class Person(BasePerson):
     @classmethod
     def get_by_id(cls, person_id):
         return cls.__people[person_id]
-    # Generating an ip address for new instance
-    # (maybe i should remove the class-properties as they are depricated)
-
-    @classmethod
-    @property
-    def test(cls):
-        cls.__id_pool += 1
-        return cls.__id_pool
 
     # Adding a record using the person instance and an id
     @classmethod
@@ -146,12 +158,12 @@ class Person(BasePerson):
     # a region containing nested classes
     # these classes should be directly called from Person class
     # these classes are not accessible from base person
-    # WorkingLog, EducationLog
+    # ProfessionalRecords, EducationLog
 
     # region Working-L
     # A class that is kind of a table that contains records of places each person have been worked or is working in
 
-    class WorkingLog:
+    class ProfessionalRecords:
         # Creating a new record for the table
         def __init__(
             self,
@@ -188,7 +200,7 @@ class Person(BasePerson):
     # region Education-L
     # A class that is kind of a table that contains records of places each person have been educated or is currently educating in
 
-    class EducationLog:
+    class AcademicRecords:
         # Creating a new record for the table
         def __init__(self):
             self.term
@@ -198,18 +210,6 @@ class Person(BasePerson):
         @classmethod
         def current_organization(cls):
             pass
-
-    def add_workinglog(
-        self,
-        working_organization,
-        contract_id,
-    ):
-        new_workinglog = self.__class__.WorkingLog(
-            self,
-            working_organization,
-            contract_id,
-        )
-        self._workinglog_list.append(new_workinglog)
 
 
 # endregion

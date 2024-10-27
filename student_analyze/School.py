@@ -11,8 +11,8 @@ from .GlobalAttributes import (
     EducationGrade,
     Lesson,
 )
-# for type hints
-from typing import Union
+# for type hints (type annotations)
+from typing import Union, List
 
 # endregion
 
@@ -22,11 +22,42 @@ from typing import Union
 # School class
 class School(Organization):
     # last_classroom
-    def __init__(self, name, *education_states_list: EducationState):
+    # TODO adding validation for type hints
+    def __init__(
+        self, 
+        name, 
+        education_states_list: Union[EducationState, List[EducationState]],
+        education_groups_list: Union[EducationGroup, List[EducationGroup]], 
+    ):
         # initializations
         self.name = name
-        self.education_state = set(
-            education_state for education_state in education_states_list)
+        self.education_state = set()
+        self.education_group = set()
+
+        # checking wether the input parameters are iterables or not
+        if hasattr(education_states_list, '__iter__'):
+            self.education_state.update(education_states_list)
+        else:
+            self.education_state.add(education_states_list)
+            
+        
+        if hasattr(education_groups_list, '__iter__'):
+            self.education_group.update(education_groups_list)
+        else:
+            self.education_group.add(education_groups_list)
+            
+        # Validation
+        # TODO im not sure what would happen to the instance when it raises an error mid-init. i should check on that later
+        # TODO creating custom errors for different sitiuations
+        # TODO adding validation for not having only generic education groups
+        for group in self.education_group:
+            if the_state := group.parent_educationstate not in self.education_state:
+                raise ValueError(f"the education group {group}\'s education state is not within the given education_states_list: \"{the_state}\"")
+            if (gen_dep := group.generic_dependency) is not None:
+                for dependency in gen_dep:
+                    if dependency not in self.education_group:
+                        raise ValueError(f"the education group {group} has a generic dependency that is not assigned to school: \"{dependency}\"")
+
 
         # data containers
         self.classrooms = dict()
@@ -43,6 +74,7 @@ class School(Organization):
     # region c-room
     # Create add adding multiple classrooms to the school
 
+    # TODO adding validation for type hints
     def add_classrooms(
         self,
         *classroom_names: Union[str, int],
@@ -81,10 +113,11 @@ class School(Organization):
     im not sure if there is any risk of problems in first method
     this idea applies to many other parts of my program, and maybe ill change my structure in the future"""
 
+    # TODO adding validation for type hints
     def add_classgroup(
         self,
-        educationgrade,
-        educationgroup,
+        educationgrade: EducationGrade,
+        educationgroup: EducationGroup,
         student_ids_list,
     ):
         # TODO Getting educationgrade
@@ -102,30 +135,37 @@ class School(Organization):
         )
         # Assigning the newly created classgroup to the classgroups dict
         self.classgroups[classgroup_id] = new_classgroup
+        return new_classgroup
 
     # endregion
 
     # region student
 
+
     # Creating new students and assigning them to the school
+    # TODO adding validation for type hints
     def add_student(
         self,
-        student_first_name,
-        student_last_name,
-        education_grade,
+        person: Person,
+        education_grade: EducationGrade,
+        education_group: EducationGroup,
     ):
+        # Validation
+        if the_es := education_grade.parent_educationstate not in self.education_state:
+            raise ValueError(f"the student {person}\'s education state is not within the school education_states list: \"{the_es}\"")
         # Generating an id for the student from student_id_pool
-        student_id = next(self.student_id)
+        student_id = next(self.student_id_pool)
         # Calling the Student class to create an instance of Student
         new_student = self.Student(
             self,
-            first_name=student_first_name,
-            last_name=student_last_name,
-            education_grade=education_grade,
-            id=student_id,
+            student_id,
+            person,
+            education_grade,
+            education_group,
         )
         # Adding the newly created student to students dict
         self.students[student_id] = new_student
+        return new_student
 
     # endregion
 
@@ -137,6 +177,8 @@ class School(Organization):
     # each entity has its own id counter
     # This function is used within the class, where ever a new entity creates
     # ID Generator
+
+    # TODO adding validation for type hints
 
     def generate_id(self, entity: str, start_id: int = None):
         last_id = start_id
@@ -191,8 +233,15 @@ class School(Organization):
     # Classroom class which are called by School class instances. they are used as the place for holding class sessions
 
     # TODO adding __slot__ for all classes
+    # TODO adding validation for type hints
+    # TODO changing id type to str
     class ClassRoom:
-        def __init__(self, parent_school, parent_assigned_id, name):
+        def __init__(
+            self, 
+            parent_school: 'School', 
+            parent_assigned_id: int, 
+            name: str,
+        ):
             self.parent_school = parent_school
             self.parent_assigned_id = parent_assigned_id
             self.name = name
@@ -205,6 +254,7 @@ class School(Organization):
     # Class Group class. its used to bind teachers, students, lessons, classrooms and adding schedule for each
     # region C-Group
     # I dont think if there would ever be a need to name a ClassGroup as its not user readable
+    # TODO adding validation for type hints
     class ClassGroup:
         def __init__(
             self,
@@ -228,9 +278,10 @@ class School(Organization):
             self.last_classschedule_id = 11000
 
         # Creating a class schedule
+
+        # TODO adding validation for type hints
         def add_classschedule(
             self,
-
             teacher: 'School.Teacher',
             lesson: Lesson,
         ):
@@ -246,6 +297,7 @@ class School(Organization):
             )
             self.classschedules.add(new_classschedule)
 
+        # TODO adding validation for type hints
         def generate_id(self, entity: str):
             match entity:
                 case 'cschadule':
@@ -264,6 +316,7 @@ class School(Organization):
     # This class shows which of the ClassGroup teachers is assigend and what lesson is he presenting (as a sible ClassGroup could hold many teachers and lessons at the same time)
     # In most cases the ClassSchedule instances are named by the lesson presenting within them, and sometimes combined with an id
     # e.g. "Riazi-1 20341", "Arabi", ...
+    # TODO adding validation for type hints
     class ClassSchedule:
         def __init__(
             self,
@@ -325,21 +378,40 @@ class School(Organization):
 
     # region Student
     # Student
+    # TODO adding validation for type hints
     class Student:
         def __init__(
             self, 
+            parent_school: 'School',
+            student_id: int,
             person: Person,
             education_grade: EducationGrade,
             education_group: EducationGroup,
         ):
-            pass
+            self.parent_school = parent_school
+            self.student_id = student_id
+            self.person = person
+            self.education_grade = education_grade
+            self.education_group = education_group
+            
 
     # endregion
 
     # region Teacher
     # Teacher
+    # TODO adding validation for type hints
     class Teacher:
-        pass
+        def __init__(
+            self,
+            parent_school: 'School',
+            teacher_id: int,
+            person: Person,
+            *presenting_lessons: Lesson ,
+        ):
+            self.parent_school = parent_school
+            self.teacher_id = teacher_id
+            self.person = person
+            self.presenting_lessons = [lesson for lesson in presenting_lessons]
 
     # endregion
 

@@ -51,35 +51,39 @@ def init_data(data):
 
     # region EGp
     # EducationGroups
+    # Primary School Gropus (1)
     data.egp.item["ps-general"] = data.es.item["ps"].add_group(
         "Primary School - General")
 
+    # High School 1st Groups (1)
     data.egp.item["hs1-general"] = data.es.item["hs1"].add_group(
         "High School 1st - General")
 
+    # High School 2nd Gropus (7)
     data.egp.item["hs2-general"] = data.es.item["hs2"].add_group(
         "High School 2st - General")
     data.egp.item["hs2-riazi"] = data.es.item["hs2"].add_group(
-        "High School 2st - Riazi Fizik")
+        "High School 2st - Riazi Fizik", data.egp.item["hs2-general"])
     data.egp.item["hs2-tajrobi"] = data.es.item["hs2"].add_group(
-        "High School 2st - Oloom Tajrobi")
+        "High School 2st - Oloom Tajrobi", data.egp.item["hs2-general"])
     data.egp.item["hs2-ensani"] = data.es.item["hs2"].add_group(
-        "High School 2st - Oloom Ensani")
+        "High School 2st - Oloom Ensani", data.egp.item["hs2-general"])
     data.egp.item["hs2-zaban"] = data.es.item["hs2"].add_group(
-        "High School 2st - Zaban haye Khareje")
+        "High School 2st - Zaban haye Khareje", data.egp.item["hs2-general"])
     data.egp.item["hs2-honar"] = data.es.item["hs2"].add_group(
-        "High School 2st - Honar")
+        "High School 2st - Honar", data.egp.item["hs2-general"])
     data.egp.item["hs2-fani"] = data.es.item["hs2"].add_group(
-        "High School 2st - Fani Herfei")
+        "High School 2st - Fani Herfei", data.egp.item["hs2-general"])
 
+    # University Groups (??)
     data.egp.item["u-general"] = data.es.item["u"].add_group(
         "University - General")
     data.egp.item["u-mohandesi-computer"] = data.es.item["u"].add_group(
-        "University - Mohandesi Computer")
+        "University - Mohandesi Computer", data.egp.item["u-general"])
     data.egp.item["u-oloom-computer"] = data.es.item["u"].add_group(
-        "University - Oloom Computer")
+        "University - Oloom Computer", data.egp.item["u-general"])
     data.egp.item["u-mohandesi-bargh"] = data.es.item["u"].add_group(
-        "University - Mohandesi Bargh")
+        "University - Mohandesi Bargh", data.egp.item["u-general"])
     # endregion
 
     # region Lessons
@@ -96,11 +100,35 @@ def init_data(data):
 
     # region School
     data.school.item['hesaraki'] = School(
-        'Dabestan Shahid Abas Hesaraki', data.es.item['ps'])
+        'Dabestan Shahid Abas Hesaraki',
+        data.es.item['ps'],
+        data.egp.item['ps-general']
+    )
+    
     data.school.item['alameh'] = School(
-        'Dabirestan Alameh Tabatabai', data.es.item['hs1'], data.es.item['hs2'])
+        'Dabirestan Alameh Tabatabai', 
+        [
+            data.es.item['hs1'], 
+            data.es.item['hs2']
+        ], 
+        [
+            data.egp.item['hs1-general'], 
+            data.egp.item['hs2-general'], 
+            data.egp.item['hs2-riazi'], 
+            data.egp.item['hs2-tajrobi']
+        ]
+    )
+
     data.school.item['payamenoor'] = School(
-        'Daneshgah Payame Noor', data.es.item['u'])
+        'Daneshgah Payame Noor', 
+        data.es.item['u'],
+        [
+            data.egp.item['u-general'],
+            data.egp.item['u-mohandesi-computer'],
+            data.egp.item['u-oloom-computer'],
+            data.egp.item['u-mohandesi-bargh'],
+        ]
+    )
 
     # endregion
 
@@ -157,11 +185,24 @@ def init_data(data):
     data.croom.item.update(zip(temp_croom_names, temp_croom_objects))
 
     # endregion
-    
+
+    # Adding Persons
+    person_gen = fake_person(data, 20)
+    for new_person in person_gen:
+        data.person.item[new_person.id] = new_person
+
     # region Student
     # Students
-    pass
-    
+    data.student.item['ps-1'] = data.school.item['hesaraki'].add_student(
+        data.person.item[1], data.egd.item['1st'], data.egp.item['ps-general'])
+
+    data.student.item['ps-2'] = data.school.item['hesaraki'].add_student(
+        data.person.item[2], data.egd.item['5th'], data.egp.item['ps-general'])
+
+    data.student.item['hs1-1'] = data.school.item['alameh'].add_student(
+        data.person.item[3], data.egd.item['7th'], data.egp.item['hs1-general'])
+
+
     # endregion
 
 # endregion

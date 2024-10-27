@@ -63,6 +63,7 @@ def id_generator(start_id):
 # Any organization that needs to validate a persons identification will chek that person's id with this class, and may retreive data about that person. (this connection can be seen in government web apps only gets the person id and filles other fields automatically like name, family, age, etc.)
 # Each instance of this class is single person, containing information about that person. There will be a private variable within the class itself that acts as a container for all persons created
 # UPDATE: GovPerson has been changed to Person
+# TODO adding super().__init__() and moving some attributes to the BasePerson class
 class Person(BasePerson):
     # A dictionary containing all people
     __people = dict()

@@ -1,8 +1,10 @@
-# region Module Documention
+# region  Documention
 # This module containes classes that are globaly used for education related stuff
 
-
 # endregion
+
+# imports
+from typing import Union, List
 
 
 # region E-State
@@ -29,8 +31,12 @@ class EducationState:
         self.__educationgrades.append(new_educationgrade)
         return new_educationgrade
 
-    def add_group(self, educationgroup_name):
-        new_educationgroup = EducationGroup(self, educationgroup_name)
+    def add_group(
+        self, 
+        educationgroup_name: str, 
+        generic_dependency: Union['EducationGroup', List['EducationGroup']] = [],
+    ):
+        new_educationgroup = EducationGroup(self, educationgroup_name, generic_dependency)
         self.__educationgroup.add(new_educationgroup)
         return new_educationgroup
 
@@ -82,10 +88,24 @@ class EducationGrade:
 # Dedicated education groups like riazi and mohandesi shimi do have generic dependencies
 #   e.g. General group lessons that are the same for every dedicated group like dini, ghoran, etc.
 class EducationGroup:
-    def __init__(self, parent_educationstate, name, generic_dependency: 'EducationGroup'):
+    def __init__(
+        self, 
+        parent_educationstate: EducationState, 
+        name: str, 
+        generic_dependency: Union['EducationGroup', List['EducationGroup']] = [], 
+    ):
+        # initializations
         self.parent_educationstate = parent_educationstate
         self.name = name
-        self.generic_dependancy = generic_dependency
+
+        # checking wether the input parameters are iterables or not
+        # TODO adding further validation to check if the input values actually match the type hints
+        if hasattr(generic_dependency, '__iter__'):
+            self.generic_dependency = set(generic_dependency)
+        else:
+            self.generic_dependency = {generic_dependency}
+
+        # Data Containers
         self.lessons = set()
 
     # Adding an already created lesson to lessons list inside the education group

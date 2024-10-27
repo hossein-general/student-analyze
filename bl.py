@@ -22,3 +22,4 @@ class RuntimeDataAccessor:
         self.person = DataObject('Person')
         self.school = DataObject('School')
         self.croom = DataObject('ClassRoom')
+        self.student = DataObject('Student')

@@ -35,7 +35,7 @@ def main():
     
     # region initializations and fakers
     faker.init_data(data)
-    person_gen = faker.fake_person(data, 20)
+    person_gen = faker.fake_person(data, 5)
     for new_person in person_gen:
         data.person.item[new_person.id] = new_person
 

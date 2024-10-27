@@ -4,7 +4,7 @@
 
 # region importing
 from .Organization import Organization
-from .Person import Person
+from .Persons import Person
 from .GlobalAttributes import (
     EducationState,
     EducationGroup,

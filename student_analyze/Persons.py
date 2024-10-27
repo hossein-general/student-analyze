@@ -40,6 +40,17 @@ class Gender:
 
 # endregion
 
+# region id_generator
+# The generator function at this point is somuch like a range() generator
+# the reason of using a different generator is to customize it in the future
+def id_generator(start_id):
+    current_id = start_id
+    while True:
+        yield current_id
+        current_id += 1
+
+# endregion
+
 
 # region Person
 # GovernmentPerson shortened as GovPerson
@@ -50,8 +61,8 @@ class Gender:
 class Person(BasePerson):
     # A dictionary containing all people
     __people = dict()
-    __id_pool = 0
-    __last_nationalcode = 1000
+    __id = id_generator(1)
+    __national_code = id_generator(1001)
 
     # TODO making the national_code a string (right now its an integer to prevent complecation)
     # TODO write typing for each parameter (e.g. parameter: str)
@@ -64,7 +75,7 @@ class Person(BasePerson):
         education_grade: EducationGrade,
         national_code: int = None,
     ):
-        self.id = self.__class__.test
+        self.id = next(self.__class__.__id)
         self.gender = gender
         self.first_name = first_name
         self.last_name = last_name
@@ -77,12 +88,13 @@ class Person(BasePerson):
         if national_code is not None:
             self.__national_code = national_code
         else:
-            self.__national_code = self.__class__.get_national_code()
+            self.__national_code = next(self.__class__.__national_code) 
         # Adding the newly created person to the
         self.__class__.add_person(self)
         self._workinglog_list = []
 
     # region @prop
+
     @property
     def age(self):
         # TODO calculating age
@@ -104,14 +116,9 @@ class Person(BasePerson):
     @classmethod
     def get_by_id(cls, person_id):
         return cls.__people[person_id]
-
-    @classmethod
-    def get_national_code(cls):
-        cls.__last_nationalcode += 1
-        return cls.__last_nationalcode
-
     # Generating an ip address for new instance
     # (maybe i should remove the class-properties as they are depricated)
+
     @classmethod
     @property
     def test(cls):
@@ -134,13 +141,12 @@ class Person(BasePerson):
         return f'<Person: "{self.fullname}">'
 
     # endregion
-    
+
     # region nested classes
     # a region containing nested classes
     # these classes should be directly called from Person class
     # these classes are not accessible from base person
     # WorkingLog, EducationLog
-
 
     # region Working-L
     # A class that is kind of a table that contains records of places each person have been worked or is working in

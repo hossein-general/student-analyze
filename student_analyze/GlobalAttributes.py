@@ -114,12 +114,18 @@ class EducationGroup:
         self.lessons = set()
 
     # Adding an already created lesson to lessons list inside the education group
-    def add_lesson(self, lesson_name, education_grade, prerequisite=None):
+    def add_lesson(
+            self, 
+            lesson_name: str, 
+            education_grade: EducationGrade, 
+            grade_base_prerequisite: 'Lesson' = [],
+        ):
+
         new_lesson = Lesson(
             self,
             lesson_name,
             education_grade,
-            prerequisite,
+            grade_base_prerequisite,
         )
         self.lessons.add(new_lesson)
         return new_lesson
@@ -141,8 +147,15 @@ class Lesson:
         parent_educationgroup: EducationGroup,
         name: str,
         educationgrade: EducationGrade,
-        prerequisite: "Lesson" = None,
+        grade_base_prerequisite: "Lesson" = [],
     ):
+        # Checking if the lesson and the prerequisite of it are of a sae education_grade
+        for prequisite in grade_base_prerequisite:
+            if educationgrade != prequisite.educationgrade:
+                raise ValueError(
+                    f"the lesson and its prerequisite are not of the same education_grade: {prequisite}"
+                )
+        # Note: There is no need for validating education grops of them, as there could be prerequisites from differen classgroups to each other
         # The EducationGroup that this lesson belongs to
         self.parent_educationgroup = parent_educationgroup
         # The grade that this lesson is presenting in
@@ -150,7 +163,7 @@ class Lesson:
         # The name of that lesson
         self.name = name
         # The lessons that are necessary to be learned before starting this lesson (e.g. math-1 should be learned before math-2)
-        self.prerequisite = prerequisite
+        self.grade_base_prerequisite = grade_base_prerequisite
 
     def __str__(self):
         return self.name

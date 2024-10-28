@@ -161,7 +161,7 @@ class Person(BasePerson):
     # these classes are not accessible from base person
     # ProfessionalRecords, EducationLog
 
-    # region Working-L
+    # region Professional-R
     # A class that is kind of a table that contains records of places each person have been worked or is working in
 
     class ProfessionalRecords:
@@ -198,7 +198,7 @@ class Person(BasePerson):
 
     # endregion
 
-    # region Education-L
+    # region Academic-R
     # A class that is kind of a table that contains records of places each person have been educated or is currently educating in
 
     class AcademicRecords:

@@ -97,9 +97,26 @@ def init_data(data):
 
     # region Lessons
     # Lessons
-    data.lesson.item["farsi aval"] = data.egp.item["ps-general"].add_lesson(
-        "Farsi Aval", data.egd.item["1st"]
+    data.lesson.item["ps-farsi-aval"] = data.egp.item["ps-general"].add_lesson(
+        "Farsi Aval",
+        data.egd.item["1st"],
     )
+
+    data.lesson.item["ps-riazi-dovom"] = data.egp.item["ps-general"].add_lesson(
+        "Riazi Dovom",
+        data.egd.item["1st"],
+    )
+
+    data.lesson.item["hs1-hendese-1"] = data.egp.item["ps-general"].add_lesson(
+        "Hendese 1",
+        data.egd.item["7th"],
+    )
+
+    data.lesson.item["hs1-riazi-2"] = data.egp.item["ps-general"].add_lesson(
+        "Riazi Hashtom",
+        data.egd.item["8th"],
+    )
+
     # endregion
 
     # region Gender
@@ -243,7 +260,7 @@ def init_data(data):
     # region Teacher
     # Teachers
     # data.teacher.item['1'] = data.school.itme["hesaraki"].add_teacher(
-    #     data.person.item[11], 
+    #     data.person.item[11],
 
     # )
 

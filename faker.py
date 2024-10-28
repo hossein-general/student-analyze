@@ -259,18 +259,45 @@ def init_data(data):
 
     # region Teacher
     # Teachers
-    data.teacher.item["1"] = data.school.item["hesaraki"].add_teacher(
+    data.teacher.item["hesaraki-1"] = data.school.item["hesaraki"].add_teacher(
         data.person.item[11],
         data.lesson.item["ps-farsi-aval"],
         data.lesson.item["ps-riazi-dovom"],
     )
 
-    data.teacher.item["1"] = data.school.item["alameh"].add_teacher(
+    data.teacher.item["alameh-1"] = data.school.item["alameh"].add_teacher(
         data.person.item[12],
         data.lesson.item["hs1-riazi-2"],
     )
 
     # endregion
+    
+    # region C-Group
+    data.cg.item['hesaraki-1'] = data.school.item['hesaraki'].add_classgroup(
+        data.egd.item['1st'],
+        data.egp.item['ps-general'],
+        data.teacher.item['hesaraki-1'],
+        data.lesson.item['ps-farsi-aval'],
+        [data.student.item['ps-1']],
+    )
+
+    data.cg.item['hesaraki-2'] = data.school.item['hesaraki'].add_classgroup(
+        data.egd.item['2nd'],
+        data.egp.item['ps-general'],
+        data.teacher.item['hesaraki-1'],
+        data.lesson.item['ps-riazi-dovom'],
+    )
+
+    data.cg.item['alameh-1'] = data.school.item['alameh'].add_classgroup(
+        data.egd.item['8th'],
+        data.egp.item['hs1-general'],
+        data.teacher.item['alameh-1'],
+        data.lesson.item['hs1-riazi-2'],
+    )
+
+
+    # endregion
+
 
 
 # endregion

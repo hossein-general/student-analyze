@@ -121,11 +121,10 @@ class School(Organization):
         self,
         educationgrade: EducationGrade,
         educationgroup: EducationGroup,
-        student_ids_list,
+        teacher: 'School.Teacher',
+        lesson: Lesson,
+        student_list: List['School.Student'] = [],
     ):
-        # TODO Getting educationgrade
-        # TODO Getting student_list
-        # TODO Getting teacher_list
         # Generate an id for the new classgroup
         classgroup_id = next(self.classgroup_id_pool)
         # Creating an instance of ClassGroup
@@ -134,7 +133,9 @@ class School(Organization):
             classgroup_id,
             educationgrade,
             educationgroup,
-            student_ids_list,
+            teacher,
+            lesson,
+            student_list,
         )
         # Assigning the newly created classgroup to the classgroups dict
         self.classgroups[classgroup_id] = new_classgroup
@@ -292,21 +293,27 @@ class School(Organization):
     # Class Group class. its used to bind teachers, students, lessons, classrooms and adding schedule for each
     # region C-Group
     # I dont think if there would ever be a need to name a ClassGroup as its not user readable
+    # Note: There may not be need for education group and grade as they are accessible trhou lesson 
+    #   but i rather access them directly from classgroup itself rather than through lesson
     # TODO adding validation for type hints
     class ClassGroup:
         def __init__(
             self,
-            parent_assigned_id,
             parent_school: "School",
+            group_id: int,
             educationgrade: EducationGrade,
             educationgroup: EducationGroup,
-            student_list: set = None,
+            teacher: "School.Teacher",
+            lesson: Lesson,
+            student_list: List['School.Student'] = [],
         ):
             # initializations
-            self.parent_assigned_id = parent_assigned_id
             self.parent_school = parent_school
+            self.group_id = group_id
             self.educationgrade = educationgrade
             self.educationgroup = educationgroup
+            self.teacher = teacher
+            self.lesson = lesson
             self.students = student_list
 
             # data containers
@@ -323,10 +330,6 @@ class School(Organization):
             teacher: "School.Teacher",
             lesson: Lesson,
         ):
-            # TODO Getting classschedule_name and removing from parameters
-            # TODO Getting students_list and removing from parameters
-            # TODO Getting teacher and removing from parameters
-            # TODO Getting lesson and removing from parameters
             # Generating an id for the classschedule for new ClassSchedule
             classschedule_id = self.generate_id("cschedule")
             # Calling the ClassSchedule class to create an instance of it
@@ -361,14 +364,10 @@ class School(Organization):
             self,
             parent_classgroup: "School.ClassGroup",
             id: int,
-            teacher: "School.Teacher",
-            lesson: Lesson,
         ):
             # initializations
             self.id = id
             self.parent_classgroup = parent_classgroup
-            self.teacher = teacher
-            self.lesson = lesson
             # empty data container
             self.classsessions = set()
 

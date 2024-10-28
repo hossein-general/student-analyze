@@ -169,8 +169,8 @@ class School(Organization):
             raise ValueError(
                 f'the student {person}\'s education group is not within the school education_states group: "{education_group}"'
             )
-            
-        # Generating an id for the student from student_id_pool
+
+        # Generating an id for the student
         student_id = next(self.student_id_pool)
         # Calling the Student class to create an instance of Student
         new_student = self.Student(
@@ -183,6 +183,27 @@ class School(Organization):
         # Adding the newly created student to students dict
         self.students[student_id] = new_student
         return new_student
+
+    # endregion
+
+    # region teacher
+    def add_teacher(self, person: Person, *lessons: Lesson):
+        # validating input lessons
+        for lesson in lessons:
+            # checking if the lessons are within schools education groups
+            if (the_egp := lesson.parent_educationgroup) not in self.education_group:
+                raise ValueError(
+                    f'the teacher {person}\'s education group is not within the school education_states group: "{the_egp}"'
+                )
+            # There would not be any need to validate educaiton grade to be within the school list, as
+            # if the education group is within the school then the education grade must be too
+
+        # Generating an id for the teacher
+        teacher_id = next(self.teacher_id_pool)
+        # Calling the Teacher class to create an instance of Teacher
+        new_teacher = self.Teacher(self, teacher_id, person, *lessons)
+        self.teachers[teacher_id] = new_teacher
+        return new_teacher
 
     # endregion
 

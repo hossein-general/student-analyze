@@ -240,6 +240,15 @@ def init_data(data):
 
     # endregion
 
+    # region Teacher
+    # Teachers
+    # data.teacher.item['1'] = data.school.itme["hesaraki"].add_teacher(
+    #     data.person.item[11], 
+
+    # )
+
+    # endregion
+
 
 # endregion
 

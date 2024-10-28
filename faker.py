@@ -107,12 +107,12 @@ def init_data(data):
         data.egd.item["1st"],
     )
 
-    data.lesson.item["hs1-hendese-1"] = data.egp.item["ps-general"].add_lesson(
+    data.lesson.item["hs1-hendese-1"] = data.egp.item["hs1-general"].add_lesson(
         "Hendese 1",
         data.egd.item["7th"],
     )
 
-    data.lesson.item["hs1-riazi-2"] = data.egp.item["ps-general"].add_lesson(
+    data.lesson.item["hs1-riazi-2"] = data.egp.item["hs1-general"].add_lesson(
         "Riazi Hashtom",
         data.egd.item["8th"],
     )
@@ -259,10 +259,16 @@ def init_data(data):
 
     # region Teacher
     # Teachers
-    # data.teacher.item['1'] = data.school.itme["hesaraki"].add_teacher(
-    #     data.person.item[11],
+    data.teacher.item["1"] = data.school.item["hesaraki"].add_teacher(
+        data.person.item[11],
+        data.lesson.item["ps-farsi-aval"],
+        data.lesson.item["ps-riazi-dovom"],
+    )
 
-    # )
+    data.teacher.item["1"] = data.school.item["alameh"].add_teacher(
+        data.person.item[12],
+        data.lesson.item["hs1-riazi-2"],
+    )
 
     # endregion
 
@@ -287,7 +293,7 @@ def fake_person(data, count):
             ("elham", data.gender.item["female"]),
             ("hasan", data.gender.item["male"]),
             ("ali", data.gender.item["male"]),
-            ("said", data.gender.item["male"]),
+            ("Saeed", data.gender.item["male"]),
             ("arash", data.gender.item["male"]),
             ("hoorieh", data.gender.item["female"]),
         )

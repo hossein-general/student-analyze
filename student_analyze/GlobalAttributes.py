@@ -118,7 +118,7 @@ class EducationGroup:
             self, 
             lesson_name: str, 
             education_grade: EducationGrade, 
-            grade_base_prerequisite: 'Lesson' = [],
+            grade_base_prerequisite: List['Lesson'] = [],
         ):
 
         new_lesson = Lesson(
@@ -147,7 +147,7 @@ class Lesson:
         parent_educationgroup: EducationGroup,
         name: str,
         educationgrade: EducationGrade,
-        grade_base_prerequisite: "Lesson" = [],
+        grade_base_prerequisite: List["Lesson"] = [],
     ):
         # Checking if the lesson and the prerequisite of it are of a sae education_grade
         for prequisite in grade_base_prerequisite:

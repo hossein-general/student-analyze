@@ -193,7 +193,7 @@ class School(Organization):
             # checking if the lessons are within schools education groups
             if (the_egp := lesson.parent_educationgroup) not in self.education_group:
                 raise ValueError(
-                    f'the teacher {person}\'s education group is not within the school education_states group: "{the_egp}"'
+                    f'the teacher "{person}"\'s lessons\'s education group is not within the school "{self}" education_states group: "{the_egp}" lesson: "{lesson}"'
                 )
             # There would not be any need to validate educaiton grade to be within the school list, as
             # if the education group is within the school then the education grade must be too

@@ -11,6 +11,7 @@ from .GlobalAttributes import (
     EducationGrade,
     Lesson,
 )
+
 # for type hints (type annotations)
 from typing import Union, List
 
@@ -24,10 +25,10 @@ class School(Organization):
     # last_classroom
     # TODO adding validation for type hints
     def __init__(
-        self, 
-        name, 
+        self,
+        name,
         education_states_list: Union[EducationState, List[EducationState]],
-        education_groups_list: Union[EducationGroup, List[EducationGroup]], 
+        education_groups_list: Union[EducationGroup, List[EducationGroup]],
     ):
         # initializations
         self.name = name
@@ -35,29 +36,31 @@ class School(Organization):
         self.education_group = set()
 
         # checking wether the input parameters are iterables or not
-        if hasattr(education_states_list, '__iter__'):
+        if hasattr(education_states_list, "__iter__"):
             self.education_state.update(education_states_list)
         else:
             self.education_state.add(education_states_list)
-            
-        
-        if hasattr(education_groups_list, '__iter__'):
+
+        if hasattr(education_groups_list, "__iter__"):
             self.education_group.update(education_groups_list)
         else:
             self.education_group.add(education_groups_list)
-            
+
         # Validation
         # TODO im not sure what would happen to the instance when it raises an error mid-init. i should check on that later
         # TODO creating custom errors for different sitiuations
         # TODO adding validation for not having only generic education groups
         for group in self.education_group:
             if the_state := group.parent_educationstate not in self.education_state:
-                raise ValueError(f"the education group {group}\'s education state is not within the given education_states_list: \"{the_state}\"")
+                raise ValueError(
+                    f'the education group {group}\'s education state is not within the given education_states_list: "{the_state}"'
+                )
             if (gen_dep := group.generic_dependency) is not None:
                 for dependency in gen_dep:
                     if dependency not in self.education_group:
-                        raise ValueError(f"the education group {group} has a generic dependency that is not assigned to school: \"{dependency}\"")
-
+                        raise ValueError(
+                            f'the education group {group} has a generic dependency that is not assigned to school: "{dependency}"'
+                        )
 
         # data containers
         self.classrooms = dict()
@@ -66,10 +69,10 @@ class School(Organization):
         self.classgroups = dict()
 
         # id generators
-        self.classroom_id_pool = self.generate_id('classroom')
-        self.student_id_pool = self.generate_id('student')
-        self.teacher_id_pool = self.generate_id('teacher')
-        self.classgroup_id_pool = self.generate_id('classgroup')
+        self.classroom_id_pool = self.generate_id("classroom")
+        self.student_id_pool = self.generate_id("student")
+        self.teacher_id_pool = self.generate_id("teacher")
+        self.classgroup_id_pool = self.generate_id("classgroup")
 
     # region c-room
     # Create add adding multiple classrooms to the school
@@ -141,7 +144,6 @@ class School(Organization):
 
     # region student
 
-
     # Creating new students and assigning them to the school
     # TODO adding validation for type hints
     def add_student(
@@ -151,8 +153,23 @@ class School(Organization):
         education_group: EducationGroup,
     ):
         # Validation
-        if the_es := education_grade.parent_educationstate not in self.education_state:
-            raise ValueError(f"the student {person}\'s education state is not within the school education_states list: \"{the_es}\"")
+        if (
+            the_es := education_grade.parent_educationstate
+        ) not in self.education_state:
+            raise ValueError(
+                f'the student {person}\'s education state is not within the school education_states list: "{the_es}"'
+            )
+
+        if not education_group.direct_use:
+            raise ValueError(
+                f'the student {person}\'s education group is not directly assignable: "{education_group}"'
+            )
+
+        if education_group not in self.education_group:
+            raise ValueError(
+                f'the student {person}\'s education group is not within the school education_states group: "{education_group}"'
+            )
+            
         # Generating an id for the student from student_id_pool
         student_id = next(self.student_id_pool)
         # Calling the Student class to create an instance of Student
@@ -237,9 +254,9 @@ class School(Organization):
     # TODO changing id type to str
     class ClassRoom:
         def __init__(
-            self, 
-            parent_school: 'School', 
-            parent_assigned_id: int, 
+            self,
+            parent_school: "School",
+            parent_assigned_id: int,
             name: str,
         ):
             self.parent_school = parent_school
@@ -259,7 +276,7 @@ class School(Organization):
         def __init__(
             self,
             parent_assigned_id,
-            parent_school: 'School',
+            parent_school: "School",
             educationgrade: EducationGrade,
             educationgroup: EducationGroup,
             student_list: set = None,
@@ -282,7 +299,7 @@ class School(Organization):
         # TODO adding validation for type hints
         def add_classschedule(
             self,
-            teacher: 'School.Teacher',
+            teacher: "School.Teacher",
             lesson: Lesson,
         ):
             # TODO Getting classschedule_name and removing from parameters
@@ -290,7 +307,7 @@ class School(Organization):
             # TODO Getting teacher and removing from parameters
             # TODO Getting lesson and removing from parameters
             # Generating an id for the classschedule for new ClassSchedule
-            classschedule_id = self.generate_id('cschedule')
+            classschedule_id = self.generate_id("cschedule")
             # Calling the ClassSchedule class to create an instance of it
             new_classschedule = self.ClassSchedule(
                 self, classschedule_id, teacher, lesson
@@ -300,12 +317,13 @@ class School(Organization):
         # TODO adding validation for type hints
         def generate_id(self, entity: str):
             match entity:
-                case 'cschadule':
+                case "cschadule":
                     self.last_classschedule_id += 1
                     return self.last_classschedule_id
                 case _:
                     raise TypeError(
-                        f'{entity} is not an entity that would have an id pool in ClassGroup class. pls enter a valid option')
+                        f"{entity} is not an entity that would have an id pool in ClassGroup class. pls enter a valid option"
+                    )
 
         def __str__(self):
             return self.id
@@ -320,9 +338,9 @@ class School(Organization):
     class ClassSchedule:
         def __init__(
             self,
-            parent_classgroup: 'School.ClassGroup',
+            parent_classgroup: "School.ClassGroup",
             id: int,
-            teacher: 'School.Teacher',
+            teacher: "School.Teacher",
             lesson: Lesson,
         ):
             # initializations
@@ -374,6 +392,7 @@ class School(Organization):
 
         def __str__(self):
             return f"{self.lesson} {self.start_time}-{self.end_time}"
+
     # endregion
 
     # region Student
@@ -381,8 +400,8 @@ class School(Organization):
     # TODO adding validation for type hints
     class Student:
         def __init__(
-            self, 
-            parent_school: 'School',
+            self,
+            parent_school: "School",
             student_id: int,
             person: Person,
             education_grade: EducationGrade,
@@ -393,7 +412,6 @@ class School(Organization):
             self.person = person
             self.education_grade = education_grade
             self.education_group = education_group
-            
 
     # endregion
 
@@ -403,10 +421,10 @@ class School(Organization):
     class Teacher:
         def __init__(
             self,
-            parent_school: 'School',
+            parent_school: "School",
             teacher_id: int,
             person: Person,
-            *presenting_lessons: Lesson ,
+            *presenting_lessons: Lesson,
         ):
             self.parent_school = parent_school
             self.teacher_id = teacher_id

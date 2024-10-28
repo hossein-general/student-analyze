@@ -32,11 +32,14 @@ class EducationState:
         return new_educationgrade
 
     def add_group(
-        self, 
-        educationgroup_name: str, 
-        generic_dependency: Union['EducationGroup', List['EducationGroup']] = [],
+        self,
+        educationgroup_name: str,
+        direct_use: bool = True,
+        generic_dependency: Union["EducationGroup", List["EducationGroup"]] = [],
     ):
-        new_educationgroup = EducationGroup(self, educationgroup_name, generic_dependency)
+        new_educationgroup = EducationGroup(
+            self, educationgroup_name, direct_use, generic_dependency
+        )
         self.__educationgroup.add(new_educationgroup)
         return new_educationgroup
 
@@ -89,18 +92,20 @@ class EducationGrade:
 #   e.g. General group lessons that are the same for every dedicated group like dini, ghoran, etc.
 class EducationGroup:
     def __init__(
-        self, 
-        parent_educationstate: EducationState, 
-        name: str, 
-        generic_dependency: Union['EducationGroup', List['EducationGroup']] = [], 
+        self,
+        parent_educationstate: EducationState,
+        name: str,
+        direct_use: bool = True,
+        generic_dependency: Union["EducationGroup", List["EducationGroup"]] = [],
     ):
         # initializations
         self.parent_educationstate = parent_educationstate
         self.name = name
+        self.direct_use = direct_use
 
         # checking wether the input parameters are iterables or not
         # TODO adding further validation to check if the input values actually match the type hints
-        if hasattr(generic_dependency, '__iter__'):
+        if hasattr(generic_dependency, "__iter__"):
             self.generic_dependency = set(generic_dependency)
         else:
             self.generic_dependency = {generic_dependency}
@@ -109,16 +114,11 @@ class EducationGroup:
         self.lessons = set()
 
     # Adding an already created lesson to lessons list inside the education group
-    def add_lesson(
-        self, 
-        lesson_name, 
-        education_grade, 
-        prerequisite = None
-    ):
+    def add_lesson(self, lesson_name, education_grade, prerequisite=None):
         new_lesson = Lesson(
-            self, 
-            lesson_name, 
-            education_grade, 
+            self,
+            lesson_name,
+            education_grade,
             prerequisite,
         )
         self.lessons.add(new_lesson)
@@ -137,11 +137,11 @@ class EducationGroup:
 # region Lesson
 class Lesson:
     def __init__(
-        self, 
-        parent_educationgroup: EducationGroup, 
-        name: str, 
-        educationgrade: EducationGrade, 
-        prerequisite: 'Lesson' = None
+        self,
+        parent_educationgroup: EducationGroup,
+        name: str,
+        educationgrade: EducationGrade,
+        prerequisite: "Lesson" = None,
     ):
         # The EducationGroup that this lesson belongs to
         self.parent_educationgroup = parent_educationgroup
@@ -157,6 +157,7 @@ class Lesson:
 
     def __repr__(self):
         return f'<Lesson: "{self.name}">'
+
 
 # endregion
 
@@ -176,5 +177,6 @@ class EducationTerm:
 
     def __repr__(self):
         return f'<EducationTerm: "{self.name}">'
+
 
 # endregion

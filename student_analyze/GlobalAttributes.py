@@ -4,6 +4,9 @@
 # endregion
 
 # imports
+from .Validations import Validator
+
+# for type hints (type annotations)
 from typing import Union, List
 
 
@@ -115,11 +118,11 @@ class EducationGroup:
 
     # Adding an already created lesson to lessons list inside the education group
     def add_lesson(
-            self, 
-            lesson_name: str, 
-            education_grade: EducationGrade, 
-            grade_base_prerequisite: List['Lesson'] = [],
-        ):
+        self,
+        lesson_name: str,
+        education_grade: EducationGrade,
+        grade_base_prerequisite: List["Lesson"] = [],
+    ):
 
         new_lesson = Lesson(
             self,
@@ -142,6 +145,10 @@ class EducationGroup:
 
 # region Lesson
 class Lesson:
+    # Creating Validator object
+    check = Validator()
+    check.msg['lesson-prerequisites'] = "the lesson"
+
     def __init__(
         self,
         parent_educationgroup: EducationGroup,
@@ -149,13 +156,18 @@ class Lesson:
         educationgrade: EducationGrade,
         grade_base_prerequisite: List["Lesson"] = [],
     ):
-        # Checking if the lesson and the prerequisite of it are of a sae education_grade
-        for prequisite in grade_base_prerequisite:
-            if educationgrade != prequisite.educationgrade:
+        # Validation
+        # Checking if the lesson and the prerequisites of it are of a same education_grade
+
+        self.check.is_same(self, grade_base_prerequisite, )
+
+        for prerequisite in grade_base_prerequisite:
+            if educationgrade != prerequisite.educationgrade:
                 raise ValueError(
-                    f"the lesson and its prerequisite are not of the same education_grade: {prequisite}"
+                    f"the lesson and its prerequisite are not of the same education_grade: {prerequisite}"
                 )
         # Note: There is no need for validating education grops of them, as there could be prerequisites from differen classgroups to each other
+
         # The EducationGroup that this lesson belongs to
         self.parent_educationgroup = parent_educationgroup
         # The grade that this lesson is presenting in

@@ -47,6 +47,8 @@ class School(Organization):
             self.education_group.add(education_groups_list)
 
         # Validation
+        # - checking if education groups within the school list are compatible with  the education statets
+        # - checking for each education groups generic dependency to be included within the school education_group
         # TODO im not sure what would happen to the instance when it raises an error mid-init. i should check on that later
         # TODO creating custom errors for different sitiuations
         # TODO adding validation for not having only generic education groups
@@ -55,12 +57,12 @@ class School(Organization):
                 raise ValueError(
                     f'the education group {group}\'s education state is not within the given education_states_list: "{the_state}"'
                 )
-            if (gen_dep := group.generic_dependency) is not None:
-                for dependency in gen_dep:
-                    if dependency not in self.education_group:
-                        raise ValueError(
-                            f'the education group {group} has a generic dependency that is not assigned to school: "{dependency}"'
-                        )
+
+            for dependency in group.generic_dependency:
+                if dependency not in self.education_group:
+                    raise ValueError(
+                        f'the education group {group} has a generic dependency that is not assigned to school: "{dependency}"'
+                    )
 
         # data containers
         self.classrooms = dict()
@@ -121,9 +123,9 @@ class School(Organization):
         self,
         educationgrade: EducationGrade,
         educationgroup: EducationGroup,
-        teacher: 'School.Teacher',
+        teacher: "School.Teacher",
         lesson: Lesson,
-        student_list: List['School.Student'] = [],
+        student_list: List["School.Student"] = [],
     ):
         # Generate an id for the new classgroup
         classgroup_id = next(self.classgroup_id_pool)
@@ -154,13 +156,14 @@ class School(Organization):
         education_group: EducationGroup,
     ):
         # Validation
+        # checking if the students education state and education group is within the school's egp and es list
         if (
             the_es := education_grade.parent_educationstate
         ) not in self.education_state:
             raise ValueError(
                 f'the student {person}\'s education state is not within the school education_states list: "{the_es}"'
             )
-
+        # if the assigned education group is not a directly usable group
         if not education_group.direct_use:
             raise ValueError(
                 f'the student {person}\'s education group is not directly assignable: "{education_group}"'
@@ -293,7 +296,7 @@ class School(Organization):
     # Class Group class. its used to bind teachers, students, lessons, classrooms and adding schedule for each
     # region C-Group
     # I dont think if there would ever be a need to name a ClassGroup as its not user readable
-    # Note: There may not be need for education group and grade as they are accessible trhou lesson 
+    # Note: There may not be need for education group and grade as they are accessible trhou lesson
     #   but i rather access them directly from classgroup itself rather than through lesson
     # TODO adding validation for type hints
     class ClassGroup:
@@ -305,7 +308,7 @@ class School(Organization):
             educationgroup: EducationGroup,
             teacher: "School.Teacher",
             lesson: Lesson,
-            student_list: List['School.Student'] = [],
+            student_list: List["School.Student"] = [],
         ):
             # initializations
             self.parent_school = parent_school

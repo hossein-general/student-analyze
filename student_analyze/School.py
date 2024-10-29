@@ -296,7 +296,7 @@ class School(Organization):
     # Class Group class. its used to bind teachers, students, lessons, classrooms and adding schedule for each
     # region C-Group
     # I dont think if there would ever be a need to name a ClassGroup as its not user readable
-    # Note: There may not be need for education group and grade as they are accessible trhou lesson
+    # NOTE There may not be need for education group and grade as they are accessible trhou lesson
     #   but i rather access them directly from classgroup itself rather than through lesson
     # TODO adding validation for type hints
     class ClassGroup:

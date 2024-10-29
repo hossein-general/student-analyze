@@ -117,6 +117,14 @@ def init_data(data):
         data.egd.item["8th"],
     )
 
+
+    # for teset:
+    data.lesson.item["ps-farsi-dovom"] = data.egp.item["ps-general"].add_lesson(
+        "Farsi Dovom",
+        data.egd.item["2nd"],
+        data.lesson.item['ps-farsi-aval']
+    )
+
     # endregion
 
     # region Gender

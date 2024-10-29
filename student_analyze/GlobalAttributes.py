@@ -143,11 +143,14 @@ class EducationGroup:
 # endregion
 
 
+# BUG if user creates a Lesson instance directly, and does not compliance validation rules, the instace will be created any ways, and validations may not prevent that
+# NOTE the validations within Lesson class are only used to inform user about the incoming bugs and would not prevent them from doing anythin (as it sis direct access)
 # region Lesson
 class Lesson:
     # Creating Validator object
     check = Validator()
-    check.msg['lesson-prerequisites'] = "the lesson"
+    check.msg['lesson-prerequisites'] = 'the lesson: "{caller}" and its prerequisite: "{content_1}" are not of the same education grade: "{content_2}"'
+    # check.msg['parameter-type'] = 'the parameter []'
 
     def __init__(
         self,
@@ -156,18 +159,16 @@ class Lesson:
         educationgrade: EducationGrade,
         grade_base_prerequisite: List["Lesson"] = [],
     ):
-        # Validation
-        # Checking if the lesson and the prerequisites of it are of a same education_grade
+        # Parameter formatting
+        # to handle not supported format of arguments and keep the function easier to use
+        if not hasattr(grade_base_prerequisite, "__iter__"):
+            grade_base_prerequisite = [grade_base_prerequisite]
 
-        self.check.is_same(self, grade_base_prerequisite, )
-
-        for prerequisite in grade_base_prerequisite:
-            if educationgrade != prerequisite.educationgrade:
-                raise ValueError(
-                    f"the lesson and its prerequisite are not of the same education_grade: {prerequisite}"
-                )
-        # Note: There is no need for validating education grops of them, as there could be prerequisites from differen classgroups to each other
-
+        # Type Validations
+        self.check.check_type(parent_educationgroup, EducationGroup, 'parameter-type')
+        
+        # NOTE It was necessary to puth attribute initialization before validation 
+        # (to prevent some errors like "Lesson object has no attribute 'name'" when calling its str)
         # The EducationGroup that this lesson belongs to
         self.parent_educationgroup = parent_educationgroup
         # The grade that this lesson is presenting in
@@ -176,6 +177,12 @@ class Lesson:
         self.name = name
         # The lessons that are necessary to be learned before starting this lesson (e.g. math-1 should be learned before math-2)
         self.grade_base_prerequisite = grade_base_prerequisite
+
+        # Logical Validations
+        # Checking if the lesson and the prerequisites of it are of a same education_grade
+        self.check.is_same_as(self, grade_base_prerequisite, educationgrade, 'educationgrade', 'lesson-prerequisites')
+        # NOTE There is no need for validating education grops of them, as there could be prerequisites from differen classgroups to each other
+
 
     def __str__(self):
         return self.name

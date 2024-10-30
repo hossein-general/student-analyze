@@ -3,12 +3,15 @@
 # for abstractmethods
 from abc import ABC, abstractmethod
 
+# for validations 
+from .Validations import Validator
+
 # only for type hints:
+from datetime import datetime
 from .GlobalAttributes import (
     EducationGrade,
     EducationGroup
 )
-from datetime import datetime
 
 # endregion
 
@@ -30,8 +33,21 @@ class BasePerson(ABC):
 # A Gender could be Male or Female
 class Gender:
     _genders = []
+    cls_name = 'Gender'
+
+    # Validator object
+    check = Validator()
 
     def __init__(self, name: str):
+        # Validations
+        self.check.check_type(
+            name,
+            str,
+            "name",
+            creating_class=self.cls_name,
+        )
+
+        # Initializations
         self.name = name
         self.__class__._genders.append(self)
 
@@ -69,6 +85,10 @@ class Person(BasePerson):
     __people = dict()
     __id = id_generator(1)
     __national_code = id_generator(1001)
+    cls_name = 'Person'
+
+    # Validator object
+    check = Validator()
 
     # TODO making the national_code a string (right now its an integer to prevent complecation)
     # TODO write typing for each parameter (e.g. parameter: str)
@@ -80,6 +100,39 @@ class Person(BasePerson):
         birth_date: datetime,
         national_code: int = None,
     ):
+        # Validations
+        self.check.check_type(
+            first_name,
+            str,
+            "first_name",
+            creating_class=self.cls_name,
+        )
+        self.check.check_type(
+            last_name,
+            str,
+            "last_name",
+            creating_class=self.cls_name,
+        )
+        self.check.check_type(
+            gender,
+            Gender,
+            "gender",
+            creating_class=self.cls_name,
+        )
+        self.check.check_type(
+            birth_date,
+            datetime,
+            "birth_date",
+            creating_class=self.cls_name,
+        )
+        self.check.check_type(
+            national_code,
+            (int, type(None)),
+            "national_code",
+            creating_class=self.cls_name,
+        )
+
+        # Initializations
         self.id = next(self.__class__.__id)
         self.gender = gender
         self.first_name = first_name
@@ -99,7 +152,7 @@ class Person(BasePerson):
 
     # region methods
     
-
+    # TODO adding Validations
     def add_professional_record(
         self,
         working_organization,
@@ -164,6 +217,7 @@ class Person(BasePerson):
     # region Professional-R
     # A class that is kind of a table that contains records of places each person have been worked or is working in
 
+    # TODO adding validations
     class ProfessionalRecords:
         # Creating a new record for the table
         def __init__(
@@ -201,6 +255,7 @@ class Person(BasePerson):
     # region Academic-R
     # A class that is kind of a table that contains records of places each person have been educated or is currently educating in
 
+    # TODO adding validations
     class AcademicRecords:
         # Creating a new record for the table
         def __init__(self):

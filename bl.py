@@ -26,3 +26,5 @@ class RuntimeDataAccessor:
         self.teacher = DataObject('Teacher')
         self.cg = DataObject('Class Group')
 
+# TODO creating a decorator to keep record of any instance creation
+

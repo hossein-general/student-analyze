@@ -21,6 +21,7 @@ def init_data(data):
     data.es.item["hs1"] = EducationState("High School 1st")
     data.es.item["hs2"] = EducationState("High School 2nd")
     data.es.item["u"] = EducationState("University")
+
     # endregion
 
     # region EGd
@@ -59,7 +60,7 @@ def init_data(data):
 
     # High School 2nd Gropus (7)
     data.egp.item["hs2-general"] = data.es.item["hs2"].add_group(
-        "High School 2st - General", False
+        "High School 2st - General", direct_use=False
     )
     data.egp.item["hs2-riazi"] = data.es.item["hs2"].add_group(
         "High School 2st - Riazi Fizik", data.egp.item["hs2-general"]
@@ -82,7 +83,7 @@ def init_data(data):
 
     # University Groups (??)
     data.egp.item["u-general"] = data.es.item["u"].add_group(
-        "University - General", False
+        "University - General", direct_use=False
     )
     data.egp.item["u-mohandesi-computer"] = data.es.item["u"].add_group(
         "University - Mohandesi Computer", data.egp.item["u-general"]
@@ -93,6 +94,7 @@ def init_data(data):
     data.egp.item["u-mohandesi-bargh"] = data.es.item["u"].add_group(
         "University - Mohandesi Bargh", data.egp.item["u-general"]
     )
+
     # endregion
 
     # region Lessons
@@ -116,16 +118,6 @@ def init_data(data):
         "Riazi Hashtom",
         data.egd.item["8th"],
     )
-
-
-    # for teset:
-    data.lesson.item["ps-farsi-dovom"] = data.egp.item["ps-general"].add_lesson(
-        "Farsi Dovom",
-        data.egd.item["2nd"],
-        data.lesson.item['ps-farsi-aval']
-    )
-
-    # endregion
 
     # region Gender
     # Genders
@@ -279,33 +271,31 @@ def init_data(data):
     )
 
     # endregion
-    
+
     # region C-Group
-    data.cg.item['hesaraki-1'] = data.school.item['hesaraki'].add_classgroup(
-        data.egd.item['1st'],
-        data.egp.item['ps-general'],
-        data.teacher.item['hesaraki-1'],
-        data.lesson.item['ps-farsi-aval'],
-        [data.student.item['ps-1']],
+    data.cg.item["hesaraki-1"] = data.school.item["hesaraki"].add_classgroup(
+        data.egd.item["1st"],
+        data.egp.item["ps-general"],
+        data.teacher.item["hesaraki-1"],
+        data.lesson.item["ps-farsi-aval"],
+        [data.student.item["ps-1"]],
     )
 
-    data.cg.item['hesaraki-2'] = data.school.item['hesaraki'].add_classgroup(
-        data.egd.item['2nd'],
-        data.egp.item['ps-general'],
-        data.teacher.item['hesaraki-1'],
-        data.lesson.item['ps-riazi-dovom'],
+    data.cg.item["hesaraki-2"] = data.school.item["hesaraki"].add_classgroup(
+        data.egd.item["2nd"],
+        data.egp.item["ps-general"],
+        data.teacher.item["hesaraki-1"],
+        data.lesson.item["ps-riazi-dovom"],
     )
 
-    data.cg.item['alameh-1'] = data.school.item['alameh'].add_classgroup(
-        data.egd.item['8th'],
-        data.egp.item['hs1-general'],
-        data.teacher.item['alameh-1'],
-        data.lesson.item['hs1-riazi-2'],
+    data.cg.item["alameh-1"] = data.school.item["alameh"].add_classgroup(
+        data.egd.item["8th"],
+        data.egp.item["hs1-general"],
+        data.teacher.item["alameh-1"],
+        data.lesson.item["hs1-riazi-2"],
     )
-
 
     # endregion
-
 
 
 # endregion

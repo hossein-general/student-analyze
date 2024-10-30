@@ -6,21 +6,6 @@ from pprint import pprint
 # Other packages
 from datetime import datetime
 
-# Modules from the main package
-from student_analyze import (
-    Person,
-    # Student,  # Depricated
-    # Teacher,  # Depricated
-    EducationState,
-    EducationGrade,  # i think its unnecessary (as its automatically created)
-    EducationGroup,
-    EducationTerm,
-    Lesson,
-    School,
-    gtattr,
-    # GovPerson, # Renamed to Person
-)
-
 # Program Modules
 import faker
 from ui import Program

@@ -10,14 +10,33 @@ from .Validations import Validator
 from typing import Union, List
 
 
-# region E-State
+# region E-State <13>
 # EducationState will define type of education states wich affects different school types
 # e.g. Primary School, High School 1st Term, High School 2nd Term, University
+# TODO adding a decorator to store all created instances
 class EducationState:
     __es_list = []
+    cls_name = "EducationState"
+
+    # creating a validator instance
+    check = Validator()
 
     # The insert_to parameter is used to manage the order of stages
-    def __init__(self, state_name, insert_to: int = None):
+    def __init__(self, state_name: str, insert_to: int = None):
+        # Validations
+        self.check.check_type(
+            state_name,
+            str,
+            "state_name",
+            self.cls_name,
+        )
+        self.check.check_type(
+            insert_to,
+            (int, type(None)),
+            "insert_to",
+            self.cls_name,
+        )
+
         self.state_name = state_name
         # instead of creating id's for each educationgrade, im using a list that supports order, so i could now which grade comes after another in its order
         self.__educationgrades = list()
@@ -29,7 +48,18 @@ class EducationState:
             self.__class__.__es_list.insert(insert_to, self)
 
     # this method is used to create a new educationGrade though an educationState instance, which is the main way of doing so.
-    def add_grade(self, educationgrade_name):
+    def add_grade(
+        self,
+        educationgrade_name: str,
+    ):
+        # Validations
+        self.check.check_type(
+            educationgrade_name,
+            str,
+            "educationgrade_name",
+            creating_class="EdcuationGrade",
+        )
+
         new_educationgrade = EducationGrade(self, educationgrade_name)
         self.__educationgrades.append(new_educationgrade)
         return new_educationgrade
@@ -37,9 +67,31 @@ class EducationState:
     def add_group(
         self,
         educationgroup_name: str,
-        direct_use: bool = True,
         generic_dependency: Union["EducationGroup", List["EducationGroup"]] = [],
+        direct_use: bool = True,
     ):
+        # Validations
+        self.check.check_type(
+            educationgroup_name,
+            str,
+            "educatoingroup_name",
+            creating_class="EdcuationGroup",
+        )
+        self.check.check_type(
+            generic_dependency,
+            (EducationGroup, list),
+            "generic_dependency",
+            creating_class="EdcuationGroup",
+            inner_type=EducationGroup,
+        )
+        self.check.check_type(
+            direct_use,
+            bool,
+            "direct_use",
+            creating_class="EdcuationGroup",
+        )
+
+        # Creating and adding the instance
         new_educationgroup = EducationGroup(
             self, educationgroup_name, direct_use, generic_dependency
         )
@@ -64,7 +116,7 @@ class EducationState:
 # endregion
 
 
-# region E-Grade
+# region E-Grade <90>
 # EducationGrades are stages within each EducationState that are defining the path for each student
 # e.g. the primary school has 6 grades from 1st to 6th grade
 #   then high school 1st term has 3, starting with 7th and ending with 9th grade
@@ -73,7 +125,29 @@ class EducationState:
 # EducationGrade and SchoolTyeps are different from EducationGroups
 #   The first two are used to define where is an student in life time of education and the other defines the field of study
 class EducationGrade:
-    def __init__(self, parent_educationstate, name):
+    check = Validator()
+    cls_name = "EducationGrade"
+
+    def __init__(
+        self,
+        parent_educationstate: EducationState,
+        name: str,
+    ):
+        # Validation
+        self.check.check_type(
+            parent_educationstate,
+            EducationState,
+            "parent_educationstate",
+            self.cls_name,
+        )
+        self.check.check_type(
+            name,
+            str,
+            "name",
+            self.cls_name,
+        )
+
+        # Initialization
         self.parent_educationstate = parent_educationstate
         self.name = name
 
@@ -87,13 +161,16 @@ class EducationGrade:
 # endregion
 
 
-# region E-Group
+# region E-Group <135>
 # EducationGroups are created to define different fields of study in differen EducationStates
 # Each person could be assigned to multiple groups (e.g. both 'Dedicated lessons' and 'generic lessons')
 # e.g. General, Tajrobi, Riazi, Mohandesi mechanic, ...
 # Dedicated education groups like riazi and mohandesi shimi do have generic dependencies
 #   e.g. General group lessons that are the same for every dedicated group like dini, ghoran, etc.
 class EducationGroup:
+    check = Validator()
+    cls_name = "EducationGroup"
+
     def __init__(
         self,
         parent_educationstate: EducationState,
@@ -101,7 +178,34 @@ class EducationGroup:
         direct_use: bool = True,
         generic_dependency: Union["EducationGroup", List["EducationGroup"]] = [],
     ):
-        # initializations
+        # Validation
+        self.check.check_type(
+            parent_educationstate,
+            EducationState,
+            "parent_educationstate",
+            self.cls_name,
+        )
+        self.check.check_type(
+            name,
+            str,
+            "name",
+            self.cls_name,
+        )
+        self.check.check_type(
+            direct_use,
+            bool,
+            "direct_use",
+            self.cls_name,
+        )
+        self.check.check_type(
+            generic_dependency,
+            (EducationGroup, list),
+            "generic_dependency",
+            self.cls_name,
+            inner_type=EducationGroup,
+        )
+
+        # Initializations
         self.parent_educationstate = parent_educationstate
         self.name = name
         self.direct_use = direct_use
@@ -123,7 +227,28 @@ class EducationGroup:
         education_grade: EducationGrade,
         grade_base_prerequisite: List["Lesson"] = [],
     ):
+        # Validations
+        self.check.check_type(
+            lesson_name,
+            str,
+            "lesson_name",
+            creating_class='Lesson',
+        )
+        self.check.check_type(
+            education_grade,
+            EducationGrade,
+            "education_grade",
+            creating_class='Lesson',
+        )
+        self.check.check_type(
+            grade_base_prerequisite,
+            (list),
+            "grade_base_prerequisite",
+            creating_class='Lesson',
+            inner_type=Lesson,
+        )
 
+        # Creating and adding the instance
         new_lesson = Lesson(
             self,
             lesson_name,
@@ -145,12 +270,14 @@ class EducationGroup:
 
 # BUG if user creates a Lesson instance directly, and does not compliance validation rules, the instace will be created any ways, and validations may not prevent that
 # NOTE the validations within Lesson class are only used to inform user about the incoming bugs and would not prevent them from doing anythin (as it sis direct access)
-# region Lesson
+# region Lesson <231>
 class Lesson:
     # Creating Validator object
     check = Validator()
-    check.msg['lesson-prerequisites'] = 'the lesson: "{caller}" and its prerequisite: "{content_1}" are not of the same education grade: "{content_2}"'
-    # check.msg['parameter-type'] = 'the parameter []'
+    cls_name = "Lesson"
+    check.msg["lesson-prerequisites"] = (
+        'the lesson: "{caller_instane}" and its prerequisite: "{content_1}" are not of the same education grade: "{content_2}"'
+    )
 
     def __init__(
         self,
@@ -160,14 +287,38 @@ class Lesson:
         grade_base_prerequisite: List["Lesson"] = [],
     ):
         # Parameter formatting
-        # to handle not supported format of arguments and keep the function easier to use
+        # to handle not supported format of arguments and make the function easier to use
         if not hasattr(grade_base_prerequisite, "__iter__"):
             grade_base_prerequisite = [grade_base_prerequisite]
 
         # Type Validations
-        self.check.check_type(parent_educationgroup, EducationGroup, 'parameter-type')
-        
-        # NOTE It was necessary to puth attribute initialization before validation 
+        self.check.check_type(
+            parent_educationgroup,
+            EducationGroup,
+            "parent_educationgroup",
+            self.cls_name,
+        )
+        self.check.check_type(
+            name,
+            str,
+            "name",
+            self.cls_name,
+        )
+        self.check.check_type(
+            educationgrade,
+            EducationGrade,
+            "educationgrade",
+            self.cls_name,
+        )
+        self.check.check_type(
+            grade_base_prerequisite,
+            list,
+            "grade_base_prerequisite",
+            self.cls_name,
+            inner_type=Lesson,
+        )
+
+        # NOTE It was necessary to puth attribute initialization before validation
         # (to prevent some errors like "Lesson object has no attribute 'name'" when calling its str)
         # The EducationGroup that this lesson belongs to
         self.parent_educationgroup = parent_educationgroup
@@ -180,9 +331,14 @@ class Lesson:
 
         # Logical Validations
         # Checking if the lesson and the prerequisites of it are of a same education_grade
-        self.check.is_same_as(self, grade_base_prerequisite, educationgrade, 'educationgrade', 'lesson-prerequisites')
+        self.check.is_same_as(
+            self,
+            grade_base_prerequisite,
+            educationgrade,
+            "educationgrade",
+            "lesson-prerequisites",
+        )
         # NOTE There is no need for validating education grops of them, as there could be prerequisites from differen classgroups to each other
-
 
     def __str__(self):
         return self.name
@@ -194,7 +350,7 @@ class Lesson:
 # endregion
 
 
-# region E-Term
+# region E-Term <302>
 # EducationTerms are not yet defined, but will manage the date system for learnings
 # Something like "1 year for each grade of highschool state, 4 month for each term of university, etc..."
 # TODO complete the EducationTerm class

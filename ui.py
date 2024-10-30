@@ -1,8 +1,15 @@
 # This module contains user interface functions that will commmunicate with user and has access to bl (business logic) module functions
 
 # region Importing
-from typing import Callable  # to assign functions to type hints
+# for type hinting
+from typing import Callable, Union, Any
+from bl import DataObject
+
+# for cleaner look
 from os import system
+
+# for validation
+from student_analyze import Validator
 
 # Development tools
 import ipdb
@@ -12,7 +19,38 @@ import ipdb
 
 # region MenueOption
 class MenueOption:
-    def __init__(self, name: str, trigger: Callable, data_object=None) -> None:
+    cls_name = "MenueOption"
+
+    # Creating Validator object
+    check = Validator()
+
+    def __init__(
+        self,
+        name: str,
+        trigger: Union[Callable, None, str],
+        data_object: DataObject = None,
+    ) -> None:
+        # Type Validation
+        self.check.check_type(
+            name,
+            str,
+            "name",
+            self.cls_name,
+        )
+        self.check.check_type(
+            trigger,
+            (Callable, type(None), str),
+            "trigger",
+            self.cls_name,
+        )
+        self.check.check_type(
+            data_object,
+            (DataObject, type(None)),
+            "data_object",
+            self.cls_name,
+        )
+
+        # Initialization
         self.name = name
         self.trigger = trigger
         self.data_object = data_object
@@ -22,6 +60,7 @@ class MenueOption:
 
     def __repr__(self) -> str:
         return f'<MenueOption: "{self.name}">'
+
 
 # endregion
 
@@ -35,9 +74,7 @@ class Program:
 
         # Main Menue menue options
         self.main_menue_options = (
-            MenueOption(
-                "global attribute managment", self.global_attribute_management
-            ),
+            MenueOption("global attribute managment", self.global_attribute_management),
             MenueOption("person managment", self.person_management),
         )
         # Global attribute management menue option
@@ -132,7 +169,6 @@ class Program:
                 menue_done = False
 
     # endrgion
-
 
     # region Refactors
     # this method will print menue options and adds some extra options to it, while adding indexes to them

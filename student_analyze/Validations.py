@@ -14,16 +14,16 @@ class Validator:
 
         # check_type messages
         self.msg["parameter-type-creating"] = (
-            'the parameter: "{field}" should be of type: "{type}" for creating {creating_class} instance'
+            'the parameter: \n"{field}" should be of type: \n"{type}" for creating {creating_class} instance \n(value: "{value}" was given)'
         )
         self.msg["parameter-inner-type-creating"] = (
-            'the parameter: "{field}" should be of type: "{type}" and containing values of type: "{inner_value}" for creating {creating_class} instance'
+            'the parameter: \n"{field}" should be of type: \n"{type}" and containing values of type: \n"{inner_type}" for creating {creating_class} instance \n(value: "{value}" and inner_value: "{inner_value}" were given)'
         )
         self.msg["parameter-type"] = (
-            'the parameter: "{field}" should be of type: "{type}"'
+            'the parameter: \n"{field}" should be of type: \n"{type}" \n(value: "{value}" was given)'
         )
         self.msg["parameter-inner-type"] = (
-            'the parameter: "{field}" should be of type: "{type}" and containing values of type: "{inner_value}"'
+            'the parameter: \n"{field}" should be of type: \n"{type}" and containing values of type: \n"{inner_type}" \n(value: "{value}" and inner_value: "{inner_value}" were given)'
         )
 
     # region check_type()
@@ -58,7 +58,7 @@ class Validator:
         # checking the inner values and their types (if necessary)
         if hasattr(value, "__iter__") and inner_type is not None:
             for inner_value in value:
-                if isinstance(inner_value, inner_type):
+                if not isinstance(inner_value, inner_type):
                     # adding the 'inner_value' key with its variable value to be able to format the message with it
                     fcollection["inner_value"] = inner_value
 
@@ -69,7 +69,9 @@ class Validator:
                     else:
                         # if of creating instance type:
                         msg_key = "parameter-inner-type-creating"
+                    import ipdb
 
+                    ipdb.set_trace()
                     raise ValueError(self.msg[msg_key].format(**fcollection))
 
     # endregion

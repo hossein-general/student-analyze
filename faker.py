@@ -354,14 +354,12 @@ def fake_person(data, count):
         temp_gender = temp_fname_gender[1]
         # TODO making the birth_date attribute a random date within a range
         temp_birth_date = datetime(2001, 9, 11)
-        temp_education_grade = random.choice(tuple(data.egd.item.values()))
 
         yield Person(
             temp_first_name,
             temp_last_name,
             temp_gender,
             temp_birth_date,
-            temp_education_grade,
         )
 
 

@@ -99,6 +99,11 @@ class Program:
             MenueOption("Edit", None),
             MenueOption("Remove", None),
         )
+        # Exit/Back menue option
+        self.exit_option = MenueOption("Exit", "Exit")
+        # ipdb menue option
+        self.ipdb_option = MenueOption("ipdb", "ipdb")
+        
 
     # region Menues
     def menue(self, menue_options: tuple):
@@ -107,6 +112,10 @@ class Program:
         # bottom message is a list containing errors that program have encountered that user has to fix when inputting data
         bottom_message = []
         while True:
+            # reseting menue_done by each loop
+            menue_done = False
+
+            # cleaning the cli screen
             system("cls")
             print("main menue")
 
@@ -123,7 +132,10 @@ class Program:
 
             try:
                 # Checking if the user input refers to a method that should be called
-                if isinstance(ref_menue[inp], MenueOption):
+                # NOTE previously i was making the ref_menue[inp] able to have any type of value
+                #   aside from MenueOption instancers, ive been using string and None types too and 
+                #   match cased them within the else block. but now its forced to use only MenueOption instances
+                if callable(ref_menue[inp].trigger):
                     system("cls")
                     # Calling that method
                     # this will also send the data_object (e.g. es, eg, gender, etc.)
@@ -131,15 +143,17 @@ class Program:
                     # To know if the ref_menue option has been run and excecuted, so there will be no need for match-case (in the exception else statement)
                     menue_done = True
 
-            except TypeError:
-                bottom_message.append("pls enter a valid choice")
+            except TypeError as err:
+                bottom_message.append(f"pls enter a valid choice \n{err}")
                 continue
 
-            except KeyError:
+            except KeyError as err:
                 # If the key was not defined in the refactor-print list
                 # If the inp value was not empty
                 if inp:
-                    bottom_message.append("menue item out of range")
+                    bottom_message.append(f"menue item out of range \n{err}")
+                else:
+                    bottom_message.append(f"unexpected KeyError: \n{err}")
                 continue
 
             except BaseException as err:
@@ -147,9 +161,10 @@ class Program:
                 continue
 
             else:
+                # if the menue ooption was not done within the try block
                 if not menue_done:
                     # defining a match case to handle multiple types of actions
-                    match ref_menue[inp]:
+                    match ref_menue[inp].trigger:
                         # for exiting the current menue
                         case "Exit":
                             break
@@ -166,28 +181,35 @@ class Program:
                             bottom_message.append(
                                 f"there was a problem with menue options, pls contact admin: \n{ref_menue[inp]}, type: {type(ref_menue[inp])}"
                             )
-                menue_done = False
 
     # endrgion
 
     # region Refactors
     # this method will print menue options and adds some extra options to it, while adding indexes to them
-    def option_print_refactor(self, menue_options):
+    def option_print_refactor(self, menue_options_main):
+        # initializations
         refactored_menue = {}
-        for index_id, option in enumerate(menue_options):
-            refactored_menue[str(index_id + 1)] = option
-            print(f"{index_id + 1} {option}")
+        menue_options = [(option, option.name) for option in menue_options_main]
 
+        # this part of code desides if the back option should be displayed as "Exit" or not
+        # in other words, are we in the main menue or not?
         if menue_options == self.main_menue_options:
             exit_label = "Exit"
         else:
             exit_label = "Back"
 
-        refactored_menue[str(index_id + 2)] = "Exit"
-        print(f"{index_id + 2} {exit_label}")
+        # adding additional options to the menue
+        # Exit/Back option
+        menue_options.append((self.exit_option, exit_label))
 
-        refactored_menue[str(index_id + 3)] = "ipdb"
-        print(f"{index_id + 3} ipdb")
+        # ipdb option (for development only)
+        menue_options.append((self.ipdb_option, 'ipdb'))
+
+        # printing options
+        for index_id, option in enumerate(menue_options):
+            refactored_menue[str(index_id + 1)] = option[0]
+            print(f"{index_id + 1} {option[1]}")
+
         return refactored_menue
 
     # endregion

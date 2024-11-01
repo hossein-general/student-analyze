@@ -146,9 +146,12 @@ class Person(BasePerson):
             self.__national_code = national_code
         else:
             self.__national_code = next(self.__class__.__national_code)
+
+        # Data Containers
+        self._professional_record_list = []
+            
         # Adding the newly created person to the
         self.__class__.add_person(self)
-        self._professional_record_list = []
 
     # region methods
     

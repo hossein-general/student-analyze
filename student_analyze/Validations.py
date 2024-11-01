@@ -29,6 +29,7 @@ class Validator:
     # region check_type()
     # Mainly check for parameter value validation  (to be of a certain type)
     # NOTE supports multi-types as tuple
+    # TODO adding type validation for dict keys and values
     def check_type(
         self,
         value: Any,

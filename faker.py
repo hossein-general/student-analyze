@@ -121,8 +121,8 @@ def init_data(data):
 
     # region Gender
     # Genders
-    data.gender.item["male"] = Gender("male")
-    data.gender.item["female"] = Gender("female")
+    data.gender.item["male"] = Gender("male", "Mr.")
+    data.gender.item["female"] = Gender("female", "Mrs.")
     # endregion
 
     # region School

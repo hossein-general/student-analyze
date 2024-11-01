@@ -22,6 +22,7 @@ from typing import Union, List
 
 
 # School class
+# TODO making the schools gender specific (or at least an option for that)
 class School(Organization):
     # Validator object
     check = Validator()
@@ -711,6 +712,9 @@ class School(Organization):
             self.person = person
             self.education_grade = education_grade
             self.education_group = education_group
+        
+        def __str__(self):
+            return f'{self.person.first_name} {self.person.last_name}'
 
     # endregion
 
@@ -762,6 +766,9 @@ class School(Organization):
             self.teacher_id = teacher_id
             self.person = person
             self.presenting_lessons = [lesson for lesson in presenting_lessons]
+
+        def __str__(self):
+            return f'{self.person.gender.prefix} {self.person.last_name}'
 
     # endregion
 

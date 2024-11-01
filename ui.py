@@ -28,7 +28,6 @@ class MenueOption:
         self,
         name: str,
         trigger: Union['Menue', None, str, tuple],
-        data_object: DataObject = None,
     ) -> None:
         # Type Validation
         self.check.check_type(
@@ -43,17 +42,10 @@ class MenueOption:
             "trigger",
             self.cls_name,
         )
-        self.check.check_type(
-            data_object,
-            (DataObject, type(None)),
-            "data_object",
-            self.cls_name,
-        )
 
         # Initialization
         self.name = name
         self.trigger = trigger
-        self.data_object = data_object
 
     def __str__(self) -> str:
         return self.name
@@ -64,11 +56,13 @@ class MenueOption:
 # endregion
 
 # region Menue
+# TODO adding type validations
 class Menue:
-    def __init__(self, name: str, *menue_options: MenueOption):
+    def __init__(self, name: str, *menue_options: MenueOption, data_object = None):
         self.name = name
         # menue options list
         self.molist = menue_options
+        self.data_object = data_object
 
 # endregion
 
@@ -78,39 +72,121 @@ class Program:
         system("cls")
 
         self.data = data
+        
+        # management menue options that will be used for manage base Menues
+        manage_mo = (
+            MenueOption("Show all", self.show_all),
+            MenueOption("Add", None),
+            MenueOption("Edit", None),
+            MenueOption("Remove", None),
+        )
 
-        # Education State management menue option
+        # Creating Menues
+        # ClassGroup management menue 
+        self.mo_cg_manage = Menue(
+            'Class Group management',
+            *manage_mo,
+            data_object=self.data.cg
+        )
+        # Teacher management menue 
+        self.mo_teacher_manage = Menue(
+            'Teacher management',
+            *manage_mo,
+            data_object=self.data.teacher
+        )
+        # Student management menue 
+        self.mo_student_manage = Menue(
+            'Student management',
+            *manage_mo,
+            data_object=self.data.student
+        )
+        # ClassRoom management menue 
+        self.mo_croom_manage = Menue(
+            'Classroom management',
+            *manage_mo,
+            data_object=self.data.croom
+        )
+        # School management menue 
+        self.mo_school_manage = Menue(
+            'School management',
+            *manage_mo,
+            data_object=self.data.school
+        )
+        # Gender management menue 
+        self.mo_gender_manage = Menue(
+            'Gender management',
+            *manage_mo,
+            data_object=self.data.gender
+        )
+        # Lesson management menue 
+        self.mo_lesson_manage = Menue(
+            'Lesson management',
+            *manage_mo,
+            data_object=self.data.lesson
+        )
+        # Education Group management menue 
+        self.mo_egp_manage = Menue(
+            'Education Group management',
+            *manage_mo,
+            data_object=self.data.egp
+        )
+        # Education Grade management menue 
+        self.mo_egd_manage = Menue(
+            'Education Grade management',
+            *manage_mo,
+            data_object=self.data.egd
+        )
+        # Education State management menue 
         self.mo_es_manage = Menue(
             'Education State management',
-            MenueOption("Show all", self.show_all, data.es),
-            MenueOption("Add", None, data.es),
-            MenueOption("Edit", None, data.es),
-            MenueOption("Remove", None, data.es),
+            *manage_mo,
+            data_object=self.data.es
         )
-        # Person management menue option
+        # Person management menue 
         self.mo_person_manage = Menue(
             'Person management',
-            MenueOption("Show all", self.show_all, data.person),
-            MenueOption("Search", None, None),
-            MenueOption("Add", None, None),
-            MenueOption("Edit", None, None),
-            MenueOption("Remove", None, None),
+            *manage_mo,
+            data_object=self.data.person
         )
-        # Global attribute management menue option
+        
+        # Main Menues Management
+        # School Base Direct managements 
+        self.mo_school_base_direct_manage = Menue(
+            'School Base Direct manage',
+            MenueOption("School", self.mo_school_manage),
+            MenueOption("Classroom", self.mo_croom_manage),
+            MenueOption("Student", self.mo_student_manage),
+            MenueOption("Teacher", self.mo_teacher_manage),
+            MenueOption("Class Group", self.mo_cg_manage),
+        )
+        # Person realated managements
+        self.mo_person_related_manage = Menue(
+            'Person realted management',
+            MenueOption('Person', self.mo_person_manage),
+            MenueOption('Gender', self.mo_gender_manage),
+        )
+        # School related managements menue & menue options
+        self.mo_school_related_manage = Menue(
+            'School related managements',
+            MenueOption("Direct Class Managements <dev>", self.mo_school_base_direct_manage),
+            MenueOption("Schools", None),
+        )
+        # Global attribute management menue & menue options
         self.mo_glob_attr_manage = Menue(
             'Global Attributes management',
-            MenueOption("Education States management", None, None),
-            MenueOption("Education Grade management", None, None),
-            MenueOption("Education Group management", None, None),
-            MenueOption("Lesson management", None, None),
+            MenueOption("Education States", self.mo_es_manage),
+            MenueOption("Education Grade", self.mo_egd_manage),
+            MenueOption("Education Group", self.mo_egp_manage),
+            MenueOption("Lesson", self.mo_lesson_manage),
         )
-        # Main Menue menue options
+        # Main Menue menue & menue options
         self.mo_main_menue = Menue(
             'Main Menue',
-            MenueOption("global attribute managment", self.mo_glob_attr_manage, None),
-            MenueOption("person managment", self.mo_person_manage, None),
+            MenueOption("Global Attribute management", self.mo_glob_attr_manage),
+            MenueOption("Person realated management", self.mo_person_related_manage),
+            MenueOption("School related managements", self.mo_school_related_manage),
         )
-        # Exit/Back menue option
+        # Exit/Back menue & menue option
         self.exit_option = MenueOption("Exit", "Exit")
         # ipdb menue option
         self.ipdb_option = MenueOption("ipdb", "ipdb")
@@ -147,7 +223,7 @@ class Program:
                     system("cls")
                     # Calling that method
                     # this will also send the data_object (e.g. es, eg, gender, etc.)
-                    ref_menue[inp].trigger(ref_menue[inp].data_object)
+                    ref_menue[inp].trigger(menue_options.data_object)
                     continue
                     # To know if the ref_menue option has been run and excecuted, so there will be no need for match-case (in the exception else statement)
                 elif isinstance(ref_menue[inp].trigger, Menue):
@@ -232,32 +308,46 @@ class Program:
     # endregion
 
     # region triger funcs
+    # TODO moving all calculation from the DataObject class here to make customizations possible 
     def show_all(self, data_object):
         # import ipdb; ipdb.set_trace()
         # cleaning the screen
         system('cls')
 
         # retrieving the list of data from data object
-        lst = data_object.retrieve()
+        ret = data_object.retrieve()
+        lst = ret[0]
+        col_names = ret[1]
 
         # a variable that defines the current page we are in 
         # each page contains 10 rows of data
         page = 1
+        # the count of showing rows
+        row_count = 10
         # the end page defines the last page for the content 
         # (the main use is to define where the last page is so i could prevent any further page forward navigation)
-        end_page = (len(lst) // 10 if len(lst) % 10 == 0 else len(lst) // 10 +1)
 
         while True:
+            end_page = (len(lst) // row_count if len(lst) % row_count == 0 else len(lst) // row_count +1)
             # cleaning the screen
             system("cls")
 
+            # Initializations
+            max_row = 99
+            min_row = 5
+            starting_row = (page - 1) * row_count + 1
+            ending_row = page * row_count 
+
             # The header for the list
-            print(data_object, f": ({page}/{end_page})", sep = "")
+            # (also checking if the endrow doesnt exit length of the data list)
+            print(data_object, f": (page: {page}/{end_page}) (rows: {starting_row}-{(ending_row if ending_row <= len(lst) else len(lst))})", sep = "")
 
             # Printing list of data (10 items)
             try:
-                for i in range((page - 1) * 10 + 1, page * 10 + 1):
-                    print('{:<8}'.format(f'{i})'), lst[i])
+                print()
+                print('{:<8}'.format('rows'), col_names)
+                for i in range(starting_row, ending_row + 1):
+                    print('{:<8}'.format(f'{i})'), lst[i-1])
 
             except IndexError:
                 print('end')
@@ -268,10 +358,11 @@ class Program:
                 print(err)
             
             # Getting user input
-            inp = input('q: quit / n: next page / p: previous page / any other key: refresh: ')
+            inp = input(f'\nq: quit / n: next page / p: previous page / row number ({min_row}-{max_row}): ')
 
             # Checking the user input
-            match inp:
+            # checking the first index of the string to make it easyier for user (in case of miss hitting other keys)
+            match inp[0]:
                 case 'n':
                     # preventing user from going further than the last page
                     if page < end_page:
@@ -280,12 +371,15 @@ class Program:
                 case 'p':
                     if page > 1:
                         page -= 1
-                
-                case 'r':
-                    continue
 
                 case 'q':
                     break
+
+            if inp.isdigit():
+                inp = int(inp)
+                if inp >= min_row and inp <= max_row:
+                    row_count = inp
+                    page = 1
 
     # endregion
 

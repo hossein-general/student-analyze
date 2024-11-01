@@ -38,7 +38,7 @@ class Gender:
     # Validator object
     check = Validator()
 
-    def __init__(self, name: str):
+    def __init__(self, name: str, prefix: str):
         # Validations
         self.check.check_type(
             name,
@@ -46,9 +46,16 @@ class Gender:
             "name",
             creating_class=self.cls_name,
         )
+        self.check.check_type(
+            prefix,
+            str,
+            "prefix",
+            creating_class=self.cls_name,
+        )
 
         # Initializations
         self.name = name
+        self.prefix = prefix
         self.__class__._genders.append(self)
 
     def __str__(self):
@@ -204,7 +211,7 @@ class Person(BasePerson):
     # region format
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return f"{self.gender.prefix} {self.fullname}"
 
     def __repr__(self):
         return f'<Person: "{self.fullname}">'

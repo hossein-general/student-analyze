@@ -107,14 +107,9 @@ class Program:
 
     # region Menues
     def menue(self, menue_options: tuple):
-        # this variables will show if the requested menue has been called successfully or not
-        menue_done = False
         # bottom message is a list containing errors that program have encountered that user has to fix when inputting data
         bottom_message = []
         while True:
-            # reseting menue_done by each loop
-            menue_done = False
-
             # cleaning the cli screen
             system("cls")
             print("main menue")
@@ -140,20 +135,18 @@ class Program:
                     # Calling that method
                     # this will also send the data_object (e.g. es, eg, gender, etc.)
                     ref_menue[inp].trigger(ref_menue[inp].data_object)
+                    continue
                     # To know if the ref_menue option has been run and excecuted, so there will be no need for match-case (in the exception else statement)
-                    menue_done = True
 
             except TypeError as err:
-                bottom_message.append(f"pls enter a valid choice \n{err}")
+                bottom_message.append(f"pls enter a valid choice")
                 continue
 
             except KeyError as err:
                 # If the key was not defined in the refactor-print list
                 # If the inp value was not empty
                 if inp:
-                    bottom_message.append(f"menue item out of range \n{err}")
-                else:
-                    bottom_message.append(f"unexpected KeyError: \n{err}")
+                    bottom_message.append(f"menue item out of range")
                 continue
 
             except BaseException as err:
@@ -161,26 +154,24 @@ class Program:
                 continue
 
             else:
-                # if the menue ooption was not done within the try block
-                if not menue_done:
-                    # defining a match case to handle multiple types of actions
-                    match ref_menue[inp].trigger:
-                        # for exiting the current menue
-                        case "Exit":
-                            break
+                # defining a match case to handle multiple types of actions
+                match ref_menue[inp].trigger:
+                    # for exiting the current menue
+                    case "Exit":
+                        break
 
-                        case "ipdb":
-                            ipdb.set_trace()
+                    case "ipdb":
+                        ipdb.set_trace()
 
-                        case None:
-                            bottom_message.append(
-                                f"the selected menue is not implemented yet, pls excuse the programmer! :)"
-                            )
+                    case None:
+                        bottom_message.append(
+                            f"the selected menue is not implemented yet, pls excuse the programmer! :)"
+                        )
 
-                        case _:
-                            bottom_message.append(
-                                f"there was a problem with menue options, pls contact admin: \n{ref_menue[inp]}, type: {type(ref_menue[inp])}"
-                            )
+                    case _:
+                        bottom_message.append(
+                            f"there was a problem with menue options, pls contact admin: \n{ref_menue[inp]}, type: {type(ref_menue[inp])}"
+                        )
 
     # endrgion
 
@@ -193,7 +184,7 @@ class Program:
 
         # this part of code desides if the back option should be displayed as "Exit" or not
         # in other words, are we in the main menue or not?
-        if menue_options == self.main_menue_options:
+        if menue_options_main == self.main_menue_options:
             exit_label = "Exit"
         else:
             exit_label = "Back"

@@ -4,11 +4,12 @@
 from student_analyze import Validator
 from typing import Dict
 
+
 # region DataObject
 # This object containes information about the data that is stored within it
 # TODO adding type validations for DataObject
 class DataObject:
-    cls_name = 'DateObject'
+    cls_name = "DateObject"
 
     # Creating a Validator object
     check = Validator()
@@ -18,14 +19,14 @@ class DataObject:
         self.check.check_type(
             data_name,
             str,
-            'data_name',
+            "data_name",
             self.cls_name,
         )
         # TODO adding type validation for dict keys and values
         self.check.check_type(
             printable_data,
             (dict, type(None)),
-            'printable_data',
+            "printable_data",
             self.cls_name,
             inner_type=str,
         )
@@ -45,7 +46,9 @@ class DataObject:
         # Creating a base-text for formatting
         # the following line creates something like this:
         #   "{!s:<5}  {!s:<20} {!s:<20} {!s:<10} {!s:<25} {!s:<15} {!s:<72}"
-        base_formatting_text = " ".join([f"{{!s:<{place_count}}}" for place_count in values_len])
+        base_formatting_text = " ".join(
+            [f"{{!s:<{place_count}}}" for place_count in values_len]
+        )
 
         # iterating through the tuple to create formated string of it
         for item in items:
@@ -57,9 +60,9 @@ class DataObject:
 
             # appending the resaults
             retrieving_content.append(row)
-        
+
         col_names = base_formatting_text.format(*attrs)
-        
+
         return retrieving_content, col_names
 
     def __str__(self):
@@ -68,6 +71,7 @@ class DataObject:
     def __repr__(self):
         return f'<DataObject: "{self.data_name}">'
 
+
 # endregion
 
 
@@ -75,104 +79,93 @@ class DataObject:
 class RuntimeDataAccessor:
     def __init__(self) -> None:
         self.es = DataObject(
-            'Education State',
+            "Education State",
             {
-                'state_name': 5,
-            }
+                "state_name": 5,
+            },
         )
         self.egd = DataObject(
-            'Education Grade',
+            "Education Grade",
             {
-                'name': 12,
-                'parent_educationstate': 5,
-            }
+                "name": 12,
+                "parent_educationstate": 5,
+            },
         )
         self.egp = DataObject(
-            'Education Group',
+            "Education Group",
             {
-                'parent_educationstate': 25,
-                'name': 45,
-                'direct_use': 15,
-                'generic_dependency': 55,
-                'lessons': 40,
-            }
+                "parent_educationstate": 25,
+                "name": 45,
+                "direct_use": 15,
+                "generic_dependency": 55,
+                "lessons": 40,
+            },
         )
         self.lesson = DataObject(
-            'Lesson',
+            "Lesson",
             {
-                'name': 15,
-                'parent_educationgroup': 30,
-                'educationgrade': 30,
-                'grade_base_prerequisite': 50,
-            }
+                "name": 15,
+                "parent_educationgroup": 30,
+                "educationgrade": 30,
+                "grade_base_prerequisite": 50,
+            },
         )
-        self.gender = DataObject(
-            'Gender',
-            {
-                'name': 8,
-                'prefix': 10
-            }
-        )
+        self.gender = DataObject("Gender", {"name": 8, "prefix": 10})
         self.person = DataObject(
-            'Person', 
+            "Person",
             {
-                'id': 5,
-                'first_name': 20,
-                'last_name': 20,
-                'gender': 10,
-                'birth_date': 25,
-                'national_code': 15
-            }
+                "id": 5,
+                "first_name": 20,
+                "last_name": 20,
+                "gender": 10,
+                "birth_date": 25,
+                "national_code": 15,
+            },
         )
         self.school = DataObject(
-            'School',
-            {
-                'name': 33, 
-                'education_state': 40,
-                'education_group': 55
-            }
+            "School", {"name": 33, "education_state": 40, "education_group": 55}
         )
         self.croom = DataObject(
-            'ClassRoom',
+            "ClassRoom",
             {
-                'name': 10, 
-                'parent_school': 33,
-                'parent_assigned_id': 25,
-            }
+                "name": 15,
+                "parent_school": 33,
+                "parent_assigned_id": 25,
+            },
         )
         self.student = DataObject(
-            'Student', 
+            "Student",
             {
-                'student_id': 13,
-                'person': 40,
-                'parent_school': 33,
-                'education_grade': 30,
-                'education_group': 35,
-            }
+                "student_id": 13,
+                "person": 40,
+                "parent_school": 33,
+                "education_grade": 25,
+                "education_group": 35,
+            },
         )
         self.teacher = DataObject(
-            'Teacher', 
+            "Teacher",
             {
-                'teacher_id': 10,
-                'person': 40,
-                'parent_school': 33,
-                'presentin_lessons': 40
-            }
+                "teacher_id": 15,
+                "person": 30,
+                "parent_school": 33,
+                "presenting_lessons": 40,
+            },
         )
         self.cg = DataObject(
-            'Class Group',
+            "Class Group",
             {
-                'group_id': 5,
-                'parent_school': 33,
-                'educationgrade': 12,
-                'educationgroup': 40,
-                'teacher': 20,
-                'lesson': 15,
-                'students': 1
-            }
+                "group_id": 10,
+                "parent_school": 33,
+                "educationgrade": 22,
+                "educationgroup": 30,
+                "teacher": 20,
+                "lesson": 15,
+                "students": 1,
+            },
         )
+
 
 # TODO creating a decorator to keep record of any instance creation
 
 # endregion
-

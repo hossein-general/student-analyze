@@ -5,26 +5,42 @@ from typing import Any
 # region Validater
 # This class will do validations for other classes
 class Validator:
-    def __init__(self) -> None:
-        self.msg = {}
+    # creating the message dictionary
+    msg = {}
 
-        # Default message values
-        self.msg["check_type"] = "The type_check() function found type exceptions"
-        self.msg["is_same_as"] = "The is_same_as() function found non-same exception"
+    # Default message values
+    msg["check_type"] = "The type_check() function found type exceptions"
+    msg["is_same_as"] = "The is_same_as() function found non-same exception"
 
-        # check_type messages
-        self.msg["parameter-type-creating"] = (
-            'the parameter: \n"{field}" should be of type: \n"{type}" for creating {creating_class} instance \n(value: "{value}" was given)'
-        )
-        self.msg["parameter-inner-type-creating"] = (
-            'the parameter: \n"{field}" should be of type: \n"{type}" and containing values of type: \n"{inner_type}" for creating {creating_class} instance \n(value: "{value}" and inner_value: "{inner_value}" were given)'
-        )
-        self.msg["parameter-type"] = (
-            'the parameter: \n"{field}" should be of type: \n"{type}" \n(value: "{value}" was given)'
-        )
-        self.msg["parameter-inner-type"] = (
-            'the parameter: \n"{field}" should be of type: \n"{type}" and containing values of type: \n"{inner_type}" \n(value: "{value}" and inner_value: "{inner_value}" were given)'
-        )
+    # check_type messages (these are used automatically by checking given arguments to the function)
+    msg["parameter-type-creating"] = (
+        'the parameter: \n"{field}" should be of type: \n"{the_type}" for creating {creating_class} instance \n(value: "{value}" was given) :)'
+    )
+    msg["parameter-inner-type-creating"] = (
+        'the parameter: \n"{field}" should be of type: \n"{the_type}" and containing values of type: \n"{inner_type}" for creating {creating_class} instance \n(value: "{value}" and inner_value: "{inner_value}" were given) :)'
+    )
+    msg["parameter-type"] = (
+        'the parameter: \n"{field}" should be of type: \n"{the_type}" \n(value: "{value}" was given) :)'
+    )
+    msg["parameter-inner-type"] = (
+        'the parameter: \n"{field}" should be of type: \n"{the_type}" and containing values of type: \n"{inner_type}" \n(value: "{value}" and inner_value: "{inner_value}" were given) :)'
+    )
+    msg["parameter-type-simple"] = (
+        "expecting value of type {the_type} but got {value_type} :)"
+    )
+    msg["parameter-inner-type-simple"] = (
+        "expecting value of type {inner_type} but got {inner_value_type} :)"
+    )
+
+    # This functions is called whenever classes want to check types using a single dict containing attr-valuetypes
+    def init_check_type(self, attrs_and_types: tuple):
+        # type checking the given arguments
+        self.check_type(attrs_and_types, tuple, inner_type=tuple)
+
+        # calling the check_type() function to validate any new object instance parameters thats inharitted from validation class
+        if attrs_and_types is not None:
+            for attr in attrs_and_types:
+                self.check_type(*attr)
 
     # region check_type()
     # Mainly check for parameter value validation  (to be of a certain type)
@@ -33,8 +49,8 @@ class Validator:
     def check_type(
         self,
         value: Any,
-        type: Any,
-        field: str = "-field-",
+        the_type: Any,
+        field: str = None,
         creating_class: str = None,
         inner_type: Any = None,
     ):
@@ -44,16 +60,23 @@ class Validator:
         fcollection.pop("self")
 
         # checking the value and its type
-        if not isinstance(value, type):
+
+        if not isinstance(value, the_type):
+            # adding the type of the value
+            fcollection["value_type"] = type(value)
 
             # using the desired message
-            if creating_class is None:
+            if (creating_class is None) and (field is None):
+                # if there where no argument else than the value and type
+                msg_key = "parameter-type-simple"
+
+            elif creating_class is None:
                 # if of normal check type:
                 msg_key = "parameter-type"
+
             else:
                 # if of creating instance type:
                 msg_key = "parameter-type-creating"
-
             raise TypeError(self.msg[msg_key].format(**fcollection))
 
         # checking the inner values and their types (if necessary)
@@ -62,17 +85,21 @@ class Validator:
                 if not isinstance(inner_value, inner_type):
                     # adding the 'inner_value' key with its variable value to be able to format the message with it
                     fcollection["inner_value"] = inner_value
+                    # adding the type of the inner value
+                    fcollection["inner_value_type"] = type(inner_value)
 
                     # using the desired message
+                    if (creating_class is None) and (field is None):
+                        # if there where no argument else than the value and type
+                        msg_key = "parameter-inner-type-simple"
+
                     if creating_class is None:
                         # if of normal check type:
                         msg_key = "parameter-inner-type"
+
                     else:
                         # if of creating instance type:
                         msg_key = "parameter-inner-type-creating"
-                    import ipdb
-
-                    ipdb.set_trace()
                     raise ValueError(self.msg[msg_key].format(**fcollection))
 
     # endregion

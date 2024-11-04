@@ -1,17 +1,13 @@
-
 # region importing
 # for abstractmethods
 from abc import ABC, abstractmethod
 
-# for validations 
+# for validations
 from .Validations import Validator
 
 # only for type hints:
 from datetime import datetime
-from .GlobalAttributes import (
-    EducationGrade,
-    EducationGroup
-)
+from .GlobalAttributes import EducationGrade, EducationGroup
 
 # endregion
 
@@ -26,32 +22,22 @@ class BasePerson(ABC):
     def __str__(self):
         pass
 
+
 # endregion
 
 
 # region Gender
 # A Gender could be Male or Female
-class Gender:
+class Gender(Validator):
     _genders = []
-    cls_name = 'Gender'
-
-    # Validator object
-    check = Validator()
+    cls_name = "Gender"
 
     def __init__(self, name: str, prefix: str):
-        # Validations
-        self.check.check_type(
-            name,
-            str,
-            "name",
-            creating_class=self.cls_name,
-        )
-        self.check.check_type(
-            prefix,
-            str,
-            "prefix",
-            creating_class=self.cls_name,
-        )
+        # a tuple containing tuples of arguments to be used when passed to type validation
+        attr_types = ((name, str), (prefix, str))
+
+        # Type Validations
+        self.init_check_type(attr_types)
 
         # Initializations
         self.name = name
@@ -63,6 +49,7 @@ class Gender:
 
     def __repr__(self):
         return f'<Gender: "{self.name}">'
+
 
 # endregion
 
@@ -77,6 +64,7 @@ def id_generator(start_id):
         yield current_id
         current_id += 1
 
+
 # endregion
 
 
@@ -87,15 +75,12 @@ def id_generator(start_id):
 # Each instance of this class is single person, containing information about that person. There will be a private variable within the class itself that acts as a container for all persons created
 # UPDATE: GovPerson has been changed to Person
 # TODO adding super().__init__() and moving some attributes to the BasePerson class
-class Person(BasePerson):
+class Person(BasePerson, Validator):
     # A dictionary containing all people
     __people = dict()
     __id = id_generator(1)
     __national_code = id_generator(1001)
-    cls_name = 'Person'
-
-    # Validator object
-    check = Validator()
+    cls_name = "Person"
 
     # TODO making the national_code a string (right now its an integer to prevent complecation)
     # TODO write typing for each parameter (e.g. parameter: str)
@@ -107,37 +92,17 @@ class Person(BasePerson):
         birth_date: datetime,
         national_code: int = None,
     ):
-        # Validations
-        self.check.check_type(
-            first_name,
-            str,
-            "first_name",
-            creating_class=self.cls_name,
+        # a tuple containing tuples of arguments to be used when passed to type validation
+        attr_types = (
+            (first_name, str),
+            (last_name, str),
+            (gender, Gender),
+            (birth_date, datetime),
+            (national_code, (int, type(None))),
         )
-        self.check.check_type(
-            last_name,
-            str,
-            "last_name",
-            creating_class=self.cls_name,
-        )
-        self.check.check_type(
-            gender,
-            Gender,
-            "gender",
-            creating_class=self.cls_name,
-        )
-        self.check.check_type(
-            birth_date,
-            datetime,
-            "birth_date",
-            creating_class=self.cls_name,
-        )
-        self.check.check_type(
-            national_code,
-            (int, type(None)),
-            "national_code",
-            creating_class=self.cls_name,
-        )
+
+        # Type Validations
+        self.init_check_type(attr_types)
 
         # Initializations
         self.id = next(self.__class__.__id)
@@ -156,12 +121,12 @@ class Person(BasePerson):
 
         # Data Containers
         self._professional_record_list = []
-            
+
         # Adding the newly created person to the
         self.__class__.add_person(self)
 
     # region methods
-    
+
     # TODO adding Validations
     def add_professional_record(
         self,
@@ -211,10 +176,22 @@ class Person(BasePerson):
     # region format
 
     def __str__(self):
-        return f"{self.gender.prefix} {self.fullname}"
+        # Checking if the object is fully generated and has first_name, last_name and gender assigned to it
+        if (
+            hasattr(self, "gender")
+            and hasattr(self, "first_name")
+            and hasattr(self, "last_name")
+        ):
+            return f"{self.gender.prefix} {self.fullname}"
+        else:
+            return "<Person: in-progress>"
 
     def __repr__(self):
-        return f'<Person: "{self.fullname}">'
+        # Checking if the object is fully generated and has first_name and last_name assigned to it
+        if hasattr(self, "first_name") and hasattr(self, "last_name"):
+            return f'<Person: "{self.fullname}">'
+        else:
+            return "<Person: in-progress>"
 
     # endregion
 

@@ -37,12 +37,17 @@ class DataObject:
     def retrieve(self):
         # Creating a tuple of item values
         items = tuple(self.item.values())
-        values_len = tuple(self.printable_data.values())
+        attrs = self.printable_data.keys
+
+        return items, attrs
         attrs = tuple(self.printable_data.keys())
+        values_len = tuple(self.printable_data.values())
+
+        # this list contains the formatted data, each item is a row as a string
         retrieving_content = []
 
         # Creating a base-text for formatting
-        # the following line creates something like this:
+        # the following statement creates something like this:
         #   "{!s:<5}  {!s:<20} {!s:<20} {!s:<10} {!s:<25} {!s:<15} {!s:<72}"
         base_formatting_text = " ".join(
             [f"{{!s:<{place_count}}}" for place_count in values_len]

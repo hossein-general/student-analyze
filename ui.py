@@ -17,6 +17,32 @@ import ipdb
 # endregion
 
 
+# region UserIn
+# the UserIn class is used to store previous user inputs and maybe some more functionality in the future
+class UserIn:
+    def __init__(self) -> None:
+        self.catch = ""
+
+    # getting the user input and returning it
+    def user_option(self, show):
+
+        # formatting the self.catch in a way that it doesnt take so much space when is used as a placeholder
+        placeholder = self.catch if len(self.catch) <= 6 else (self.catch[:3] + "...")
+
+        # getting input and printing the 'show' value, as well as the last entered value as a placeholder
+        new_inp = input(f"{show} <{placeholder}> " if placeholder else f"{show} ")
+
+        if not new_inp:
+            return self.catch
+
+        self.catch = new_inp
+        return new_inp
+
+    # clearing the previous choices
+    def clear_catch(self):
+        self.catch = ""
+
+
 # region MenueOption
 class MenueOption:
     cls_name = "MenueOption"
@@ -70,6 +96,7 @@ class Program:
     def __init__(self, data) -> None:
         system("cls")
 
+        self.get = UserIn()
         self.data = data
 
         # management menue options that will be used for manage base Menues
@@ -80,6 +107,7 @@ class Program:
             MenueOption("Remove", None),
         )
 
+        # region Creating Menues
         # Creating Menues
         # ClassGroup management menue
         self.mo_cg_manage = Menue(
@@ -169,6 +197,7 @@ class Program:
         self.exit_option = MenueOption("Exit", "Exit")
         # ipdb menue option
         self.ipdb_option = MenueOption("ipdb", "ipdb")
+        # endregion
 
     # region Menues
     # TODO adding type validations
@@ -190,7 +219,7 @@ class Program:
                     print("-", bottom_message.pop(0))
 
             # Getting the user input
-            inp = input("pls enter your choice: ")
+            inp = self.get.user_option("pls enter your choice: ")
 
             try:
                 # Checking if the user input refers to a method that should be called
@@ -290,13 +319,24 @@ class Program:
     # Triger functions are methods that are used to interact with users
     # they can connect to bl and retrieve data to show, edit, delete, serach and do other things
 
-
     # region show_all
     # TODO moving all calculation from the DataObject class here to make customizations possible
     def show_all(self, data_object):
+        # to clear previous user inputs
+        self.get.clear_catch()
         # import ipdb; ipdb.set_trace()
         # cleaning the screen
         system("cls")
+
+        items, attrs = data_object.retrieve()
+        
+
+
+
+
+
+
+
 
         # retrieving the list of data from data object
         ret = data_object.retrieve()
@@ -312,6 +352,7 @@ class Program:
         # (the main use is to define where the last page is so i could prevent any further page forward navigation)
 
         while True:
+            # calculating the page count (considering the number of )
             end_page = (
                 len(lst) // row_count
                 if len(lst) % row_count == 0
@@ -350,7 +391,7 @@ class Program:
                 print(err)
 
             # Getting user input
-            inp = input(
+            inp = self.get.user_option(
                 f"\nq: quit / n: next page / p: previous page / row number ({min_row}-{max_row}): "
             )
 

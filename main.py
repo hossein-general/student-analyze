@@ -17,7 +17,7 @@ from bl import RuntimeDataAccessor
 # main: Containing functions for users to modify and manage the applicatoin (like adding person, organization, etc.)
 def main():
     data = RuntimeDataAccessor()
-    
+
     # region initializations and fakers
     faker.init_data(data)
     person_gen = faker.fake_person(data, 5)
@@ -29,7 +29,7 @@ def main():
     program = Program(data)
     program.start()
 
-    system("cls")    
+    system("cls")
     print("Good Luck")
 
 

@@ -34,7 +34,7 @@ class Validator:
 
     # This functions is called whenever classes want to check types using a single dict containing attr-valuetypes
     def init_check_type(self, attrs_and_types: tuple):
-        # type checking the given arguments
+         # type checking the given arguments
         self.check_type(attrs_and_types, tuple, inner_type=tuple)
 
         # calling the check_type() function to validate any new object instance parameters thats inharitted from validation class
@@ -43,7 +43,7 @@ class Validator:
                 self.check_type(*attr)
     def add_msg(self, the_key, the_message):
         self.__class__.msg[the_key] = the_message
-        
+
     # region check_type()
     # Mainly check for parameter value validation  (to be of a certain type)
     # NOTE supports multi-types as tuple

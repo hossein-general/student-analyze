@@ -27,21 +27,16 @@ class MenueOption:
     def __init__(
         self,
         name: str,
-        trigger: Union['Menue', None, str, tuple],
+        trigger: Union["Menue", None, str, tuple],
     ) -> None:
-        # Type Validation
-        self.check.check_type(
-            name,
-            str,
-            "name",
-            self.cls_name,
+        # a tuple containing tuples of arguments to be used when passed to type validation
+        attr_types = (
+            (name, str),
+            (trigger, (Menue, Callable, type(None), str)),
         )
-        self.check.check_type(
-            trigger,
-            (Callable, type(None), str, Menue),
-            "trigger",
-            self.cls_name,
-        )
+
+        # Type Validations
+        self.check.init_check_type(attr_types)
 
         # Initialization
         self.name = name
@@ -53,18 +48,22 @@ class MenueOption:
     def __repr__(self) -> str:
         return f'<MenueOption: "{self.name}">'
 
+
 # endregion
+
 
 # region Menue
 # TODO adding type validations
 class Menue:
-    def __init__(self, name: str, *menue_options: MenueOption, data_object = None):
+    def __init__(self, name: str, *menue_options: MenueOption, data_object=None):
         self.name = name
         # menue options list
         self.molist = menue_options
         self.data_object = data_object
 
+
 # endregion
+
 
 # region Program
 class Program:
@@ -72,7 +71,7 @@ class Program:
         system("cls")
 
         self.data = data
-        
+
         # management menue options that will be used for manage base Menues
         manage_mo = (
             MenueOption("Show all", self.show_all),
@@ -82,77 +81,55 @@ class Program:
         )
 
         # Creating Menues
-        # ClassGroup management menue 
+        # ClassGroup management menue
         self.mo_cg_manage = Menue(
-            'Class Group management',
-            *manage_mo,
-            data_object=self.data.cg
+            "Class Group management", *manage_mo, data_object=self.data.cg
         )
-        # Teacher management menue 
+        # Teacher management menue
         self.mo_teacher_manage = Menue(
-            'Teacher management',
-            *manage_mo,
-            data_object=self.data.teacher
+            "Teacher management", *manage_mo, data_object=self.data.teacher
         )
-        # Student management menue 
+        # Student management menue
         self.mo_student_manage = Menue(
-            'Student management',
-            *manage_mo,
-            data_object=self.data.student
+            "Student management", *manage_mo, data_object=self.data.student
         )
-        # ClassRoom management menue 
+        # ClassRoom management menue
         self.mo_croom_manage = Menue(
-            'Classroom management',
-            *manage_mo,
-            data_object=self.data.croom
+            "Classroom management", *manage_mo, data_object=self.data.croom
         )
-        # School management menue 
+        # School management menue
         self.mo_school_manage = Menue(
-            'School management',
-            *manage_mo,
-            data_object=self.data.school
+            "School management", *manage_mo, data_object=self.data.school
         )
-        # Gender management menue 
+        # Gender management menue
         self.mo_gender_manage = Menue(
-            'Gender management',
-            *manage_mo,
-            data_object=self.data.gender
+            "Gender management", *manage_mo, data_object=self.data.gender
         )
-        # Lesson management menue 
+        # Lesson management menue
         self.mo_lesson_manage = Menue(
-            'Lesson management',
-            *manage_mo,
-            data_object=self.data.lesson
+            "Lesson management", *manage_mo, data_object=self.data.lesson
         )
-        # Education Group management menue 
+        # Education Group management menue
         self.mo_egp_manage = Menue(
-            'Education Group management',
-            *manage_mo,
-            data_object=self.data.egp
+            "Education Group management", *manage_mo, data_object=self.data.egp
         )
-        # Education Grade management menue 
+        # Education Grade management menue
         self.mo_egd_manage = Menue(
-            'Education Grade management',
-            *manage_mo,
-            data_object=self.data.egd
+            "Education Grade management", *manage_mo, data_object=self.data.egd
         )
-        # Education State management menue 
+        # Education State management menue
         self.mo_es_manage = Menue(
-            'Education State management',
-            *manage_mo,
-            data_object=self.data.es
+            "Education State management", *manage_mo, data_object=self.data.es
         )
-        # Person management menue 
+        # Person management menue
         self.mo_person_manage = Menue(
-            'Person management',
-            *manage_mo,
-            data_object=self.data.person
+            "Person management", *manage_mo, data_object=self.data.person
         )
-        
+
         # Main Menues Management
-        # School Base Direct managements 
+        # School Base Direct managements
         self.mo_school_base_direct_manage = Menue(
-            'School Base Direct manage',
+            "School Base Direct manage",
             MenueOption("School", self.mo_school_manage),
             MenueOption("Classroom", self.mo_croom_manage),
             MenueOption("Student", self.mo_student_manage),
@@ -161,19 +138,21 @@ class Program:
         )
         # Person realated managements
         self.mo_person_related_manage = Menue(
-            'Person realted management',
-            MenueOption('Person', self.mo_person_manage),
-            MenueOption('Gender', self.mo_gender_manage),
+            "Person realted management",
+            MenueOption("Person", self.mo_person_manage),
+            MenueOption("Gender", self.mo_gender_manage),
         )
         # School related managements menue & menue options
         self.mo_school_related_manage = Menue(
-            'School related managements',
-            MenueOption("Direct Class Managements <dev>", self.mo_school_base_direct_manage),
+            "School related managements",
+            MenueOption(
+                "Direct Class Managements <dev>", self.mo_school_base_direct_manage
+            ),
             MenueOption("Schools", None),
         )
         # Global attribute management menue & menue options
         self.mo_glob_attr_manage = Menue(
-            'Global Attributes management',
+            "Global Attributes management",
             MenueOption("Education States", self.mo_es_manage),
             MenueOption("Education Grade", self.mo_egd_manage),
             MenueOption("Education Group", self.mo_egp_manage),
@@ -181,7 +160,7 @@ class Program:
         )
         # Main Menue menue & menue options
         self.mo_main_menue = Menue(
-            'Main Menue',
+            "Main Menue",
             MenueOption("Global Attribute management", self.mo_glob_attr_manage),
             MenueOption("Person realated management", self.mo_person_related_manage),
             MenueOption("School related managements", self.mo_school_related_manage),
@@ -190,7 +169,6 @@ class Program:
         self.exit_option = MenueOption("Exit", "Exit")
         # ipdb menue option
         self.ipdb_option = MenueOption("ipdb", "ipdb")
-        
 
     # region Menues
     # TODO adding type validations
@@ -217,7 +195,7 @@ class Program:
             try:
                 # Checking if the user input refers to a method that should be called
                 # NOTE previously i was making the ref_menue[inp] able to have any type of value
-                #   aside from MenueOption instancers, ive been using string and None types too and 
+                #   aside from MenueOption instancers, ive been using string and None types too and
                 #   match cased them within the else block. but now its forced to use only MenueOption instances
                 if callable(ref_menue[inp].trigger):
                     system("cls")
@@ -229,7 +207,6 @@ class Program:
                 elif isinstance(ref_menue[inp].trigger, Menue):
                     self.menue(ref_menue[inp].trigger)
                     continue
-                    
 
             except TypeError as err:
                 bottom_message.append(f"pls enter a valid choice")
@@ -273,31 +250,33 @@ class Program:
     def option_print_refactor(self, menue_option_original: Menue):
         # initializations
         refactored_menue = {}
-        temp_menue_options = [(option, option.name) for option in menue_option_original.molist]
+        temp_menue_options = [
+            (option, option.name) for option in menue_option_original.molist
+        ]
 
         # printing options
         for index_id, option in enumerate(temp_menue_options):
             refactored_menue[str(index_id + 1)] = option[0]
             print(f"{index_id + 1}- {option[1]}")
-        
+
         # for an empty line
         print()
 
         # this part of code desides if the back option should be displayed as "Exit" or not
         # in other words, are we in the main menue or not?
-        if menue_option_original.name == 'Main Menue':
+        if menue_option_original.name == "Main Menue":
             exit_label = "Exit"
         else:
             exit_label = "Back"
 
         # adding additional options to the menue
         # Exit/Back option
-        refactored_menue['ipdb'] = self.ipdb_option
+        refactored_menue["ipdb"] = self.ipdb_option
         print(f"(i)- ipdb")
 
         # adding additional options to the menue
         # Exit/Back option
-        refactored_menue['q'] = self.exit_option
+        refactored_menue["q"] = self.exit_option
         print(f"(q)- {exit_label}")
 
         # for an empty line
@@ -308,27 +287,36 @@ class Program:
     # endregion
 
     # region triger funcs
-    # TODO moving all calculation from the DataObject class here to make customizations possible 
+    # Triger functions are methods that are used to interact with users
+    # they can connect to bl and retrieve data to show, edit, delete, serach and do other things
+
+
+    # region show_all
+    # TODO moving all calculation from the DataObject class here to make customizations possible
     def show_all(self, data_object):
         # import ipdb; ipdb.set_trace()
         # cleaning the screen
-        system('cls')
+        system("cls")
 
         # retrieving the list of data from data object
         ret = data_object.retrieve()
         lst = ret[0]
         col_names = ret[1]
 
-        # a variable that defines the current page we are in 
+        # a variable that defines the current page we are in
         # each page contains 10 rows of data
         page = 1
         # the count of showing rows
         row_count = 10
-        # the end page defines the last page for the content 
+        # the end page defines the last page for the content
         # (the main use is to define where the last page is so i could prevent any further page forward navigation)
 
         while True:
-            end_page = (len(lst) // row_count if len(lst) % row_count == 0 else len(lst) // row_count +1)
+            end_page = (
+                len(lst) // row_count
+                if len(lst) % row_count == 0
+                else len(lst) // row_count + 1
+            )
             # cleaning the screen
             system("cls")
 
@@ -336,43 +324,49 @@ class Program:
             max_row = 99
             min_row = 5
             starting_row = (page - 1) * row_count + 1
-            ending_row = page * row_count 
+            ending_row = page * row_count
 
             # The header for the list
             # (also checking if the endrow doesnt exit length of the data list)
-            print(data_object, f": (page: {page}/{end_page}) (rows: {starting_row}-{(ending_row if ending_row <= len(lst) else len(lst))})", sep = "")
+            print(
+                data_object,
+                f": (page: {page}/{end_page}) (rows: {starting_row}-{(ending_row if ending_row <= len(lst) else len(lst))})",
+                sep="",
+            )
 
             # Printing list of data (10 items)
             try:
                 print()
-                print('{:<8}'.format('rows'), col_names)
+                print("{:<8}".format("rows"), col_names)
                 for i in range(starting_row, ending_row + 1):
-                    print('{:<8}'.format(f'{i})'), lst[i-1])
+                    print("{:<8}".format(f"{i})"), lst[i - 1])
 
             except IndexError:
-                print('end')
+                print("end")
                 end_page = page
 
             except BaseException as err:
-                print('unexpected error:')
+                print("unexpected error:")
                 print(err)
-            
+
             # Getting user input
-            inp = input(f'\nq: quit / n: next page / p: previous page / row number ({min_row}-{max_row}): ')
+            inp = input(
+                f"\nq: quit / n: next page / p: previous page / row number ({min_row}-{max_row}): "
+            )
 
             # Checking the user input
             # checking the first index of the string to make it easyier for user (in case of miss hitting other keys)
             match inp[0]:
-                case 'n':
+                case "n":
                     # preventing user from going further than the last page
                     if page < end_page:
                         page += 1
 
-                case 'p':
+                case "p":
                     if page > 1:
                         page -= 1
 
-                case 'q':
+                case "q":
                     break
 
             if inp.isdigit():
@@ -380,6 +374,8 @@ class Program:
                 if inp >= min_row and inp <= max_row:
                     row_count = inp
                     page = 1
+
+    # endregion
 
     # endregion
 

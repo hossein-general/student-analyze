@@ -41,7 +41,9 @@ class Validator:
         if attrs_and_types is not None:
             for attr in attrs_and_types:
                 self.check_type(*attr)
-
+    def add_msg(self, the_key, the_message):
+        self.__class__.msg[the_key] = the_message
+        
     # region check_type()
     # Mainly check for parameter value validation  (to be of a certain type)
     # NOTE supports multi-types as tuple

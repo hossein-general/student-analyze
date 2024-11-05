@@ -1,8 +1,12 @@
 # This is the module which is resposible for all calculations and logics
 
+# region importing
+
 # Importing
 from student_analyze import Validator
 from typing import Dict
+
+# endregion
 
 
 # region DataObject
@@ -15,21 +19,15 @@ class DataObject:
     check = Validator()
 
     def __init__(self, data_name: str, printable_data: Dict[str, int] = None) -> None:
+
+        # a tuple containing tuples of arguments to be used when passed to type validation
+        attr_types = (
+            (data_name, str),
+            (printable_data, dict, str, int),
+        )
+
         # Type Validations
-        self.check.check_type(
-            data_name,
-            str,
-            "data_name",
-            self.cls_name,
-        )
-        # TODO adding type validation for dict keys and values
-        self.check.check_type(
-            printable_data,
-            (dict, type(None)),
-            "printable_data",
-            self.cls_name,
-            inner_type=str,
-        )
+        self.check.init_check_type(attr_types)
 
         # Initializations
         self.data_name = data_name

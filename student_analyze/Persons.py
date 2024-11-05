@@ -28,7 +28,7 @@ class BasePerson(ABC):
 
 # region Gender
 # A Gender could be Male or Female
-class Gender():
+class Gender:
     # Creating a Validator object
     check = Validator()
 
@@ -81,7 +81,7 @@ def id_generator(start_id):
 class Person(BasePerson):
     # Creating a Validator object
     check = Validator()
-    
+
     # A dictionary containing all people
     __people = dict()
     __id = id_generator(1)
@@ -215,10 +215,10 @@ class Person(BasePerson):
     class ProfessionalRecords:
         # Creating a Validator object
         check = Validator()
-        
+
         # Creating a Validator object
         check = Validator()
-        
+
         # Creating a new record for the table
         def __init__(
             self,
@@ -259,7 +259,7 @@ class Person(BasePerson):
     class AcademicRecords:
         # Creating a Validator object
         check = Validator()
-        
+
         # Creating a new record for the table
         def __init__(self):
             self.term

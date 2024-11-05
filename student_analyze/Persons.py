@@ -28,7 +28,10 @@ class BasePerson(ABC):
 
 # region Gender
 # A Gender could be Male or Female
-class Gender(Validator):
+class Gender():
+    # Creating a Validator object
+    check = Validator()
+
     _genders = []
     cls_name = "Gender"
 
@@ -37,7 +40,7 @@ class Gender(Validator):
         attr_types = ((name, str), (prefix, str))
 
         # Type Validations
-        self.init_check_type(attr_types)
+        self.check.init_check_type(attr_types)
 
         # Initializations
         self.name = name
@@ -75,11 +78,15 @@ def id_generator(start_id):
 # Each instance of this class is single person, containing information about that person. There will be a private variable within the class itself that acts as a container for all persons created
 # UPDATE: GovPerson has been changed to Person
 # TODO adding super().__init__() and moving some attributes to the BasePerson class
-class Person(BasePerson, Validator):
+class Person(BasePerson):
+    # Creating a Validator object
+    check = Validator()
+    
     # A dictionary containing all people
     __people = dict()
     __id = id_generator(1)
     __national_code = id_generator(1001)
+    # class name is sometimes used for formatting purposes (e.g. when calling type_check from Validator)
     cls_name = "Person"
 
     # TODO making the national_code a string (right now its an integer to prevent complecation)
@@ -102,7 +109,7 @@ class Person(BasePerson, Validator):
         )
 
         # Type Validations
-        self.init_check_type(attr_types)
+        self.check.init_check_type(attr_types)
 
         # Initializations
         self.id = next(self.__class__.__id)
@@ -206,6 +213,12 @@ class Person(BasePerson, Validator):
 
     # TODO adding validations
     class ProfessionalRecords:
+        # Creating a Validator object
+        check = Validator()
+        
+        # Creating a Validator object
+        check = Validator()
+        
         # Creating a new record for the table
         def __init__(
             self,
@@ -244,6 +257,9 @@ class Person(BasePerson, Validator):
 
     # TODO adding validations
     class AcademicRecords:
+        # Creating a Validator object
+        check = Validator()
+        
         # Creating a new record for the table
         def __init__(self):
             self.term

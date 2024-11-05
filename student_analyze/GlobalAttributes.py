@@ -14,20 +14,23 @@ from typing import Union, List
 # EducationState will define type of education states wich affects different school types
 # e.g. Primary School, High School 1st Term, High School 2nd Term, University
 # TODO adding a decorator to store all created instances
-class EducationState(Validator):
+class EducationState():
+    # Creating Validator object 
+    check = Validator()
+
     __es_list = []
     cls_name = "EducationState"
 
     # The insert_to parameter is used to manage the order of stages
     def __init__(self, state_name: str, insert_to: int = None):
-        # a dictionary containing parameter values and the desired type for each
+        # a tuple containing tuples of arguments to be used when passed to type validation
         attr_types = (
             (state_name, str),
             (insert_to, (int, type(None))),
         )
 
         # Type Validations
-        self.init_check_type(attr_types)
+        self.check.init_check_type(attr_types)
 
         self.state_name = state_name
         # instead of creating id's for each educationgrade, im using a list that supports order, so i could now which grade comes after another in its order
@@ -45,7 +48,7 @@ class EducationState(Validator):
         educationgrade_name: str,
     ):
         # Validations
-        self.check_type(educationgrade_name, str)
+        self.check.check_type(educationgrade_name, str)
 
         new_educationgrade = EducationGrade(self, educationgrade_name)
         self.__educationgrades.append(new_educationgrade)
@@ -57,7 +60,7 @@ class EducationState(Validator):
         generic_dependency: Union["EducationGroup", List["EducationGroup"]] = [],
         direct_use: bool = True,
     ):
-        # a dictionary containing parameter values and the desired type for each
+        # a tuple containing tuples of arguments to be used when passed to type validation
         attr_types = (
             (educationgroup_name, str),
             (generic_dependency, (EducationGroup, list), EducationGroup),
@@ -65,7 +68,7 @@ class EducationState(Validator):
         )
 
         # Type Validations
-        self.init_check_type(attr_types)
+        self.check.init_check_type(attr_types)
 
         # Creating and adding the instance
         new_educationgroup = EducationGroup(
@@ -100,7 +103,10 @@ class EducationState(Validator):
 #   and at the end, universities having 3 main stages: Bachelor's degree, Master's degree, and Ph.D
 # EducationGrade and SchoolTyeps are different from EducationGroups
 #   The first two are used to define where is an student in life time of education and the other defines the field of study
-class EducationGrade(Validator):
+class EducationGrade():
+    # Creating a Validator object
+    check = Validator()
+    
     cls_name = "EducationGrade"
 
     def __init__(
@@ -108,14 +114,14 @@ class EducationGrade(Validator):
         parent_educationstate: EducationState,
         name: str,
     ):
-        # a dictionary containing parameter values and the desired type for each
+        # a tuple containing tuples of arguments to be used when passed to type validation
         attr_types = (
             (parent_educationstate, EducationState),
             (name, str),
         )
 
         # Type Validations
-        self.init_check_type(attr_types)
+        self.check.init_check_type(attr_types)
 
         # Initialization
         self.parent_educationstate = parent_educationstate
@@ -137,7 +143,10 @@ class EducationGrade(Validator):
 # e.g. General, Tajrobi, Riazi, Mohandesi mechanic, ...
 # Dedicated education groups like riazi and mohandesi shimi do have generic dependencies
 #   e.g. General group lessons that are the same for every dedicated group like dini, ghoran, etc.
-class EducationGroup(Validator):
+class EducationGroup():
+    # Creating a Validator object
+    check = Validator()
+    
     cls_name = "EducationGroup"
 
     def __init__(
@@ -147,7 +156,7 @@ class EducationGroup(Validator):
         direct_use: bool = True,
         generic_dependency: Union["EducationGroup", List["EducationGroup"]] = [],
     ):
-        # a dictionary containing parameter values and the desired type for each
+        # a tuple containing tuples of arguments to be used when passed to type validation
         attr_types = (
             (parent_educationstate, EducationState),
             (name, str),
@@ -156,7 +165,7 @@ class EducationGroup(Validator):
         )
 
         # Type Validations
-        self.init_check_type(attr_types)
+        self.check.init_check_type(attr_types)
 
         # Initializations
         self.parent_educationstate = parent_educationstate
@@ -180,7 +189,7 @@ class EducationGroup(Validator):
         education_grade: EducationGrade,
         grade_base_prerequisite: List["Lesson"] = [],
     ):
-        # a dictionary containing parameter values and the desired type for each
+        # a tuple containing tuples of arguments to be used when passed to type validation
         attr_types = (
             (lesson_name, str),
             (education_grade, EducationGrade),
@@ -188,7 +197,7 @@ class EducationGroup(Validator):
         )
 
         # Type Validations
-        self.init_check_type(attr_types)
+        self.check.init_check_type(attr_types)
 
         # Creating and adding the instance
         new_lesson = Lesson(
@@ -213,10 +222,13 @@ class EducationGroup(Validator):
 # BUG if user creates a Lesson instance directly, and does not compliance validation rules, the instace will be created any ways, and validations may not prevent that
 # NOTE the validations within Lesson class are only used to inform user about the incoming bugs and would not prevent them from doing anythin (as it sis direct access)
 # region Lesson <231>
-class Lesson(Validator):
+class Lesson():
+    # Creating a Validator object
+    check = Validator()
+    
     cls_name = "Lesson"
 
-    Validator.msg["lesson-prerequisites"] = (
+    check.msg["lesson-prerequisites"] = (
         'the lesson: "{caller_instane}" and its prerequisite: "{content_1}" are not of the same education grade: "{content_2}"'
     )
 
@@ -232,7 +244,7 @@ class Lesson(Validator):
         # TODO modifying __str__ and __repr__ to handle not having first name and last name defined and removing this part
         if not hasattr(grade_base_prerequisite, "__iter__"):
             grade_base_prerequisite = [grade_base_prerequisite]
-        # a dictionary containing parameter values and the desired type for each
+        # a tuple containing tuples of arguments to be used when passed to type validation
         attr_types = (
             (parent_educationgroup, EducationGroup),
             (name, str),
@@ -241,7 +253,7 @@ class Lesson(Validator):
         )
 
         # Type Validations
-        self.init_check_type(attr_types)
+        self.check.init_check_type(attr_types)
 
         # NOTE It was necessary to puth attribute initialization before validation
         # (to prevent some errors like "Lesson object has no attribute 'name'" when calling its str)
@@ -256,7 +268,7 @@ class Lesson(Validator):
 
         # Logical Validations
         # Checking if the lesson and the prerequisites of it are of a same education_grade
-        self.is_same_as(
+        self.check.is_same_as(
             self,
             grade_base_prerequisite,
             educationgrade,
@@ -280,6 +292,9 @@ class Lesson(Validator):
 # Something like "1 year for each grade of highschool state, 4 month for each term of university, etc..."
 # TODO complete the EducationTerm class and adding validations
 class EducationTerm:
+    # Creating a Validator object
+    check = Validator()
+    
     def __init__(self, parent_educationstate, name, order):
         self.parent_educationstate = parent_educationstate
         self.name = name

@@ -23,7 +23,11 @@ from typing import Union, List
 
 # School class
 # TODO making the schools gender specific (or at least an option for that)
-class School(Organization, Validator):
+class School(Organization):
+    # Creating a Validator object
+    check = Validator()
+
+    # class name is sometimes used for formatting purposes (e.g. when calling type_check from Validator)
     cls_name = "School"
 
     # region __init__
@@ -33,7 +37,7 @@ class School(Organization, Validator):
         education_states_list: Union[EducationState, List[EducationState]],
         education_groups_list: Union[EducationGroup, List[EducationGroup]],
     ):
-        # a dictionary containing parameter values and the desired type for each
+        # a tuple containing tuples of arguments to be used when passed to type validation
         attr_types = (
             (name, str),
             (education_states_list, (EducationState, list), EducationState),
@@ -41,7 +45,7 @@ class School(Organization, Validator):
         )
 
         # Type Validations
-        self.init_check_type(attr_types)
+        self.check.init_check_type(attr_types)
 
         # region <Init>
         # initializations
@@ -113,14 +117,14 @@ class School(Organization, Validator):
     ):
         # NOTE the funcion accepts integer numbers as classroom name and uses the str() to make them string
 
-        # a dictionary containing parameter values and the desired type for each
+        # a tuple containing tuples of arguments to be used when passed to type validation
         attr_types = (
             (classroom_names, tuple, (str, int)),
             (starting_id, (int, type(None))),
         )
 
         # Type Validations
-        self.init_check_type(attr_types)
+        self.check.init_check_type(attr_types)
 
         # a list to be return at the end of the function
         created_crooms = []
@@ -164,7 +168,7 @@ class School(Organization, Validator):
         lesson: Lesson,
         student_list: List["School.Student"] = [],
     ):
-        # a dictionary containing parameter values and the desired type for each
+        # a tuple containing tuples of arguments to be used when passed to type validation
         attr_types = (
             (educationgrade, EducationGrade),
             (educationgroup, EducationGroup),
@@ -174,7 +178,7 @@ class School(Organization, Validator):
         )
 
         # Type Validations
-        self.init_check_type(attr_types)
+        self.check.init_check_type(attr_types)
 
         # Generate an id for the new classgroup
         classgroup_id = next(self.classgroup_id_pool)
@@ -204,7 +208,7 @@ class School(Organization, Validator):
         education_grade: EducationGrade,
         education_group: EducationGroup,
     ):
-        # a dictionary containing parameter values and the desired type for each
+        # a tuple containing tuples of arguments to be used when passed to type validation
         attr_types = (
             (person, Person),
             (education_grade, EducationGrade),
@@ -212,7 +216,7 @@ class School(Organization, Validator):
         )
 
         # Type Validations
-        self.init_check_type(attr_types)
+        self.check.init_check_type(attr_types)
 
         # Logical Validation
         # checking if the students education state and education group is within the school's egp and es list
@@ -253,14 +257,14 @@ class School(Organization, Validator):
 
     # region teacher
     def add_teacher(self, person: Person, *lessons: Lesson):
-        # a dictionary containing parameter values and the desired type for each
+        # a tuple containing tuples of arguments to be used when passed to type validation
         attr_types = (
             (person, Person),
             (lessons, tuple, Lesson),
         )
 
         # Type Validations
-        self.init_check_type(attr_types)
+        self.check.init_check_type(attr_types)
 
         # Logical Validations
         # validating input lessons
@@ -293,14 +297,14 @@ class School(Organization, Validator):
     # ID Generator
 
     def generate_id(self, entity: str, start_id: int = None):
-        # a dictionary containing parameter values and the desired type for each
+        # a tuple containing tuples of arguments to be used when passed to type validation
         attr_types = (
             (entity, str),
             (start_id, (int, type(None))),
         )
 
         # Type Validations
-        self.init_check_type(attr_types)
+        self.check.init_check_type(attr_types)
 
         # Creating Generator (matching the entity type name to generate desired id pattern)
         # TODO BUG i should find some way to prevent id duplication as data may be storde within the database
@@ -357,7 +361,10 @@ class School(Organization, Validator):
 
     # TODO adding __slot__ for all classes
     # TODO changing id type to str
-    class ClassRoom(Validator):
+    class ClassRoom:
+        # Creating a Validator object
+        check = Validator()
+
         cls_name = "ClassRoom"
 
         def __init__(
@@ -366,7 +373,7 @@ class School(Organization, Validator):
             parent_assigned_id: int,
             name: str,
         ):
-            # a dictionary containing parameter values and the desired type for each
+            # a tuple containing tuples of arguments to be used when passed to type validation
             attr_types = (
                 (parent_school, School),
                 (parent_assigned_id, int),
@@ -374,7 +381,7 @@ class School(Organization, Validator):
             )
 
             # Type Validations
-            self.init_check_type(attr_types)
+            self.check.init_check_type(attr_types)
 
             # Initializations
             self.parent_school = parent_school
@@ -392,7 +399,10 @@ class School(Organization, Validator):
     # NOTE There may not be need for education group and grade as they are accessible trhou lesson
     #   but i rather access them directly from classgroup itself rather than through lesson
     # TODO adding validation for type hints
-    class ClassGroup(Validator):
+    class ClassGroup:
+        # Creating a Validator object
+        check = Validator()
+
         cls_name = "ClassGroup"
 
         def __init__(
@@ -405,7 +415,7 @@ class School(Organization, Validator):
             lesson: Lesson,
             student_list: List["School.Student"] = [],
         ):
-            # a dictionary containing parameter values and the desired type for each
+            # a tuple containing tuples of arguments to be used when passed to type validation
             attr_types = (
                 (parent_school, School),
                 (group_id, int),
@@ -417,7 +427,7 @@ class School(Organization, Validator):
             )
 
             # Type Validations
-            self.init_check_type(attr_types)
+            self.check.init_check_type(attr_types)
 
             # Initializations
             self.parent_school = parent_school
@@ -441,14 +451,14 @@ class School(Organization, Validator):
             teacher: "School.Teacher",
             lesson: Lesson,
         ):
-            # a dictionary containing parameter values and the desired type for each
+            # a tuple containing tuples of arguments to be used when passed to type validation
             attr_types = (
                 (teacher, School.Teacher),
                 (lesson, Lesson),
             )
 
             # Type Validations
-            self.init_check_type(attr_types)
+            self.check.init_check_type(attr_types)
 
             # Generating an id for the classschedule for new ClassSchedule
             classschedule_id = self.generate_id("cschedule")
@@ -460,7 +470,7 @@ class School(Organization, Validator):
 
         def generate_id(self, entity: str):
             # Type Validations
-            self.check_type(entity, str, "entity", "id_generator")
+            self.check.check_type(entity, str, "entity", "id_generator")
 
             # generating id base on the entity name for desired id pattern
             match entity:
@@ -482,7 +492,10 @@ class School(Organization, Validator):
     # In most cases the ClassSchedule instances are named by the lesson presenting within them, and sometimes combined with an id
     # e.g. "Riazi-1 20341", "Arabi", ...
     # TODO adding validation for type hints
-    class ClassSchedule(Validator):
+    class ClassSchedule:
+        # Creating a Validator object
+        check = Validator()
+
         def __init__(
             self,
             parent_classgroup: "School.ClassGroup",
@@ -491,6 +504,7 @@ class School(Organization, Validator):
             # initializations
             self.id = id
             self.parent_classgroup = parent_classgroup
+
             # empty data container
             self.classsessions = set()
 
@@ -518,6 +532,9 @@ class School(Organization, Validator):
 
     # TODO adding type validations
     class ClassSession:
+        # Creating a Validator object
+        check = Validator()
+
         def __init__(
             self,
             parent_classsession,
@@ -542,7 +559,10 @@ class School(Organization, Validator):
     # region Student
     # Student
     # TODO adding validation for type hints
-    class Student(Validator):
+    class Student:
+        # Creating a Validator object
+        check = Validator()
+
         cls_name = "Student"
 
         def __init__(
@@ -553,7 +573,7 @@ class School(Organization, Validator):
             education_grade: EducationGrade,
             education_group: EducationGroup,
         ):
-            # a dictionary containing parameter values and the desired type for each
+            # a tuple containing tuples of arguments to be used when passed to type validation
             attr_types = (
                 (parent_school, School),
                 (student_id, int),
@@ -563,7 +583,7 @@ class School(Organization, Validator):
             )
 
             # Type Validations
-            self.init_check_type(attr_types)
+            self.check.init_check_type(attr_types)
 
             # Initializations
             self.parent_school = parent_school
@@ -580,7 +600,10 @@ class School(Organization, Validator):
     # region Teacher
     # Teacher
     # TODO adding validation for type hints
-    class Teacher(Validator):
+    class Teacher:
+        # Creating a Validator object
+        check = Validator()
+
         cls_name = "Teacher"
 
         # Creating Validator object
@@ -593,7 +616,7 @@ class School(Organization, Validator):
             person: Person,
             *presenting_lessons: Lesson,
         ):
-            # a dictionary containing parameter values and the desired type for each
+            # a tuple containing tuples of arguments to be used when passed to type validation
             attr_types = (
                 (parent_school, School),
                 (teacher_id, int),
@@ -602,8 +625,7 @@ class School(Organization, Validator):
             )
 
             # Type Validations
-            self.init_check_type(attr_types)
-
+            self.check.init_check_type(attr_types)
 
             # Initializations
             self.parent_school = parent_school

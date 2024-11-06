@@ -106,7 +106,7 @@ def init_data(data):
 
     data.lesson.item["ps-riazi-dovom"] = data.egp.item["ps-general"].add_lesson(
         "Riazi Dovom",
-        data.egd.item["1st"],
+        data.egd.item["2nd"],
     )
 
     data.lesson.item["hs1-hendese-1"] = data.egp.item["hs1-general"].add_lesson(

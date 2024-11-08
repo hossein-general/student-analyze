@@ -3,15 +3,21 @@
 # TODO creating a function for updating applications data manager object
 # TODO creating functions to directly get data from database
 
+
+# # importin json to work with it
+import json
+# json.loads()      # convert to python
+# json.dumps()      # convert to json
+
+
+
 from os import system
 import requests
-
-system("cls")
 
 
 def get_posts():
     # Define the API endpoint URL
-    url = "http://127.0.0.1:8000/all_person"
+    url = "http://127.0.0.1:8000/show/es"
 
     try:
         # Make a GET request to the API endpoint using requests.get()
@@ -36,11 +42,17 @@ def main():
     posts = get_posts()
     if posts:
         print(posts)
+        print('-----------------------------')
+
+        for item in posts:
+            print(item)
+        
     else:
         print("Failed to fetch posts from API.")
 
 
 if __name__ == "__main__":
+    system("cls")
     main()
 
 

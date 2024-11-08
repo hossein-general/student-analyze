@@ -300,7 +300,7 @@ class Program:
 
         # adding additional options to the menue
         # Exit/Back option
-        refactored_menue["ipdb"] = self.ipdb_option
+        refactored_menue["i"] = self.ipdb_option
         print(f"(i)- ipdb")
 
         # adding additional options to the menue

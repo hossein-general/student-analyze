@@ -91,6 +91,9 @@ class EducationState():
     def list(cls):
         return cls.__es_list
 
+    def get_dict(self):
+        return {'name': self.state_name}
+
 
 # endregion
 
@@ -132,6 +135,12 @@ class EducationGrade():
 
     def __repr__(self):
         return f'<EducationGrade: "{self.name}">'
+    
+    def get_dict(self):
+        return {
+            'name': self.state_name,
+            'educationstate': self.parent_educationstate
+        }
 
 
 # endregion
@@ -214,6 +223,14 @@ class EducationGroup():
 
     def __repr__(self):
         return f'<EducationGroup: "{self.name}">'
+    
+    def get_dict(self):
+        return {
+            'name': self.name,
+            'educationstate': self.parent_educationstate,
+            'direct_use': self.direct_use,
+            'generic_dependancies': list(self.generic_dependency),
+        }
 
 
 # endregion
@@ -282,6 +299,14 @@ class Lesson():
 
     def __repr__(self):
         return f'<Lesson: "{self.name}">'
+    
+    def get_dict(self):
+        return {
+            'name': self.name, 
+            'educationgroup': self.parent_educationgroup, 
+            'educationgrade': self.educationgrade, 
+            'grade_base_prerequisite': self.grade_base_prerequisite, 
+        }
 
 
 # endregion

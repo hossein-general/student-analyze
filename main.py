@@ -6,6 +6,7 @@ from os import system
 import faker
 from ui import Program
 from bl import RuntimeDataAccessor
+from dal import run
 
 # endregion
 
@@ -21,7 +22,12 @@ def main():
         data.person.item[new_person.id] = new_person
 
     # endregion
+    
+    # only for direct dal access
+    if input('do you wanna directly connect to dal? (enter empty)')== "":
+        run(data)
 
+    # running the ui app
     program = Program(data)
     program.start()
 

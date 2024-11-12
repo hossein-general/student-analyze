@@ -1,10 +1,6 @@
 # region IMPORTING
 # For a cleaner look
 from os import system
-from pprint import pprint
-
-# Other packages
-from datetime import datetime
 
 # Program Modules
 import faker

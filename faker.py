@@ -21,6 +21,7 @@ def init_data(data):
     data.es.item["hs1"] = EducationState("High School 1st")
     data.es.item["hs2"] = EducationState("High School 2nd")
     data.es.item["u"] = EducationState("University")
+    data.es.item['test'] = EducationState('testing es')    # for testing
 
     # endregion
 
@@ -44,6 +45,8 @@ def init_data(data):
     data.egd.item["bachelor"] = data.es.item["u"].add_grade("Bachelor")
     data.egd.item["master"] = data.es.item["u"].add_grade("Master")
     data.egd.item["phd"] = data.es.item["u"].add_grade("Ph.D")
+
+    data.egd.item['test'] = data.es.item['test'].add_grade('testing egd')     # for testing
     # endregion
 
     # region EGp
@@ -95,6 +98,8 @@ def init_data(data):
         "University - Mohandesi Bargh", data.egp.item["u-general"]
     )
 
+    data.egp.item['test'] = data.es.item['test'].add_group('testing egp')       # for testing
+
     # endregion
 
     # region Lessons
@@ -118,7 +123,9 @@ def init_data(data):
         "Riazi Hashtom",
         data.egd.item["8th"],
     )
-
+    
+    data.lesson.item['test'] = data.egp.item['test'].add_lesson('test', data.egd.item['test'])      # for testing
+    
     # region Gender
     # Genders
     data.gender.item["male"] = Gender("male", "Mr.")
